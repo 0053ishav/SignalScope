@@ -18,7 +18,7 @@ export async function GET(
   try {
     const tracks =
       await searchTracks(query);
-console.log("tracks: ", tracks)
+// console.log("tracks: ", tracks)
 
     return NextResponse.json(tracks);
   } catch (error) {
