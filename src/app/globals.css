@@ -37,11 +37,7 @@
 
   /* Gradients */
 
-  --gradient-primary: linear-gradient(
-    135deg,
-    #8b5cf6 0%,
-    #3b82f6 100%
-  );
+  --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
 
   --gradient-glow: radial-gradient(
     circle,
@@ -82,3 +78,14 @@ body {
 ::selection {
   background: rgba(139, 92, 246, 0.3);
 }
+
+  /* Hide scrollbar but keep scrolling */
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }

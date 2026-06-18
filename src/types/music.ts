@@ -1,8 +1,8 @@
 export interface Track {
-   id: string;
-    name: string;
-    artist: string;
-    album?: string;
+  id: string;
+  name: string;
+  artist: string;
+  album?: string;
 }
 export interface TrackDetails {
   track_id: number;
@@ -65,4 +65,30 @@ export interface TrackDetails {
   track_lyrics_translation_options?: {
     contribution_blocked: number;
   };
+}
+
+export interface LyricsResponse {
+  lyrics_body: string;
+  lyrics_language: string;
+  explicit: number;
+  lyrics_copyright?: string;
+  updated_time?: string;
+}
+
+export interface RichSyncChunk {
+  c: string;
+  o: number;
+}
+
+export interface RichSyncLine {
+  ts: number;
+  te: number;
+  x: string;
+  l: RichSyncChunk[];
+}
+
+export interface LyricSegment {
+  startTime: number;
+  endTime: number;
+  text: string;
 }

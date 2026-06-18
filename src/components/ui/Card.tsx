@@ -1,25 +1,20 @@
-import { ReactNode } from "react";
-
 export function Card({
-  children,
+  title,
+  description,
 }: {
-  children: ReactNode;
+  title: string;
+  description: string;
 }) {
   return (
     <div
-      className="
-        rounded-3xl
-        border
-        border-border
-        bg-card/80
-        backdrop-blur-sm
-        p-6
-        shadow-lg
-        transition-all
-        hover:border-violet-500/30
-      "
-    >
-      {children}
+      className="rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/40 hover:shadow-xl border border-border bg-card/80 p-6 backdrop-blur-sm">
+      <h3 className="font-semibold">
+        {title}
+      </h3>
+
+      <p className="mt-2 text-sm text-muted">
+        {description}
+      </p>
     </div>
   );
 }
