@@ -7,6 +7,9 @@ import { TrackDetails, LyricsResponse } from "@/types/music";
 import InfoItem from "@/components/ui/InfoItem";
 import { Card } from "@/components/ui/Card";
 import LyricsPanel from "@/components/LyricsPanel";
+import { parseRichSync } from "@/lib/richsync/parseRichSync";
+import { normalizeRichSync } from "@/lib/richsync/normalizeRichSync";
+import RichSyncViewer from "@/components/RichSyncViewer";
 interface PageProps {
   params: Promise<{
     id: string;
@@ -18,15 +21,16 @@ export default async function TrackPage({ params }: PageProps) {
 
   let track: TrackDetails | null = null;
   let lyrics: LyricsResponse | null = null;
-
+  let richsync = null;
   try {
     track = await getTrack(id);
     lyrics = track.commontrack_id
       ? await getLyrics(String(track.commontrack_id))
       : null;
-    const richsync = track.commontrack_id
-      ? await getRichSync(String(track.commontrack_id))
-      : null;
+
+    if (track.commontrack_id) {
+      richsync = await getRichSync(String(track.commontrack_id));
+    }
   } catch (error) {
     console.error("Track page error:", error);
   }
@@ -42,7 +46,6 @@ export default async function TrackPage({ params }: PageProps) {
       </main>
     );
   }
-
   const genres = track.primary_genres?.music_genre_list
     ?.map((genre) => genre.music_genre.music_genre_name)
     .join(", ");
@@ -60,6 +63,12 @@ export default async function TrackPage({ params }: PageProps) {
   )
     .toString()
     .padStart(2, "0")}`;
+
+  const richsyncLines = richsync?.richsync_body
+    ? parseRichSync(richsync.richsync_body)
+    : [];
+
+  const segments = normalizeRichSync(richsyncLines);
 
   return (
     <main className={classes.page}>
@@ -92,7 +101,7 @@ export default async function TrackPage({ params }: PageProps) {
       <div className={classes.card}>
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex flex-col md:flex-row gap-8">
-            <div className="w-[350px] shrink-0 space-y-6">
+            <div className="w-87.5 shrink-0 space-y-6">
               {hasArtwork ? (
                 <Image
                   src={coverArt}
@@ -102,7 +111,7 @@ export default async function TrackPage({ params }: PageProps) {
                   className="rounded-lg"
                 />
               ) : (
-                <div className="w-[350px] h-[350px] border rounded-lg flex items-center justify-center text-gray-400">
+                <div className="w-87.5 h-87.5 border rounded-lg flex items-center justify-center text-gray-400">
                   No Artwork
                 </div>
               )}
@@ -136,7 +145,15 @@ export default async function TrackPage({ params }: PageProps) {
               <LyricsPanel
                 lyrics={lyrics?.lyrics_body}
                 language={lyrics?.lyrics_language}
-              />
+                translations={
+                  track.track_lyrics_translation_status?.map(
+                    (t) => t.to
+                  ) ?? []
+                }
+                segments={segments}
+                commontrackId={String(track.commontrack_id)}
+              />  
+
             </div>
           </div>
 

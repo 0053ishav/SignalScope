@@ -264,6 +264,28 @@ export async function getRichSync(
   }
 
   const data = await response.json();
-
   return data?.message?.body?.richsync ?? null;
+}
+
+export async function getLyricsTranslation(
+  commontrackId: string,
+  language: string
+) {
+  const response = await fetch(
+    `${BASE_URL}/track.lyrics.translation.get?commontrack_id=${commontrackId}&selected_language=${language}&apikey=${API_KEY}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch RichSync");
+  }
+
+
+  const data = await response.json();
+  return (
+    data?.message?.body?.lyrics?.lyrics_translated
+      ?.lyrics_body ?? null
+  );
 }
