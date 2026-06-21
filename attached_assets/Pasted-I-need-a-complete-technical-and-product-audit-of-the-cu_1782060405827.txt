@@ -1,0 +1,281 @@
+I need a complete technical and product audit of the current SignalScope workspace.
+
+Do NOT make changes.
+
+Do NOT generate code.
+
+Only analyze and report.
+
+Return a detailed status report covering:
+
+# 1. Project Architecture
+
+Describe the current architecture.
+
+Include:
+
+* Frontend framework
+* Backend framework
+* Routing
+* State management
+* UI libraries
+* Chart libraries
+* Monorepo structure
+* Folder structure
+* API structure
+
+Show the actual current project tree.
+
+---
+
+# 2. Pages
+
+List every page currently available.
+
+For each page include:
+
+* Route
+* Purpose
+* Current status
+* Completion percentage
+
+Example:
+
+/search
+Purpose:
+Status:
+Completion:
+
+---
+
+# 3. Components
+
+List all major components.
+
+For each component include:
+
+* Name
+* File location
+* Purpose
+* Current implementation status
+
+Group by:
+
+* Layout
+* Intelligence
+* Charts
+* Navigation
+* Track Pages
+* Shared UI
+
+---
+
+# 4. Current Intelligence Features
+
+List everything currently implemented.
+
+Examples:
+
+* Search
+* Track Details
+* Lyrics
+* RichSync
+* Translation
+* Musixmatch Analysis
+* AI Intelligence Report
+* Audience Intelligence
+* Emotional Intelligence
+* Platform Intelligence
+
+For each feature include:
+
+* Status
+* Data source
+* UI location
+
+---
+
+# 5. Existing API Integrations
+
+List every external API currently integrated.
+
+For each API include:
+
+* Provider
+* Endpoints used
+* Current status
+* What data is being consumed
+
+Example:
+
+Musixmatch
+Endpoints:
+track.search
+track.get
+track.lyrics.get
+
+Status:
+Working
+
+---
+
+# 6. Intelligence Pipeline
+
+Explain the complete intelligence flow.
+
+Example:
+
+Track Search
+→ Track Details
+→ Lyrics
+→ RichSync
+→ Analysis
+→ Signal Extraction
+→ Derived Signals
+→ Gemini Prompt
+→ Intelligence Report
+
+Include actual files involved.
+
+---
+
+# 7. Gemini Integration
+
+Report:
+
+* Current model
+* Prompt file
+* Schema file
+* Parsing logic
+* Error handling
+* Output structure
+
+Include actual fields returned.
+
+---
+
+# 8. Dashboard Audit
+
+Analyze the Intelligence Workspace.
+
+For every section report:
+
+* Exists?
+* Placeholder?
+* Fully functional?
+* Connected to live data?
+
+Sections:
+
+Executive Briefing
+
+Audience Intelligence
+
+Emotional Intelligence
+
+Cultural Intelligence
+
+Growth Intelligence
+
+Platform Intelligence
+
+Evidence Layer
+
+Scores
+
+Artist Actions
+
+Viral Drivers
+
+Content Opportunities
+
+---
+
+# 9. Charts Audit
+
+List every chart currently implemented.
+
+For each chart:
+
+* Component
+* Library
+* Data source
+* Working or placeholder
+
+---
+
+# 10. Sidebar Audit
+
+List all sidebar items.
+
+For each item specify:
+
+* Working
+* Partial
+* Placeholder
+
+---
+
+# 11. Missing Features
+
+Identify all placeholders.
+
+Identify all mocked data.
+
+Identify all hardcoded content.
+
+Identify unfinished sections.
+
+---
+
+# 12. Partner Integration Readiness
+
+For each partner:
+
+Songstats
+Cyanite
+JamBase
+ElevenLabs
+LALAL.AI
+
+Report:
+
+* Already integrated?
+* Partially integrated?
+* Not integrated?
+
+For each partner estimate:
+
+* Effort required
+* Suggested workspace section
+* Suggested data flow
+
+---
+
+# 13. Hackathon Readiness
+
+Provide:
+
+Current completion percentage
+
+Most impressive completed features
+
+Biggest missing pieces
+
+Highest-impact additions possible before submission
+
+---
+
+# 14. Final Recommendation
+
+Create a priority list:
+
+P0 = Must do before submission
+P1 = High impact
+P2 = Nice to have
+
+Rank everything by impact vs implementation time.
+
+Be brutally honest.
+
+I want the report to be exhaustive and technical.

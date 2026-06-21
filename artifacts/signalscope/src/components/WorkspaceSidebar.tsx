@@ -1,4 +1,15 @@
-import { Layers, Activity, Globe, TrendingUp, Zap, Mic2, LayoutDashboard, Share2, Download, Settings } from "lucide-react";
+import {
+  Layers,
+  Activity,
+  Globe,
+  TrendingUp,
+  Zap,
+  Mic2,
+  LayoutDashboard,
+  Share2,
+  Sparkles,
+  ListChecks,
+} from "lucide-react";
 
 interface SidebarProps {
   onSelect: (id: string) => void;
@@ -11,20 +22,25 @@ export default function WorkspaceSidebar({ onSelect, activeSection }: SidebarPro
       label: "Intelligence",
       items: [
         { id: "executive", label: "Executive Briefing", icon: LayoutDashboard },
+        { id: "overview", label: "Intelligence Overview", icon: Sparkles },
         { id: "audience", label: "Audience Intelligence", icon: Layers },
-        { id: "emotion", label: "Emotional Analysis", icon: Activity },
-        { id: "cultural", label: "Cultural Signals", icon: Globe },
+        { id: "emotion", label: "Emotional Intelligence", icon: Activity },
+        { id: "cultural", label: "Cultural Intelligence", icon: Globe },
         { id: "virality", label: "Virality Intelligence", icon: Zap },
-      ]
+      ],
     },
     {
       label: "Strategy",
       items: [
         { id: "growth", label: "Growth Intelligence", icon: TrendingUp },
-        { id: "distribution", label: "Distribution Strategy", icon: Share2 },
+        { id: "distribution", label: "Distribution Intelligence", icon: Share2 },
         { id: "actions", label: "Artist Actions", icon: Mic2 },
-      ]
-    }
+      ],
+    },
+    {
+      label: "Analysis",
+      items: [{ id: "evidence", label: "Evidence Layer", icon: ListChecks }],
+    },
   ];
 
   return (
@@ -36,7 +52,7 @@ export default function WorkspaceSidebar({ onSelect, activeSection }: SidebarPro
               {group.label}
             </p>
             <nav className="space-y-1">
-              {group.items.map(item => {
+              {group.items.map((item) => {
                 const Icon = item.icon;
                 const active = activeSection === item.id;
                 return (
@@ -44,8 +60,8 @@ export default function WorkspaceSidebar({ onSelect, activeSection }: SidebarPro
                     key={item.id}
                     onClick={() => onSelect(item.id)}
                     className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors ${
-                      active 
-                        ? "bg-primary/10 text-primary font-medium" 
+                      active
+                        ? "bg-primary/10 text-primary font-medium"
                         : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                     }`}
                   >
@@ -57,22 +73,6 @@ export default function WorkspaceSidebar({ onSelect, activeSection }: SidebarPro
             </nav>
           </div>
         ))}
-        
-        <div>
-          <p className="px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-            System
-          </p>
-          <nav className="space-y-1">
-            <button className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors text-muted-foreground hover:bg-secondary hover:text-foreground">
-              <Download className="w-4 h-4" />
-              Export Report
-            </button>
-            <button className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors text-muted-foreground hover:bg-secondary hover:text-foreground">
-              <Settings className="w-4 h-4" />
-              Settings
-            </button>
-          </nav>
-        </div>
       </div>
     </div>
   );

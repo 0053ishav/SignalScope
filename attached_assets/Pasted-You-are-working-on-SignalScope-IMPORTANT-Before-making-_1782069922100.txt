@@ -1,0 +1,284 @@
+You are working on SignalScope.
+
+IMPORTANT:
+
+Before making any changes, audit the existing codebase and understand the current architecture.
+
+Current architecture:
+
+* Vite + React frontend
+* Express backend
+* Musixmatch integration working
+* Gemini 2.5 Flash integration working
+* Intelligence Workspace already implemented
+* Intelligence reports already generated
+* Radar and Platform charts already implemented
+
+DO NOT:
+
+* Add Songstats
+* Add ElevenLabs
+* Add Cyanite
+* Add JamBase
+* Add LALAL.AI
+* Change framework
+* Change routing
+* Change monorepo structure
+* Create mock data
+* Create placeholder analytics
+
+Your task is to improve and complete the existing Intelligence Workspace.
+
+---
+
+PRIMARY OBJECTIVE
+
+Turn SignalScope into a professional intelligence dashboard similar to:
+
+* OpenAI Platform
+* Google AI Studio
+* Notion Analytics
+* HubSpot Reporting
+* Mixpanel
+* Amplitude
+* Stripe Dashboard
+
+The experience should feel like a premium intelligence platform.
+
+---
+
+PHASE 1
+
+Workspace Audit
+
+First inspect and document:
+
+* Existing pages
+* Existing components
+* Existing intelligence sections
+* Existing charts
+* Existing dead code
+* Existing placeholders
+* Existing hardcoded values
+
+Return findings before major implementation.
+
+---
+
+PHASE 2
+
+Information Architecture
+
+Improve dashboard organization.
+
+Current intelligence should be reorganized into professional sections:
+
+Executive Briefing
+
+Audience Intelligence
+
+Emotional Intelligence
+
+Cultural Intelligence
+
+Virality Intelligence
+
+Growth Intelligence
+
+Distribution Intelligence
+
+Artist Actions
+
+Evidence Layer
+
+Source Data
+
+Do not remove existing intelligence.
+
+Reorganize and improve presentation.
+
+---
+
+PHASE 3
+
+KPI Layer
+
+Improve score presentation.
+
+Current:
+
+* Audience Score
+* Emotion Score
+* Virality Score
+* Growth Score
+
+Convert into premium KPI cards.
+
+Each KPI card should include:
+
+* Score
+* Label
+* Description
+* Confidence indicator
+
+Use real report data only.
+
+No fake metrics.
+
+---
+
+PHASE 4
+
+Visualization Layer
+
+Improve charts.
+
+Current charts:
+
+* Radar Chart
+* Platform Chart
+
+Audit and improve them.
+
+Add additional visualizations only if they use real intelligence data.
+
+Examples:
+
+* Platform distribution
+* Audience distribution
+* Confidence visualization
+* Intelligence score comparison
+
+Do not fabricate data.
+
+---
+
+PHASE 5
+
+Evidence Layer
+
+Strengthen explainability.
+
+Every intelligence conclusion should show supporting evidence.
+
+Examples:
+
+Audience Intelligence
+→ Why this audience was detected
+
+Emotional Intelligence
+→ What moods/themes created the result
+
+Cultural Intelligence
+→ What cultural signals created the result
+
+Goal:
+
+Make intelligence feel explainable and trustworthy.
+
+---
+
+PHASE 6
+
+Source Data Panel
+
+Improve the right panel.
+
+Organize data into sections:
+
+Track Metadata
+
+Lyrics Analysis
+
+Mood Analysis
+
+Theme Analysis
+
+RichSync Moments
+
+Musixmatch Intelligence
+
+Use collapsible groups where appropriate.
+
+---
+
+PHASE 7
+
+Export Preparation
+
+Prepare architecture for future export.
+
+Do not build PDF export yet.
+
+Instead:
+
+* Identify exportable sections
+* Create reusable report components
+* Make dashboard sections export-friendly
+
+No functionality required yet.
+
+---
+
+PHASE 8
+
+Performance
+
+Audit:
+
+* unnecessary rerenders
+* duplicate requests
+* large payloads
+* slow intelligence generation
+
+Recommend improvements.
+
+Do not break existing functionality.
+
+---
+
+PHASE 9
+
+Cleanup
+
+Remove or identify:
+
+* dead components
+* unused imports
+* duplicate logic
+* obsolete legacy components
+
+Examples already known:
+
+* legacy SignalScopeIntelligence component
+* legacy LyricsPanel component
+* unused chart logic
+
+Verify before deleting.
+
+---
+
+SUCCESS CRITERIA
+
+When complete:
+
+SignalScope should feel like a premium AI intelligence workspace.
+
+The dashboard should communicate:
+
+* Who resonates with a song
+* Why it resonates
+* What emotional territory it occupies
+* What cultural movements it aligns with
+* Where it is likely to spread
+* What actions artists should take next
+
+Everything must be derived from existing intelligence data.
+
+No fabricated metrics.
+
+No placeholder analytics.
+
+No partner integrations yet.
+
+Focus entirely on polishing and strengthening the current intelligence platform.
