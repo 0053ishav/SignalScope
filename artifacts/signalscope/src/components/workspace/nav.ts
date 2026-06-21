@@ -38,9 +38,14 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
+    label: "Market",
+    items: [
+      { view: "performance", label: "Performance Intelligence", icon: TrendingUp },
+    ],
+  },
+  {
     label: "Strategy",
     items: [
-      { view: "performance", label: "Performance Intelligence", icon: TrendingUp, soon: true },
       { view: "live", label: "Live Intelligence", icon: MapPinned, soon: true },
       { view: "sonic", label: "Sonic Intelligence", icon: AudioWaveform, soon: true },
     ],

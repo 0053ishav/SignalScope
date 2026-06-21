@@ -8,10 +8,20 @@ import {
   getAnalysis,
 } from "@/services/musixmatch";
 import { generateIntelligenceReport } from "@/services/intelligence";
-import { db, intelligenceReportsTable } from "@workspace/db";
+import {
+  getSongstatsTrackData,
+  isSongstatsConfigured,
+} from "@/services/songstats";
+import { deriveSongstatsSignals } from "@/lib/intelligence/songstatsSignals";
+import { db, intelligenceReportsTable, songstatsCacheTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
+import type { SongstatsTrackData } from "@/types/songstats";
 
 const router: IRouter = Router();
+
+// Songstats is rate-limited (10 req/s); serve cached snapshots for this long
+// before re-fetching.
+const SONGSTATS_TTL_MS = 12 * 60 * 60 * 1000; // 12h
 
 router.get("/search", async (req, res) => {
   const query = (req.query.q as string) ?? "";
@@ -137,6 +147,89 @@ router.post("/intelligence", async (req, res) => {
     console.error("Intelligence Route Error", error);
     return res.status(500).json({
       error: error instanceof Error ? error.message : "Unknown Error",
+    });
+  }
+});
+
+/**
+ * Songstats market intelligence lookup. Always responds 200 with a status
+ * discriminator so the frontend can progressively enhance and never throws:
+ *   - "unavailable": no API key configured (honest "not connected" state)
+ *   - "empty":       configured, but Songstats has no real data for this track
+ *   - "ok":          real normalized data + derived signals
+ *   - "error":       unexpected failure (still non-fatal for the workspace)
+ */
+router.get("/songstats/:isrc", async (req, res) => {
+  const rawIsrc = (req.params.isrc ?? "").trim();
+  // The frontend sends "none" when a track has no ISRC — treat it as absent so
+  // resolution falls through to the artist+title search.
+  const isrc = rawIsrc === "none" || rawIsrc === "-" ? "" : rawIsrc;
+  const artist = (req.query.artist as string | undefined)?.trim();
+  const title = (req.query.title as string | undefined)?.trim();
+  const forceRefresh = req.query.refresh === "true";
+
+  if (!isSongstatsConfigured()) {
+    return res.json({ status: "unavailable" });
+  }
+
+  try {
+    // 1. Serve a fresh cache hit (keyed by ISRC) to respect rate limits.
+    if (isrc && !forceRefresh) {
+      try {
+        const [cached] = await db
+          .select()
+          .from(songstatsCacheTable)
+          .where(eq(songstatsCacheTable.isrc, isrc))
+          .limit(1);
+
+        if (cached && Date.now() - cached.fetchedAt.getTime() < SONGSTATS_TTL_MS) {
+          const data = cached.data as SongstatsTrackData;
+          return res.json({
+            status: "ok",
+            data,
+            signals: deriveSongstatsSignals(data),
+            cached: true,
+          });
+        }
+      } catch (cacheError) {
+        console.error("Songstats cache read failed", cacheError);
+      }
+    }
+
+    // 2. Fetch + normalize.
+    const data = await getSongstatsTrackData({ isrc, artist, title });
+
+    if (!data) {
+      return res.json({ status: "empty" });
+    }
+
+    // 3. Persist (best-effort) keyed by ISRC when we have one.
+    const cacheKey = data.isrc || isrc;
+    if (cacheKey) {
+      try {
+        await db
+          .insert(songstatsCacheTable)
+          .values({ isrc: cacheKey, data })
+          .onConflictDoUpdate({
+            target: songstatsCacheTable.isrc,
+            set: { data, fetchedAt: new Date() },
+          });
+      } catch (saveError) {
+        console.error("Songstats cache write failed", saveError);
+      }
+    }
+
+    return res.json({
+      status: "ok",
+      data,
+      signals: deriveSongstatsSignals(data),
+      cached: false,
+    });
+  } catch (error) {
+    console.error("Songstats route error", error);
+    return res.json({
+      status: "error",
+      message: error instanceof Error ? error.message : "Unknown error",
     });
   }
 });

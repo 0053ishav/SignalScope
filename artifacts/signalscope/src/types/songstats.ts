@@ -1,0 +1,95 @@
+/**
+ * Normalized Songstats shapes consumed by the frontend.
+ *
+ * These MUST stay identical to the NORMALIZED section of the backend mirror at
+ * `artifacts/api-server/src/types/songstats.ts` — they are the API contract.
+ * Only real returned fields are ever populated; nothing is fabricated.
+ */
+
+export interface SongstatsMetric {
+  key: string;
+  label: string;
+  value: number;
+}
+
+export interface SongstatsPlatform {
+  source: string;
+  label: string;
+  metrics: SongstatsMetric[];
+}
+
+export interface SongstatsTopMarket {
+  country: string;
+  value: number;
+}
+
+export interface SongstatsGrowth {
+  source: string;
+  metric: string;
+  percent: number;
+  window: string;
+}
+
+export interface SongstatsTrackData {
+  isrc: string;
+  songstatsTrackId?: string;
+  title?: string;
+  artist?: string;
+  releaseDate?: string;
+  avatarUrl?: string;
+  siteUrl?: string;
+
+  spotifyStreams?: number;
+  spotifyPopularity?: number;
+  playlistReach?: number;
+  playlistCount?: number;
+  tiktokVideos?: number;
+  tiktokViews?: number;
+  instagramPosts?: number;
+  youtubeViews?: number;
+  shazamCount?: number;
+
+  platforms: SongstatsPlatform[];
+  topMarkets: SongstatsTopMarket[];
+  growth?: SongstatsGrowth;
+  lastUpdated: string;
+}
+
+export type SongstatsSignalCategory =
+  | "momentum"
+  | "discovery"
+  | "creator"
+  | "reach"
+  | "consumption";
+
+export interface SongstatsSignal {
+  id: string;
+  category: SongstatsSignalCategory;
+  label: string;
+  detail: string;
+  metricKey: string;
+  metricValue: number;
+}
+
+export interface SongstatsSignals {
+  signals: SongstatsSignal[];
+}
+
+/** Raw envelope from GET /api/songstats/:isrc. */
+export type SongstatsResponseStatus = "ok" | "empty" | "unavailable" | "error";
+
+export interface SongstatsResponse {
+  status: SongstatsResponseStatus;
+  data?: SongstatsTrackData;
+  signals?: SongstatsSignals;
+  cached?: boolean;
+  message?: string;
+}
+
+/** Frontend-facing status, including the in-flight "loading" state. */
+export type SongstatsUiStatus =
+  | "loading"
+  | "ok"
+  | "empty"
+  | "unavailable"
+  | "error";

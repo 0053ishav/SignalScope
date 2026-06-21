@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 import type { TrackDetails, LyricsResponse, AnalysisResponse, LyricSegment } from "@/types/music";
 import type { IntelligenceReport, ReportSource } from "@/types/intelligence";
+import type { SongstatsTrackData, SongstatsSignals, SongstatsUiStatus } from "@/types/songstats";
 
 export interface TrackWorkspaceValue {
   id: string;
@@ -17,6 +18,11 @@ export interface TrackWorkspaceValue {
   regenerate: () => void;
 
   confidence: number;
+
+  /** Songstats market intelligence — loaded independently of the AI report. */
+  songstats: SongstatsTrackData | null;
+  songstatsSignals: SongstatsSignals | null;
+  songstatsStatus: SongstatsUiStatus;
 }
 
 export const TrackWorkspaceContext = createContext<TrackWorkspaceValue | null>(null);

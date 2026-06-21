@@ -24,6 +24,7 @@ timeoutMs = 20000
 [userenv.shared]
 MUSIXMATCH_BASE_URL = "https://api.musixmatch.com/ws/1.1"
 GEMINI_MODEL = "gemini-2.5-flash"
+SONGSTATS_BASE_URL = "https://api.songstats.com/enterprise/v1"
 
 [[ports]]
 localPort = 8080

@@ -297,8 +297,8 @@ export const INTELLIGENCE_SOURCES: IntelligenceSource[] = [
   },
   {
     name: "Songstats",
-    status: "coming-soon",
-    capability: "Streaming & chart performance analytics",
+    status: "connected",
+    capability: "Streaming, playlist, creator & market performance analytics",
     icon: BarChart3,
   },
   {

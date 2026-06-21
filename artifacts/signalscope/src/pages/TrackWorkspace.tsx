@@ -4,6 +4,12 @@ import { Loader2 } from "lucide-react";
 
 import type { TrackDetails, LyricsResponse, AnalysisResponse, LyricSegment } from "@/types/music";
 import type { IntelligenceReport } from "@/types/intelligence";
+import type {
+  SongstatsTrackData,
+  SongstatsSignals,
+  SongstatsUiStatus,
+  SongstatsResponse,
+} from "@/types/songstats";
 import { parseRichSync } from "@/lib/richsync/parseRichSync";
 import { normalizeRichSync } from "@/lib/richsync/normalizeRichSync";
 import { clamp } from "@/lib/intelligence";
@@ -15,6 +21,7 @@ import WorkspaceLayout from "@/components/workspace/WorkspaceLayout";
 import WorkspaceHeader from "@/components/workspace/WorkspaceHeader";
 import WorkspaceSidebar from "@/components/WorkspaceSidebar";
 import SourceIntelligencePanel from "@/components/SourceIntelligencePanel";
+import TrackPerformanceBanner from "@/components/workspace/TrackPerformanceBanner";
 
 import OverviewPage from "@/pages/workspace/OverviewPage";
 import AudiencePage from "@/pages/workspace/AudiencePage";
@@ -58,6 +65,10 @@ export default function TrackWorkspace({ id, view }: Props) {
   const [reportLoading, setReportLoading] = useState(false);
   const [reportError, setReportError] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  const [songstats, setSongstats] = useState<SongstatsTrackData | null>(null);
+  const [songstatsSignals, setSongstatsSignals] = useState<SongstatsSignals | null>(null);
+  const [songstatsStatus, setSongstatsStatus] = useState<SongstatsUiStatus>("loading");
 
   const generatedForRef = useRef<number | null>(null);
 
@@ -146,6 +157,46 @@ export default function TrackWorkspace({ id, view }: Props) {
     generate(track, lyrics, richSync, analysis, true);
   }, [track, lyrics, richSync, analysis, generate]);
 
+  // Load Songstats market data independently of the AI report, keyed off the
+  // track's ISRC. Any failure degrades to an honest status — it never blocks
+  // the workspace or the intelligence report.
+  const isrc = track?.track_isrc;
+  const artistName = track?.artist_name;
+  const trackName = track?.track_name;
+  useEffect(() => {
+    if (!track) return;
+    let cancelled = false;
+
+    const params = new URLSearchParams();
+    if (artistName) params.set("artist", artistName);
+    if (trackName) params.set("title", trackName);
+    const path = `/api/songstats/${encodeURIComponent(isrc?.trim() || "none")}?${params.toString()}`;
+
+    setSongstatsStatus("loading");
+    setSongstats(null);
+    setSongstatsSignals(null);
+
+    fetch(path)
+      .then((r) => (r.ok ? (r.json() as Promise<SongstatsResponse>) : Promise.reject(new Error("songstats request failed"))))
+      .then((res) => {
+        if (cancelled) return;
+        if (res.status === "ok" && res.data) {
+          setSongstats(res.data);
+          setSongstatsSignals(res.signals ?? null);
+          setSongstatsStatus("ok");
+        } else {
+          setSongstatsStatus(res.status === "ok" ? "empty" : res.status);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setSongstatsStatus("error");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isrc, artistName, trackName, track]);
+
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-65px)]">
@@ -188,6 +239,9 @@ export default function TrackWorkspace({ id, view }: Props) {
     reportSource: report?.source ?? null,
     regenerate,
     confidence: report ? clamp(report.confidence) : 0,
+    songstats,
+    songstatsSignals,
+    songstatsStatus,
   };
 
   const Page = PAGES[view] ?? OverviewPage;
@@ -204,6 +258,7 @@ export default function TrackWorkspace({ id, view }: Props) {
           />
         }
         header={<WorkspaceHeader view={view} onMenuClick={() => setMobileNavOpen(true)} />}
+        banner={<TrackPerformanceBanner />}
         rightRail={<SourceIntelligencePanel />}
       >
         <Page />
