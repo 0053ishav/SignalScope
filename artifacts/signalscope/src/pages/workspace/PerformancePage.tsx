@@ -10,6 +10,7 @@ import {
 import WorkspacePage from "@/components/workspace/WorkspacePage";
 import IntelligenceCard from "@/components/workspace/IntelligenceCard";
 import { EmptyChart } from "@/components/workspace/ChartCard";
+import MarketTrendChart from "@/components/workspace/charts/MarketTrendChart";
 import SongstatsUnavailable from "@/components/workspace/SongstatsUnavailable";
 import SongstatsBrandIcon, { songstatsBrandColor } from "@/components/workspace/SongstatsBrandIcon";
 import PredictionVsPerformance from "@/components/workspace/PredictionVsPerformance";
@@ -30,6 +31,26 @@ const CATEGORY_COLOR: Record<SongstatsSignalCategory, string> = {
   reach: "text-cyan-400",
   consumption: "text-amber-400",
 };
+
+const SOURCE_LABELS: Record<string, string> = {
+  spotify: "Spotify",
+  apple_music: "Apple Music",
+  tiktok: "TikTok",
+  youtube: "YouTube",
+  instagram: "Instagram",
+  soundcloud: "SoundCloud",
+  shazam: "Shazam",
+};
+
+function sourceLabelFor(source: string): string {
+  return (
+    SOURCE_LABELS[source] ??
+    source
+      .split(/[_\s]+/)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ")
+  );
+}
 
 export default function PerformancePage() {
   const { songstats, songstatsSignals, songstatsStatus } = useTrackWorkspace();
@@ -126,6 +147,30 @@ function PerformanceBody({
           </div>
         </IntelligenceCard>
       )}
+
+      {/* Market trend over time */}
+      <IntelligenceCard title="Market Trend" icon={TrendingUp} iconClassName="text-violet-400">
+        {data.trend && data.trend.points.length >= 2 ? (
+          <>
+            <p className="text-xs text-muted-foreground -mt-1 mb-3">
+              {data.trend.metric} over time on {sourceLabelFor(data.trend.source)} ·{" "}
+              {data.trend.points.length} data points from Songstats.
+            </p>
+            <div className="h-56">
+              <MarketTrendChart trend={data.trend} />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="h-40">
+              <EmptyChart />
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Songstats returned no historic time series for this track yet.
+            </p>
+          </>
+        )}
+      </IntelligenceCard>
 
       {/* Per-platform breakdown */}
       {data.platforms.length > 0 && (

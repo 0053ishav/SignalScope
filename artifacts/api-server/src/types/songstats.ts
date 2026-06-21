@@ -77,6 +77,30 @@ export interface SongstatsTopMarket {
   value: number;
 }
 
+/** One real point in a historic time series — date + value as returned. */
+export interface SongstatsHistoryPoint {
+  /** ISO date (or date-like string) as returned by Songstats. */
+  date: string;
+  /** Real metric value at that date. */
+  value: number;
+}
+
+/**
+ * A real historic time series for a single metric — present ONLY when
+ * Songstats returns a usable `history` array. Points are never fabricated or
+ * interpolated; gaps are left as-is.
+ */
+export interface SongstatsTrend {
+  /** Source the series was measured on, e.g. `spotify`. */
+  source: string;
+  /** Humanized metric label, e.g. "Streams". */
+  metric: string;
+  /** Original API metric key, e.g. `streams_total`. */
+  metricKey: string;
+  /** Chronologically ordered real data points. */
+  points: SongstatsHistoryPoint[];
+}
+
 /**
  * Optional growth reading — present ONLY when Songstats returns a usable
  * historic series or explicit growth field. Never synthesized.
@@ -124,6 +148,9 @@ export interface SongstatsTrackData {
 
   /** Growth reading — undefined unless derivable from real returned data. */
   growth?: SongstatsGrowth;
+
+  /** Historic time series — undefined unless Songstats returns real history. */
+  trend?: SongstatsTrend;
 
   /** When this snapshot was fetched (ISO). */
   lastUpdated: string;

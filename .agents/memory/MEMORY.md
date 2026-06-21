@@ -1,1 +1,2 @@
 - [api-server dev & testing gotchas](api-server-dev-testing.md) — api-server serves a built bundle (restart to pick up route edits); test via localhost:8080/api, not $REPLIT_DEV_DOMAIN.
+- [Songstats historic_stats trend shape](songstats-historic-trend.md) — historic_stats returns cumulative daily streams_total (~1pt/day); trend chart is cumulative, growth = first-vs-last of same series.

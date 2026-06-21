@@ -30,6 +30,18 @@ export interface SongstatsGrowth {
   window: string;
 }
 
+export interface SongstatsHistoryPoint {
+  date: string;
+  value: number;
+}
+
+export interface SongstatsTrend {
+  source: string;
+  metric: string;
+  metricKey: string;
+  points: SongstatsHistoryPoint[];
+}
+
 export interface SongstatsTrackData {
   isrc: string;
   songstatsTrackId?: string;
@@ -52,6 +64,7 @@ export interface SongstatsTrackData {
   platforms: SongstatsPlatform[];
   topMarkets: SongstatsTopMarket[];
   growth?: SongstatsGrowth;
+  trend?: SongstatsTrend;
   lastUpdated: string;
 }
 

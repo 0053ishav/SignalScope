@@ -6,6 +6,8 @@ import type {
   SongstatsMetric,
   SongstatsTopMarket,
   SongstatsGrowth,
+  SongstatsTrend,
+  SongstatsHistoryPoint,
 } from "@/types/songstats";
 
 /**
@@ -180,6 +182,7 @@ function normalize(
   stats: SongstatsRawTrackResponse | null,
   locations: unknown,
   growth: SongstatsGrowth | undefined,
+  trend: SongstatsTrend | undefined,
 ): SongstatsTrackData | null {
   const trackInfo = info?.track_info ?? stats?.track_info;
   const rawStats = stats?.stats ?? [];
@@ -222,6 +225,7 @@ function normalize(
     platforms,
     topMarkets: extractTopMarkets(locations),
     growth,
+    trend,
     lastUpdated: new Date().toISOString(),
   };
 
@@ -241,40 +245,79 @@ function normalize(
   return hasAnything ? data : null;
 }
 
-/* ---------------------------- growth (optional) -------------------------- */
+/* ---------------------- trend + growth (optional) ------------------------ */
+
+/** Candidate keys for the value/date fields inside a `history` row. */
+const TREND_VALUE_KEYS = ["streams_total", "streams", "value", "count_total", "count"];
+const TREND_DATE_KEYS = ["date", "day", "timestamp"];
 
 /**
- * Attempt to derive a real growth percentage from /tracks/historic_stats for
- * Spotify streams. Any shape mismatch -> undefined (never fabricated).
+ * Extract a real historic time series from /tracks/historic_stats (Spotify
+ * streams). Returns undefined on any shape mismatch — points are never
+ * fabricated or interpolated.
  */
-function deriveGrowth(historic: unknown): SongstatsGrowth | undefined {
+function extractTrend(historic: unknown): SongstatsTrend | undefined {
   if (!historic || typeof historic !== "object") return undefined;
 
   // Tolerate: { stats:[{source, data:{history:[{date, streams_total}]}}] }
   const obj = historic as Record<string, unknown>;
   const stats = Array.isArray(obj.stats) ? (obj.stats as SongstatsRawStatEntry[]) : [];
-  const spotify = stats.find((s) => s?.source === "spotify");
-  const data = spotify?.data as Record<string, unknown> | undefined;
+  const entry = stats.find((s) => s?.source === "spotify") ?? stats[0];
+  const data = entry?.data as Record<string, unknown> | undefined;
   const history = data && Array.isArray(data.history) ? (data.history as unknown[]) : [];
   if (history.length < 2) return undefined;
 
-  const series = history
-    .map((h) => (h && typeof h === "object" ? readNumber(h as Record<string, unknown>, ["streams_total", "streams", "value"]) : undefined))
-    .filter((n): n is number => n !== undefined);
-  if (series.length < 2) return undefined;
+  let metricKey: string | undefined;
+  const points: SongstatsHistoryPoint[] = [];
+  for (const h of history) {
+    if (!h || typeof h !== "object") continue;
+    const row = h as Record<string, unknown>;
 
-  const first = series[0];
-  const last = series[series.length - 1];
+    let date: string | undefined;
+    for (const k of TREND_DATE_KEYS) {
+      const v = row[k];
+      if (typeof v === "string" && v) { date = v; break; }
+      if (typeof v === "number" && Number.isFinite(v)) { date = String(v); break; }
+    }
+
+    let value: number | undefined;
+    for (const k of TREND_VALUE_KEYS) {
+      const n = toNumber(row[k]);
+      if (n !== undefined) { value = n; metricKey ??= k; break; }
+    }
+
+    if (date && value !== undefined) points.push({ date, value });
+  }
+
+  if (points.length < 2 || !metricKey) return undefined;
+
+  return {
+    source: entry?.source ?? "spotify",
+    metric: metricLabel(metricKey),
+    metricKey,
+    points,
+  };
+}
+
+/**
+ * Derive a real growth percentage from an extracted trend (first vs last
+ * point). Any unusable series -> undefined (never fabricated).
+ */
+function growthFromTrend(trend: SongstatsTrend | undefined): SongstatsGrowth | undefined {
+  if (!trend || trend.points.length < 2) return undefined;
+
+  const first = trend.points[0].value;
+  const last = trend.points[trend.points.length - 1].value;
   if (first <= 0) return undefined;
 
   const percent = ((last - first) / first) * 100;
   if (!Number.isFinite(percent)) return undefined;
 
   return {
-    source: "spotify",
-    metric: "Streams",
+    source: trend.source,
+    metric: trend.metric,
     percent: Math.round(percent * 10) / 10,
-    window: `${series.length} data points`,
+    window: `${trend.points.length} data points`,
   };
 }
 
@@ -343,8 +386,9 @@ export async function getSongstatsTrackData(lookup: SongstatsLookup): Promise<So
     historicParams ? songstatsGet<unknown>("/tracks/historic_stats", historicParams) : Promise.resolve(null),
   ]);
 
-  const growth = deriveGrowth(historic);
+  const trend = extractTrend(historic);
+  const growth = growthFromTrend(trend);
   const effectiveIsrc = isrc || stats?.track_info?.isrc || info?.track_info?.isrc || resolvedId || "";
 
-  return normalize(effectiveIsrc, info, stats, locations, growth);
+  return normalize(effectiveIsrc, info, stats, locations, growth, trend);
 }
