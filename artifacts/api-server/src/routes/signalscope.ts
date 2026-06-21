@@ -13,15 +13,25 @@ import {
   isSongstatsConfigured,
 } from "@/services/songstats";
 import { deriveSongstatsSignals } from "@/lib/intelligence/songstatsSignals";
-import { db, intelligenceReportsTable, songstatsCacheTable } from "@workspace/db";
+import {
+  getJamBaseLiveData,
+  isJamBaseConfigured,
+} from "@/services/jambase";
+import { deriveJamBaseSignals } from "@/lib/intelligence/jambaseSignals";
+import { db, intelligenceReportsTable, songstatsCacheTable, jambaseCacheTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import type { SongstatsTrackData } from "@/types/songstats";
+import type { JamBaseLiveData } from "@/types/jambase";
 
 const router: IRouter = Router();
 
 // Songstats is rate-limited (10 req/s); serve cached snapshots for this long
 // before re-fetching.
 const SONGSTATS_TTL_MS = 12 * 60 * 60 * 1000; // 12h
+
+// JamBase upcoming-event lists change slowly; serve cached snapshots for this
+// long before re-fetching (keyed by normalized artist name).
+const JAMBASE_TTL_MS = 6 * 60 * 60 * 1000; // 6h
 
 router.get("/search", async (req, res) => {
   const query = (req.query.q as string) ?? "";
@@ -227,6 +237,88 @@ router.get("/songstats/:isrc", async (req, res) => {
     });
   } catch (error) {
     console.error("Songstats route error", error);
+    return res.json({
+      status: "error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+});
+
+/**
+ * JamBase live/touring intelligence lookup. Always responds 200 with a status
+ * discriminator so the frontend can progressively enhance and never throws:
+ *   - "unavailable": no API key configured (honest "not connected" state)
+ *   - "empty":       configured, but JamBase has no upcoming events for the artist
+ *   - "ok":          real normalized live data + derived signals
+ *   - "error":       unexpected failure (still non-fatal for the workspace)
+ */
+router.get("/jambase/:artist", async (req, res) => {
+  // Express already URL-decodes path params; the frontend always sends an
+  // encodeURIComponent-valid artist name, so this is a plain string here.
+  const artist = (req.params.artist ?? "").trim();
+  const forceRefresh = req.query.refresh === "true";
+
+  if (!isJamBaseConfigured()) {
+    return res.json({ status: "unavailable" });
+  }
+  if (!artist || artist === "none" || artist === "-") {
+    return res.json({ status: "empty" });
+  }
+
+  const artistKey = artist.toLowerCase();
+
+  try {
+    // 1. Serve a fresh cache hit (keyed by normalized artist) to respect rate limits.
+    if (!forceRefresh) {
+      try {
+        const [cached] = await db
+          .select()
+          .from(jambaseCacheTable)
+          .where(eq(jambaseCacheTable.artistKey, artistKey))
+          .limit(1);
+
+        if (cached && Date.now() - cached.fetchedAt.getTime() < JAMBASE_TTL_MS) {
+          const data = cached.data as JamBaseLiveData;
+          return res.json({
+            status: "ok",
+            data,
+            signals: deriveJamBaseSignals(data),
+            cached: true,
+          });
+        }
+      } catch (cacheError) {
+        console.error("JamBase cache read failed", cacheError);
+      }
+    }
+
+    // 2. Fetch + normalize.
+    const data = await getJamBaseLiveData(artist);
+
+    if (!data) {
+      return res.json({ status: "empty" });
+    }
+
+    // 3. Persist (best-effort) keyed by normalized artist.
+    try {
+      await db
+        .insert(jambaseCacheTable)
+        .values({ artistKey, data })
+        .onConflictDoUpdate({
+          target: jambaseCacheTable.artistKey,
+          set: { data, fetchedAt: new Date() },
+        });
+    } catch (saveError) {
+      console.error("JamBase cache write failed", saveError);
+    }
+
+    return res.json({
+      status: "ok",
+      data,
+      signals: deriveJamBaseSignals(data),
+      cached: false,
+    });
+  } catch (error) {
+    console.error("JamBase route error", error);
     return res.json({
       status: "error",
       message: error instanceof Error ? error.message : "Unknown error",

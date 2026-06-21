@@ -1,16 +1,23 @@
 import { INTELLIGENCE_SOURCES } from "@/lib/intelligence";
+import { useTrackWorkspace } from "@/context/TrackWorkspaceContext";
 
 /**
  * Connection status of every intelligence source. Live sources reflect what
  * this build actually queries; the rest are honest "Coming Soon" partner slots
  * (visual only — no data is fabricated from them).
+ *
+ * JamBase is registered as "coming-soon" but flips to live ("Connected") at
+ * runtime whenever real JamBase data is active for the current track.
  */
 export default function IntelligenceSourcesPanel({ compact = false }: { compact?: boolean }) {
+  const { jambaseStatus } = useTrackWorkspace();
+  const jambaseLive = jambaseStatus === "ok";
+
   return (
     <div className="space-y-2">
       {INTELLIGENCE_SOURCES.map((src) => {
         const Icon = src.icon;
-        const connected = src.status === "connected";
+        const connected = src.status === "connected" || (src.name === "JamBase" && jambaseLive);
         return (
           <div
             key={src.name}

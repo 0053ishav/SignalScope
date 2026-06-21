@@ -35,6 +35,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { view: "cultural", label: "Cultural Intelligence", icon: Globe },
       { view: "content", label: "Content Intelligence", icon: Sparkles },
       { view: "distribution", label: "Distribution Intelligence", icon: Share2 },
+      { view: "live", label: "Live Intelligence", icon: MapPinned },
     ],
   },
   {
@@ -46,7 +47,6 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Strategy",
     items: [
-      { view: "live", label: "Live Intelligence", icon: MapPinned, soon: true },
       { view: "sonic", label: "Sonic Intelligence", icon: AudioWaveform, soon: true },
     ],
   },

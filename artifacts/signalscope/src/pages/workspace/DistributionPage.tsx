@@ -11,6 +11,7 @@ import SourceAttribution from "@/components/workspace/SourceAttribution";
 import PlatformFitBar from "@/components/workspace/charts/PlatformFitBar";
 import { EmptyChart } from "@/components/workspace/ChartCard";
 import { KPI_META } from "@/lib/intelligence";
+import LiveReachCard from "@/components/workspace/LiveReachCard";
 
 const META = KPI_META.find((m) => m.key === "growth")!;
 
@@ -45,6 +46,8 @@ export default function DistributionPage() {
             </IntelligenceCard>
 
             <ObservedPlatformPerformance />
+
+            <LiveReachCard />
 
             <DistributionEcosystem />
 

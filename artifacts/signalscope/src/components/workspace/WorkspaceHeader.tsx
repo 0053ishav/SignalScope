@@ -4,14 +4,17 @@ import { getNavItem } from "./nav";
 import WorkspaceActions from "./WorkspaceActions";
 import SafeArtwork from "./SafeArtwork";
 import { artworkCandidates } from "@/lib/songstatsMetadata";
+import { liveBadges } from "@/lib/jambase";
 
 export default function WorkspaceHeader({ view, onMenuClick }: { view: string; onMenuClick?: () => void }) {
-  const { track, songstats, report, reportLoading, confidence, regenerate } = useTrackWorkspace();
+  const { track, songstats, jambase, jambaseStatus, report, reportLoading, confidence, regenerate } =
+    useTrackWorkspace();
   const nav = getNavItem(view);
   const artwork = artworkCandidates(songstats, [
     track.album_coverart_100x100,
     track.album_coverart_350x350,
   ]);
+  const badges = jambaseStatus === "ok" ? liveBadges(jambase) : [];
 
   return (
     <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border px-4 md:px-6 py-3 flex flex-col md:flex-row gap-3 items-start md:items-center justify-between">
@@ -42,6 +45,15 @@ export default function WorkspaceHeader({ view, onMenuClick }: { view: string; o
                 {confidence}%
               </span>
             )}
+            {badges.map((b) => (
+              <span
+                key={b.label}
+                className="hidden sm:inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground bg-secondary px-1.5 py-0.5 rounded border border-border"
+              >
+                <span className="font-semibold text-foreground">{b.value}</span>
+                {b.label}
+              </span>
+            ))}
           </div>
         </div>
       </div>

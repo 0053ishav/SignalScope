@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 import type { TrackDetails, LyricsResponse, AnalysisResponse, LyricSegment } from "@/types/music";
 import type { IntelligenceReport, ReportSource } from "@/types/intelligence";
 import type { SongstatsTrackData, SongstatsSignals, SongstatsUiStatus } from "@/types/songstats";
+import type { JamBaseLiveData, JamBaseSignals, JamBaseUiStatus } from "@/types/jambase";
 
 export interface TrackWorkspaceValue {
   id: string;
@@ -23,6 +24,11 @@ export interface TrackWorkspaceValue {
   songstats: SongstatsTrackData | null;
   songstatsSignals: SongstatsSignals | null;
   songstatsStatus: SongstatsUiStatus;
+
+  /** JamBase live/touring intelligence — loaded independently of the AI report. */
+  jambase: JamBaseLiveData | null;
+  jambaseSignals: JamBaseSignals | null;
+  jambaseStatus: JamBaseUiStatus;
 }
 
 export const TrackWorkspaceContext = createContext<TrackWorkspaceValue | null>(null);

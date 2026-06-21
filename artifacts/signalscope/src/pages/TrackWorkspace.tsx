@@ -10,6 +10,12 @@ import type {
   SongstatsUiStatus,
   SongstatsResponse,
 } from "@/types/songstats";
+import type {
+  JamBaseLiveData,
+  JamBaseSignals,
+  JamBaseUiStatus,
+  JamBaseResponse,
+} from "@/types/jambase";
 import { parseRichSync } from "@/lib/richsync/parseRichSync";
 import { normalizeRichSync } from "@/lib/richsync/normalizeRichSync";
 import { clamp } from "@/lib/intelligence";
@@ -71,6 +77,10 @@ export default function TrackWorkspace({ id, view }: Props) {
   const [songstats, setSongstats] = useState<SongstatsTrackData | null>(null);
   const [songstatsSignals, setSongstatsSignals] = useState<SongstatsSignals | null>(null);
   const [songstatsStatus, setSongstatsStatus] = useState<SongstatsUiStatus>("loading");
+
+  const [jambase, setJambase] = useState<JamBaseLiveData | null>(null);
+  const [jambaseSignals, setJambaseSignals] = useState<JamBaseSignals | null>(null);
+  const [jambaseStatus, setJambaseStatus] = useState<JamBaseUiStatus>("loading");
 
   const generatedForRef = useRef<number | null>(null);
 
@@ -199,6 +209,40 @@ export default function TrackWorkspace({ id, view }: Props) {
     };
   }, [isrc, artistName, trackName, track]);
 
+  // Load JamBase live/touring data independently of the AI report and
+  // Songstats, keyed off the track's artist name. Any failure degrades to an
+  // honest status — it never blocks the workspace or any other intelligence.
+  useEffect(() => {
+    if (!track) return;
+    let cancelled = false;
+
+    const path = `/api/jambase/${encodeURIComponent(artistName?.trim() || "none")}`;
+
+    setJambaseStatus("loading");
+    setJambase(null);
+    setJambaseSignals(null);
+
+    fetch(path)
+      .then((r) => (r.ok ? (r.json() as Promise<JamBaseResponse>) : Promise.reject(new Error("jambase request failed"))))
+      .then((res) => {
+        if (cancelled) return;
+        if (res.status === "ok" && res.data) {
+          setJambase(res.data);
+          setJambaseSignals(res.signals ?? null);
+          setJambaseStatus("ok");
+        } else {
+          setJambaseStatus(res.status === "ok" ? "empty" : res.status);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setJambaseStatus("error");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [artistName, track]);
+
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-65px)]">
@@ -244,6 +288,9 @@ export default function TrackWorkspace({ id, view }: Props) {
     songstats,
     songstatsSignals,
     songstatsStatus,
+    jambase,
+    jambaseSignals,
+    jambaseStatus,
   };
 
   const Page = PAGES[view] ?? OverviewPage;
