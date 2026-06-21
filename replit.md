@@ -1,6 +1,6 @@
-# [Project name]
+# SignalScope
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Music intelligence for artists & labels: search any song (Musixmatch), view lyrics/RichSync timelines, and generate AI audience-intelligence reports (Gemini).
 
 ## Run & Operate
 
@@ -22,15 +22,19 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/signalscope/` — Vite + React frontend (wouter routing). Routes: `/` (Home), `/track/:id` (TrackPage). Theme tokens in `src/index.css`.
+- `artifacts/api-server/` — Express 5 backend. SignalScope routes in `src/routes/signalscope.ts` (mounted under `/api`). Services in `src/services/` (musixmatch, intelligence, gemini); RichSync parsing in `src/lib/richsync/`.
+- `artifacts/mockup-sandbox/` — design/preview artifact (scaffold).
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Ported from a Next.js (Vercel/v0) export: `next/link` → wouter `Link`, `next/image` → `<img>`, server components → client-side `fetch` in `useEffect`.
+- Frontend calls the backend via relative `/api/...`; the shared proxy routes `/api/*` to the api-server (signalscope is served at base path `/`).
+- Original dark theme preserved with direct hex CSS vars + Tailwind v4 `@theme inline` (not the shadcn HSL token system). Font is Geist (loaded via Google Fonts in `index.html`).
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+SignalScope turns songs into audience intelligence. Users search the Musixmatch catalog, open a track to see metadata, lyrics, and a synced RichSync timeline, then generate an AI report (Gemini) covering audience archetypes, emotional/cultural positioning, viral drivers, content opportunities, and platform fit.
 
 ## User preferences
 

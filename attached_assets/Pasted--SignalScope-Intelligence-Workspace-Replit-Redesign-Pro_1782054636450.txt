@@ -1,0 +1,665 @@
+# SignalScope Intelligence Workspace — Replit Redesign Prompt
+
+Build a modern SaaS Intelligence Workspace for SignalScope.
+
+This is NOT a music player.
+
+This is NOT a lyrics viewer.
+
+This is NOT a track details page.
+
+SignalScope is an AI-powered Music Intelligence Platform that transforms lyrics, themes, moods, metadata, RichSync timelines, and Musixmatch analysis into actionable audience intelligence for artists, labels, marketers, managers, and A&R teams.
+
+The design should feel like a blend of:
+
+* Google AI Studio
+* OpenAI Platform
+* Palantir Foundry
+* Amplitude
+* Mixpanel
+* Datadog
+* Stripe Dashboard
+* Linear
+* Vercel Dashboard
+
+The experience should feel premium, enterprise-grade, data-driven, and intelligence-focused.
+
+Avoid generic music app layouts.
+
+Avoid Spotify-style interfaces.
+
+Avoid large album-art-first layouts.
+
+Prioritize intelligence and decision-making.
+
+---
+
+# Layout
+
+Use a full-height dashboard layout.
+
+Desktop First.
+
+Responsive for tablet and mobile.
+
+Structure:
+
+Sidebar (Left)
+Main Workspace (Center)
+Insight Drawer / Context Panel (Right)
+
+Layout:
+
+---
+
+## | Sidebar | Main Intelligence Workspace | Insight Panel |
+
+---
+
+# Left Sidebar
+
+SignalScope Logo
+
+Workspace Navigation
+
+Executive Briefing
+
+Audience Intelligence
+
+* Segments
+* Archetypes
+* Evidence
+
+Emotional Analysis
+
+* Emotional Drivers
+* Resonance
+* Evidence
+
+Cultural Signals
+
+* Identity
+* Communities
+* Trends
+
+Growth Intelligence
+
+* Opportunities
+* Virality
+* Recommendations
+
+Distribution Strategy
+
+* TikTok
+* Instagram Reels
+* YouTube Shorts
+* Spotify Playlists
+* Live Events
+
+Source Intelligence
+
+* Lyrics
+* RichSync
+* Metadata
+* Musixmatch Analysis
+
+Settings
+
+Use collapsible navigation groups.
+
+Selected section should feel similar to AI Studio.
+
+---
+
+# Header
+
+Sticky top header.
+
+Contains:
+
+Track Name
+Artist Name
+Genre Tags
+
+Actions:
+
+Regenerate Intelligence
+
+Export Report
+
+Download PDF
+
+Share Report
+
+Confidence Score Badge
+
+Model Badge
+
+Example:
+
+Gemini 2.5 Flash
+Confidence 86%
+
+---
+
+# Executive Briefing Section
+
+Large hero card.
+
+Contains:
+
+AI Executive Summary
+
+Questions answered:
+
+Who is this song for?
+
+Why does it resonate?
+
+What emotional territory does it occupy?
+
+Where will it spread best?
+
+Why should marketers care?
+
+Visual style:
+
+Large card
+Premium spacing
+Gradient border
+Intelligence report feel
+
+---
+
+# KPI Intelligence Cards
+
+Display 4 large score cards.
+
+Audience Score
+
+Emotion Score
+
+Virality Score
+
+Growth Score
+
+Each card should contain:
+
+Score (0-100)
+
+Mini trend indicator
+
+Short explanation
+
+Example:
+
+Audience Score
+87
+
+Strong audience identity and clear listener alignment
+
+Use modern analytics card styling.
+
+---
+
+# Audience Intelligence Section
+
+Title:
+Audience Intelligence
+
+Show:
+
+Audience Archetypes
+
+Audience Segments
+
+Audience Evidence
+
+Visuals:
+
+Archetype Cards
+
+Examples:
+
+Ambitious Youth
+
+Digital Natives
+
+Creative Rebels
+
+Creator Economy Participants
+
+Each card contains:
+
+Name
+
+Description
+
+Reasoning
+
+Evidence Tags
+
+---
+
+# Emotional Analysis Section
+
+Title:
+Emotional Analysis
+
+Show:
+
+Emotional Positioning
+
+Emotional Drivers
+
+Emotional Evidence
+
+Visualizations:
+
+Emotion Radar Chart
+
+Emotion Distribution Bar Chart
+
+Emotion Tags
+
+Example:
+
+Confidence
+
+Motivation
+
+Empowerment
+
+Resilience
+
+Reflection
+
+---
+
+# Cultural Signals Section
+
+Title:
+Cultural Signals
+
+Display:
+
+Cultural Positioning
+
+Identity Signals
+
+Community Signals
+
+Trend Signals
+
+Visualizations:
+
+Signal Cards
+
+Community Tags
+
+Cultural Graph
+
+Examples:
+
+Creator Economy
+
+Youth Culture
+
+Success Culture
+
+Digital Identity
+
+Community Belonging
+
+---
+
+# Virality Intelligence Section
+
+Title:
+Virality Intelligence
+
+Display:
+
+Viral Drivers
+
+Spread Potential
+
+Content Triggers
+
+Creator Adoption Potential
+
+Visualizations:
+
+Virality Meter
+
+Opportunity Cards
+
+Examples:
+
+Strong Hook Moments
+
+Identity Messaging
+
+Creator-Friendly Narrative
+
+Relatable Storytelling
+
+Community Activation Potential
+
+---
+
+# Content Opportunity Radar
+
+Title:
+Content Opportunities
+
+Visualize as opportunity cards.
+
+Each card includes:
+
+Opportunity Title
+
+Potential Impact
+
+Platform Match
+
+Execution Difficulty
+
+Examples:
+
+Transformation Story Series
+
+Motivation Reels
+
+Behind The Success Journey
+
+Creator Storytelling Campaign
+
+Identity-Based Content
+
+UGC Challenge
+
+Trend Participation
+
+Meme Opportunity
+
+---
+
+# Growth Intelligence Section
+
+Title:
+Growth Intelligence
+
+Display:
+
+Growth Recommendations
+
+Audience Expansion Opportunities
+
+Playlist Opportunities
+
+Creator Collaboration Opportunities
+
+Visualize as:
+
+Strategic Recommendation Cards
+
+Priority Labels
+
+Impact Labels
+
+Examples:
+
+High Impact
+
+Medium Impact
+
+Low Effort
+
+High Effort
+
+---
+
+# Artist Action Plan
+
+Title:
+Recommended Actions
+
+Display:
+
+5 AI-generated next actions.
+
+Visualize as checklist cards.
+
+Example:
+
+Launch Creator Challenge
+
+Pitch Spotify Editorial Playlists
+
+Activate UGC Campaign
+
+Partner with Creator Communities
+
+Build Storytelling Content Series
+
+Each action should contain:
+
+Expected Impact
+
+Difficulty
+
+Priority
+
+---
+
+# Platform Intelligence
+
+Title:
+Distribution Strategy
+
+Display platform fit.
+
+Platforms:
+
+TikTok
+
+Instagram Reels
+
+YouTube Shorts
+
+Spotify Playlists
+
+Live Events
+
+Visuals:
+
+Platform Cards
+
+Fit Score
+
+Reason
+
+Strength Meter
+
+Each platform gets:
+
+High
+
+Medium
+
+Low
+
+with color-coded indicators.
+
+---
+
+# Evidence Layer
+
+Title:
+Evidence & Reasoning
+
+Most important section.
+
+Show WHY the AI generated conclusions.
+
+Display grouped evidence.
+
+Audience Evidence
+
+Emotion Evidence
+
+Culture Evidence
+
+Each evidence item should show:
+
+Source Signal
+
+Supporting Data
+
+Confidence
+
+Examples:
+
+Empowerment mood suggests Ambitious Youth audience
+
+Inspiration mood supports Motivation positioning
+
+Creator Economy signal supports creator-focused content opportunities
+
+Make this section look like a transparent AI reasoning panel.
+
+---
+
+# Source Intelligence Panel
+
+Right-side panel.
+
+Contains raw inputs.
+
+Sections:
+
+Lyrics Sample
+
+RichSync Moments
+
+Themes
+
+Moods
+
+Meaning Analysis
+
+Metadata
+
+This panel acts like an AI context window.
+
+---
+
+# Design System
+
+Style:
+
+Dark Mode First
+
+Premium SaaS
+
+Modern Intelligence Platform
+
+Glassmorphism (light)
+
+Subtle gradients
+
+Strong typography
+
+Clean spacing
+
+Not flashy
+
+Not neon
+
+Professional
+
+Use:
+
+TailwindCSS
+
+shadcn/ui
+
+Recharts
+
+Lucide Icons
+
+Framer Motion
+
+Responsive design
+
+---
+
+# Charts
+
+Add:
+
+Radar Chart
+Emotion Profile
+
+Bar Chart
+Audience Scores
+
+Horizontal Bar Chart
+Platform Fit
+
+Donut Chart
+Signal Distribution
+
+Trend Cards
+Growth Potential
+
+Opportunity Heatmap
+
+Use Recharts.
+
+---
+
+# Technical Requirements
+
+React
+
+Next.js App Router
+
+TypeScript
+
+TailwindCSS
+
+shadcn/ui
+
+Recharts
+
+Framer Motion
+
+Lucide React
+
+Fully responsive
+
+Accessibility support
+
+Skeleton loading states
+
+Error states
+
+Empty states
+
+Sticky navigation
+
+Collapsible sidebar
+
+Smooth transitions
+
+---
+
+Goal:
+
+When users open a track, they should feel like they are entering an Intelligence Workspace similar to Palantir, Amplitude, AI Studio, or Mixpanel—not a music player.
+
+Every screen should answer:
+
+"What does this song mean for audience growth and distribution strategy?"

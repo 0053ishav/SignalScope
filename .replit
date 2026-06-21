@@ -24,3 +24,15 @@ timeoutMs = 20000
 [userenv.shared]
 MUSIXMATCH_BASE_URL = "https://api.musixmatch.com/ws/1.1"
 GEMINI_MODEL = "gemini-2.5-flash"
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
+
+[[ports]]
+localPort = 8081
+externalPort = 8081
+
+[[ports]]
+localPort = 23142
+externalPort = 3000
