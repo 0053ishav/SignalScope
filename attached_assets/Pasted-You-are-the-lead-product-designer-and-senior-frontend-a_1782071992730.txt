@@ -1,0 +1,660 @@
+You are the lead product designer and senior frontend architect for SignalScope.
+
+Read the existing codebase completely before making changes.
+
+Do NOT add new external integrations yet.
+
+Do NOT add Songstats.
+
+Do NOT add Cyanite.
+
+Do NOT add JamBase.
+
+Do NOT add ElevenLabs.
+
+Do NOT add LALAL.AI.
+
+Do NOT add mock analytics.
+
+Do NOT fabricate metrics.
+
+Do NOT change backend intelligence generation.
+
+Do NOT modify Musixmatch integration.
+
+Do NOT modify Gemini intelligence generation.
+
+Your task is to redesign SignalScope into a scalable Intelligence Workspace architecture that can support future partner integrations.
+
+---
+
+PRODUCT GOAL
+
+SignalScope should feel like:
+
+* Google AI Studio
+* HubSpot
+* Mixpanel
+* Amplitude
+* Vercel Dashboard
+* Stripe Dashboard
+* Notion Analytics
+
+NOT like a long AI report page.
+
+The current implementation is a single scrolling intelligence report.
+
+That architecture does not scale.
+
+We need a workspace architecture.
+
+---
+
+NEW INFORMATION ARCHITECTURE
+
+Replace:
+
+Single page
+→ Scroll sections
+
+With:
+
+Workspace
+→ Route/Page based navigation
+
+Track Workspace
+
+Overview
+
+Audience Intelligence
+
+Emotional Intelligence
+
+Cultural Intelligence
+
+Content Intelligence
+
+Distribution Intelligence
+
+Performance Intelligence
+
+Live Intelligence
+
+Sonic Intelligence
+
+Evidence Layer
+
+Source Data
+
+---
+
+IMPORTANT
+
+Only these pages should contain real functionality right now:
+
+* Overview
+* Audience Intelligence
+* Emotional Intelligence
+* Cultural Intelligence
+* Content Intelligence
+* Distribution Intelligence
+* Evidence Layer
+* Source Data
+
+The following pages should exist as future-ready placeholders:
+
+* Performance Intelligence
+* Live Intelligence
+* Sonic Intelligence
+
+These should display:
+
+"Coming Soon"
+
+and explain which partner will power them later.
+
+Performance Intelligence
+
+Future:
+Songstats
+
+Live Intelligence
+
+Future:
+JamBase
+
+Sonic Intelligence
+
+Future:
+Cyanite
+
+Do not integrate those partners.
+
+Create architecture only.
+
+---
+
+WORKSPACE LAYOUT
+
+Desktop
+
+---
+
+Sidebar
+
+Workspace Navigation
+
+---
+
+Center
+
+Selected Intelligence View
+
+---
+
+Right Panel
+
+Source Context
+
+---
+
+The layout should feel similar to:
+
+Google AI Studio
+
+or
+
+Cursor
+
+or
+
+Claude Workspace
+
+or
+
+Vercel Dashboard
+
+---
+
+SIDEBAR REDESIGN
+
+Current sidebar uses section scrolling.
+
+Remove that pattern.
+
+Sidebar should switch workspace pages.
+
+Use proper navigation groups.
+
+INTELLIGENCE
+
+Overview
+
+Audience Intelligence
+
+Emotional Intelligence
+
+Cultural Intelligence
+
+Content Intelligence
+
+Distribution Intelligence
+
+STRATEGY
+
+Performance Intelligence
+
+Live Intelligence
+
+Sonic Intelligence
+
+ANALYSIS
+
+Evidence Layer
+
+Source Data
+
+SYSTEM
+
+Export Report
+
+Settings
+
+---
+
+SIDEBAR ICONS
+
+Use meaningful Lucide icons.
+
+Examples:
+
+Overview
+LayoutDashboard
+
+Audience
+Users
+
+Emotional
+HeartHandshake
+
+Cultural
+Globe
+
+Content
+Sparkles
+
+Distribution
+Share2
+
+Performance
+TrendingUp
+
+Live
+MapPinned
+
+Sonic
+AudioWaveform
+
+Evidence
+BadgeCheck
+
+Source Data
+Database
+
+Export
+FileOutput
+
+Settings
+Settings
+
+---
+
+PLATFORM ICONS
+
+Use real platform branding where appropriate.
+
+TikTok
+
+Instagram
+
+YouTube
+
+Spotify
+
+Live Events
+
+Use recognizable icons or branded SVG assets.
+
+Platform sections should visually feel real.
+
+---
+
+INTERACTION POLISH
+
+Audit every clickable item.
+
+Add:
+
+cursor-pointer
+
+hover states
+
+focus states
+
+active states
+
+selected states
+
+keyboard accessibility
+
+Nothing clickable should feel dead.
+
+---
+
+OVERVIEW PAGE
+
+This becomes the landing page.
+
+Contains:
+
+Executive Briefing
+
+KPI Score Cards
+
+Confidence
+
+Radar Chart
+
+Signal Distribution
+
+Key Opportunities
+
+Key Risks
+
+Quick Actions
+
+Most Important Insights
+
+This should function as the executive dashboard.
+
+---
+
+AUDIENCE INTELLIGENCE PAGE
+
+Contains:
+
+Audience Archetypes
+
+Audience Segments
+
+Audience Evidence
+
+Audience Drivers
+
+Audience Affinity Signals
+
+Audience Confidence
+
+Audience Visualization
+
+Future-ready layout for Songstats audience data.
+
+---
+
+EMOTIONAL INTELLIGENCE PAGE
+
+Contains:
+
+Emotional Positioning
+
+Mood Drivers
+
+Emotion Evidence
+
+Emotional Journey
+
+Emotional Radar
+
+Confidence
+
+---
+
+CULTURAL INTELLIGENCE PAGE
+
+Contains:
+
+Cultural Positioning
+
+Identity Signals
+
+Community Signals
+
+Narratives
+
+Cultural Evidence
+
+Cultural Drivers
+
+---
+
+CONTENT INTELLIGENCE PAGE
+
+Contains:
+
+Viral Drivers
+
+Content Opportunities
+
+Creator Angles
+
+Hook Opportunities
+
+Short Form Ideas
+
+Content Recommendations
+
+Future-ready for creator intelligence.
+
+---
+
+DISTRIBUTION INTELLIGENCE PAGE
+
+Contains:
+
+Platform Fit
+
+Platform Breakdown
+
+Platform Scores
+
+Distribution Recommendations
+
+Channel Strategy
+
+Platform Evidence
+
+Use platform logos/icons.
+
+---
+
+PERFORMANCE INTELLIGENCE PAGE
+
+Placeholder Only
+
+Future Partner:
+
+Songstats
+
+Design this page as if real metrics will arrive later.
+
+Include:
+
+Streams
+
+Playlists
+
+Growth
+
+Momentum
+
+Trend Analysis
+
+All marked Coming Soon.
+
+---
+
+LIVE INTELLIGENCE PAGE
+
+Placeholder Only
+
+Future Partner:
+
+JamBase
+
+Prepare sections for:
+
+Events
+
+Cities
+
+Markets
+
+Tour Opportunities
+
+Venue Intelligence
+
+Coming Soon.
+
+---
+
+SONIC INTELLIGENCE PAGE
+
+Placeholder Only
+
+Future Partner:
+
+Cyanite
+
+Prepare sections for:
+
+Mood Map
+
+Tempo
+
+Energy
+
+Audio DNA
+
+Track Similarity
+
+Coming Soon.
+
+---
+
+EVIDENCE LAYER PAGE
+
+Dedicated page.
+
+Not mixed into reports.
+
+Contains:
+
+Audience Evidence
+
+Emotion Evidence
+
+Culture Evidence
+
+Signal Origins
+
+Reasoning Trail
+
+Confidence Drivers
+
+Goal:
+
+Maximum transparency.
+
+---
+
+SOURCE DATA PAGE
+
+Dedicated page.
+
+Move all raw data here.
+
+Track Metadata
+
+Lyrics Analysis
+
+RichSync
+
+Mood Analysis
+
+Theme Analysis
+
+Musixmatch Intelligence
+
+Raw Signals
+
+Use collapsible cards.
+
+---
+
+DESIGN SYSTEM
+
+Keep existing SignalScope theme.
+
+Dark premium interface.
+
+Improve hierarchy.
+
+Improve spacing.
+
+Improve typography.
+
+Improve visual density.
+
+Reduce report-like appearance.
+
+Increase dashboard appearance.
+
+---
+
+CHARTS
+
+Keep existing charts.
+
+Refactor them into reusable components.
+
+Create chart architecture for future additions.
+
+Do not fabricate chart data.
+
+---
+
+COMPONENT ARCHITECTURE
+
+Create reusable workspace modules.
+
+Examples:
+
+WorkspaceLayout
+
+WorkspaceSidebar
+
+WorkspaceHeader
+
+WorkspacePage
+
+IntelligenceCard
+
+MetricCard
+
+EvidenceCard
+
+PlatformCard
+
+ComingSoonCard
+
+ChartCard
+
+SectionHeader
+
+The system must scale to future integrations.
+
+---
+
+RESPONSIVENESS
+
+Desktop first.
+
+Tablet supported.
+
+Mobile usable.
+
+Do not break existing functionality.
+
+---
+
+FINAL GOAL
+
+When a judge opens SignalScope:
+
+It should feel like a professional music intelligence platform.
+
+Not a lyrics analyzer.
+
+Not an AI wrapper.
+
+Not a report page.
+
+It should feel like an operating system for music intelligence where future partners can naturally plug into dedicated workspaces.
+
+Build architecture first.
+
+Build scalability first.
+
+Do not integrate partners yet.
+
+Create the foundation they will plug into later.
