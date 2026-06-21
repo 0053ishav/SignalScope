@@ -7,7 +7,7 @@ import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
 
-function Router() {
+export function AppRoutes() {
   return (
     <Switch>
       <Route path="/" component={HomePage} />
@@ -34,7 +34,7 @@ function App() {
           <Header />
 
           <div className="flex-1">
-            <Router />
+            <AppRoutes />
           </div>
         </div>
       </WouterRouter>
