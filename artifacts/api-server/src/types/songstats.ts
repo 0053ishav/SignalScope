@@ -25,6 +25,29 @@ export interface SongstatsRawArtist {
   avatar?: string;
 }
 
+/** Real artist-level catalog info as returned under `artist_info`. */
+export interface SongstatsRawArtistInfo {
+  songstats_artist_id?: string;
+  name?: string;
+  avatar?: string;
+  site_url?: string;
+  country?: string;
+  genres?: string[];
+  links?: SongstatsRawLink[];
+}
+
+export interface SongstatsRawArtistInfoResponse {
+  result?: string;
+  message?: string;
+  artist_info?: SongstatsRawArtistInfo;
+}
+
+export interface SongstatsRawArtistStatsResponse {
+  result?: string;
+  message?: string;
+  stats?: SongstatsRawStatEntry[];
+}
+
 /** A real catalog contributor as returned under `track_info.collaborators`. */
 export interface SongstatsRawCollaborator {
   name?: string;
@@ -119,6 +142,42 @@ export interface SongstatsLink {
   url: string;
 }
 
+/** A real audience-reach reading for an artist on one platform. */
+export interface SongstatsArtistReach {
+  /** Raw source id, e.g. `spotify`, `instagram`. */
+  source: string;
+  /** Display name, e.g. "Spotify". */
+  label: string;
+  /** Original API field key, e.g. `followers_total`. */
+  metricKey: string;
+  /** Humanized metric label, e.g. "Followers". */
+  metricLabel: string;
+  /** Real numeric value as returned. */
+  value: number;
+}
+
+/**
+ * A real primary artist behind the track — identity, links and audience reach.
+ * Every field is populated only when Songstats actually returns it; nothing is
+ * fabricated. Sourced from `/artists/info` + `/artists/stats` per artist id.
+ */
+export interface SongstatsArtist {
+  /** Songstats artist id. */
+  id: string;
+  /** Artist name as returned. */
+  name: string;
+  avatarUrl?: string;
+  siteUrl?: string;
+  /** ISO country code as returned, e.g. "US". */
+  country?: string;
+  /** Real artist genres as returned. */
+  genres?: string[];
+  /** Deduped external platform/social links (one per source). */
+  links?: SongstatsLink[];
+  /** Real follower/listener reach figures across platforms, largest first. */
+  reach?: SongstatsArtistReach[];
+}
+
 /** One real point in a historic time series — date + value as returned. */
 export interface SongstatsHistoryPoint {
   /** ISO date (or date-like string) as returned by Songstats. */
@@ -178,6 +237,9 @@ export interface SongstatsTrackData {
   collaborators?: SongstatsCollaborator[];
   links?: SongstatsLink[];
   isRemix?: boolean;
+
+  /** Primary artists behind the track — identity, links and audience reach. */
+  artists?: SongstatsArtist[];
 
   /* Headline KPIs — only set when the corresponding real field is returned. */
   spotifyStreams?: number;

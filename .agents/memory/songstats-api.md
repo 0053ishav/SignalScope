@@ -10,6 +10,10 @@ description: Non-obvious facts about the Songstats Enterprise API and SignalScop
 - **There is NO audio analysis**: every audio endpoint (tempo/key/energy/etc.) returns 404.
 - **How to apply:** The Sonic Intelligence page must stay an honest coming-soon — never build audio-derived cards or fabricate audio features. Do not waste time probing audio endpoints again.
 
+## Artist-level data exists and is rich
+- `track_info.artists` carries `{songstats_artist_id, name}` (primary artists). Per id, `/artists/info` returns `artist_info` (name, avatar, site_url, country, bio, genres, links[]) and `/artists/stats?source=all` returns per-platform stats including real audience reach: `monthly_listeners_current` (spotify), `followers_total` (most sources), `subscribers_total`/`monthly_audience_current` (youtube).
+- **How to apply:** Fetch artist info+stats keyed by `songstats_artist_id` (2 calls each — cap the fan-out, ~10 req/s limit). Surface only audience-reach keys as headline numbers; the stats bag also has playlists/charts noise you don't want raw.
+
 ## `links` arrive multiple-per-source
 - `/tracks/info` `links` contains several entries per source (different ISRCs / mixes / regions), each `{source, external_id, url, isrc}`.
 - **How to apply:** Dedupe to one link per source (prefer the entry whose `isrc` matches the queried ISRC) before display — see `extractLinks` in `api-server/.../services/songstats.ts`.

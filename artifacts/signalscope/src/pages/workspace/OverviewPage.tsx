@@ -4,6 +4,7 @@ import ReportGate from "@/components/workspace/ReportGate";
 import MarketHighlights from "@/components/workspace/MarketHighlights";
 import TrackProfileCard from "@/components/workspace/TrackProfileCard";
 import PlatformPresence from "@/components/workspace/PlatformPresence";
+import ArtistPanel from "@/components/workspace/ArtistPanel";
 import MetricCard from "@/components/workspace/MetricCard";
 import ChartCard, { EmptyChart } from "@/components/workspace/ChartCard";
 import IntelligenceCard from "@/components/workspace/IntelligenceCard";
@@ -25,6 +26,8 @@ export default function OverviewPage() {
         <TrackProfileCard />
         <PlatformPresence />
       </div>
+
+      <ArtistPanel />
 
       <ReportGate>
         {(report) => (

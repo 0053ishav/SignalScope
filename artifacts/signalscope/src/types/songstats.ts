@@ -35,6 +35,25 @@ export interface SongstatsLink {
   url: string;
 }
 
+export interface SongstatsArtistReach {
+  source: string;
+  label: string;
+  metricKey: string;
+  metricLabel: string;
+  value: number;
+}
+
+export interface SongstatsArtist {
+  id: string;
+  name: string;
+  avatarUrl?: string;
+  siteUrl?: string;
+  country?: string;
+  genres?: string[];
+  links?: SongstatsLink[];
+  reach?: SongstatsArtistReach[];
+}
+
 export interface SongstatsGrowth {
   source: string;
   metric: string;
@@ -69,6 +88,7 @@ export interface SongstatsTrackData {
   collaborators?: SongstatsCollaborator[];
   links?: SongstatsLink[];
   isRemix?: boolean;
+  artists?: SongstatsArtist[];
 
   spotifyStreams?: number;
   spotifyPopularity?: number;

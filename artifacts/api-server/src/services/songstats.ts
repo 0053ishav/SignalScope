@@ -2,6 +2,10 @@ import type {
   SongstatsRawTrackResponse,
   SongstatsRawStatEntry,
   SongstatsRawTrackInfo,
+  SongstatsRawArtist,
+  SongstatsRawArtistInfoResponse,
+  SongstatsRawArtistStatsResponse,
+  SongstatsRawLink,
   SongstatsTrackData,
   SongstatsPlatform,
   SongstatsMetric,
@@ -11,6 +15,8 @@ import type {
   SongstatsHistoryPoint,
   SongstatsCollaborator,
   SongstatsLink,
+  SongstatsArtist,
+  SongstatsArtistReach,
 } from "@/types/songstats";
 
 /**
@@ -224,6 +230,85 @@ function extractLinks(info: SongstatsRawTrackInfo | undefined, effectiveIsrc: st
   return Array.from(bySource.values());
 }
 
+/**
+ * The audience-reach metrics we surface at the artist level — real follower /
+ * listener figures only (never playlists/charts/streams totals). Mapped key ->
+ * humanized label so the UI shows an honest, meaningful number per platform.
+ */
+const ARTIST_REACH_METRICS: Array<{ key: string; label: string }> = [
+  { key: "monthly_listeners_current", label: "Monthly Listeners" },
+  { key: "followers_total", label: "Followers" },
+  { key: "subscribers_total", label: "Subscribers" },
+  { key: "monthly_audience_current", label: "Monthly Audience" },
+];
+
+/** Extract real per-platform follower/listener reach from artist stats[]. */
+function extractArtistReach(stats: SongstatsRawStatEntry[] | undefined): SongstatsArtistReach[] {
+  if (!Array.isArray(stats)) return [];
+  const out: SongstatsArtistReach[] = [];
+  for (const entry of stats) {
+    const source = typeof entry?.source === "string" ? entry.source : "";
+    const data = entry?.data as Record<string, unknown> | undefined;
+    if (!source || !data) continue;
+    for (const { key, label } of ARTIST_REACH_METRICS) {
+      const value = toNumber(data[key]);
+      if (value !== undefined && value > 0) {
+        out.push({ source, label: sourceLabel(source), metricKey: key, metricLabel: label, value });
+      }
+    }
+  }
+  return out.sort((a, b) => b.value - a.value);
+}
+
+/** Dedupe an artist's external links to one canonical entry per source. */
+function extractArtistLinks(raw: SongstatsRawLink[] | undefined): SongstatsLink[] {
+  if (!Array.isArray(raw)) return [];
+  const bySource = new Map<string, SongstatsLink>();
+  for (const l of raw) {
+    const source = typeof l?.source === "string" ? l.source.trim() : "";
+    const url = typeof l?.url === "string" ? l.url.trim() : "";
+    if (!source || !url || bySource.has(source)) continue;
+    bySource.set(source, { source, label: sourceLabel(source), url });
+  }
+  return Array.from(bySource.values());
+}
+
+/**
+ * Fetch + normalize one primary artist (identity + links + audience reach).
+ * Degrades gracefully: if the artist endpoints fail, falls back to the name /
+ * avatar already present on the track's artist entry. Returns null only when
+ * there is no usable identity at all.
+ */
+async function fetchArtist(rawArtist: SongstatsRawArtist): Promise<SongstatsArtist | null> {
+  const id = typeof rawArtist?.songstats_artist_id === "string" ? rawArtist.songstats_artist_id.trim() : "";
+  if (!id) return null;
+
+  const params = { songstats_artist_id: id };
+  const [info, stats] = await Promise.all([
+    songstatsGet<SongstatsRawArtistInfoResponse>("/artists/info", params),
+    songstatsGet<SongstatsRawArtistStatsResponse>("/artists/stats", { ...params, source: "all" }),
+  ]);
+
+  const ai = info?.artist_info;
+  const name = (typeof ai?.name === "string" && ai.name.trim()) || (typeof rawArtist.name === "string" && rawArtist.name.trim()) || "";
+  if (!name) return null;
+
+  const genres = extractStrings(ai?.genres);
+  const links = extractArtistLinks(ai?.links);
+  const reach = extractArtistReach(stats?.stats);
+
+  return {
+    id,
+    name,
+    avatarUrl: ai?.avatar || rawArtist.avatar || undefined,
+    siteUrl: ai?.site_url || undefined,
+    country: typeof ai?.country === "string" && ai.country.trim() ? ai.country.trim() : undefined,
+    genres: genres.length ? genres : undefined,
+    links: links.length ? links : undefined,
+    reach: reach.length ? reach : undefined,
+  };
+}
+
 /** Index raw stats[] by source for direct headline lookups. */
 function indexStats(stats: SongstatsRawStatEntry[]): Record<string, Record<string, unknown>> {
   const map: Record<string, Record<string, unknown>> = {};
@@ -243,6 +328,7 @@ function normalize(
   locations: unknown,
   growth: SongstatsGrowth | undefined,
   trend: SongstatsTrend | undefined,
+  artists: SongstatsArtist[],
 ): SongstatsTrackData | null {
   const trackInfo = info?.track_info ?? stats?.track_info;
   const rawStats = stats?.stats ?? [];
@@ -284,6 +370,7 @@ function normalize(
     collaborators: collaborators.length ? collaborators : undefined,
     links: links.length ? links : undefined,
     isRemix: typeof trackInfo?.is_remix === "boolean" ? trackInfo.is_remix : undefined,
+    artists: artists.length ? artists : undefined,
 
     spotifyStreams: readNumber(spotify, ["streams_total", "streams", "streams_current"]),
     spotifyPopularity: readNumber(spotify, ["popularity_current", "popularity"]),
@@ -310,6 +397,7 @@ function normalize(
     labels.length > 0 ||
     collaborators.length > 0 ||
     links.length > 0 ||
+    artists.length > 0 ||
     typeof data.isRemix === "boolean";
   const hasAnything =
     platforms.length > 0 ||
@@ -463,14 +551,22 @@ export async function getSongstatsTrackData(lookup: SongstatsLookup): Promise<So
   const resolvedId = stats?.track_info?.songstats_track_id ?? info?.track_info?.songstats_track_id;
   const historicParams = resolvedId ? { songstats_track_id: resolvedId, source: "spotify" } : null;
 
-  const [locations, historic] = await Promise.all([
+  // Primary artists come from track_info; cap the fan-out to respect the
+  // ~10 req/s rate limit (each artist costs 2 calls).
+  const rawArtists = (stats?.track_info?.artists ?? info?.track_info?.artists ?? [])
+    .filter((a): a is SongstatsRawArtist => Boolean(a?.songstats_artist_id))
+    .slice(0, 4);
+
+  const [locations, historic, artistResults] = await Promise.all([
     songstatsGet<unknown>("/tracks/locations", idParams),
     historicParams ? songstatsGet<unknown>("/tracks/historic_stats", historicParams) : Promise.resolve(null),
+    Promise.all(rawArtists.map(fetchArtist)),
   ]);
 
+  const artists = artistResults.filter((a): a is SongstatsArtist => a !== null);
   const trend = extractTrend(historic);
   const growth = growthFromTrend(trend);
   const effectiveIsrc = isrc || stats?.track_info?.isrc || info?.track_info?.isrc || resolvedId || "";
 
-  return normalize(effectiveIsrc, info, stats, locations, growth, trend);
+  return normalize(effectiveIsrc, info, stats, locations, growth, trend, artists);
 }

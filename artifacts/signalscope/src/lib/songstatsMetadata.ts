@@ -1,4 +1,9 @@
-import type { SongstatsTrackData, SongstatsCollaborator, SongstatsLink } from "@/types/songstats";
+import type {
+  SongstatsTrackData,
+  SongstatsCollaborator,
+  SongstatsLink,
+  SongstatsArtist,
+} from "@/types/songstats";
 
 /* -------------------------------------------------------------------------- */
 /* Songstats metadata helpers — deterministic interpretation over REAL fields */
@@ -130,15 +135,20 @@ export function platformLabel(source: string): string {
   );
 }
 
-/** Real links sorted into the canonical platform order (unknowns appended). */
-export function orderedLinks(data: SongstatsTrackData | null): SongstatsLink[] {
-  const links = data?.links ?? [];
-  if (links.length === 0) return [];
+/** Sort an arbitrary link list into the canonical platform order. */
+export function sortLinksByPlatform(links: SongstatsLink[]): SongstatsLink[] {
   const rank = (s: string) => {
     const i = PLATFORM_ORDER.indexOf(s);
     return i === -1 ? PLATFORM_ORDER.length : i;
   };
   return [...links].sort((a, b) => rank(a.source) - rank(b.source) || a.label.localeCompare(b.label));
+}
+
+/** Real links sorted into the canonical platform order (unknowns appended). */
+export function orderedLinks(data: SongstatsTrackData | null): SongstatsLink[] {
+  const links = data?.links ?? [];
+  if (links.length === 0) return [];
+  return sortLinksByPlatform(links);
 }
 
 /** Count of distinct platforms this track is verifiably present on. */
@@ -154,6 +164,18 @@ export function openTrackLinks(data: SongstatsTrackData | null): SongstatsLink[]
   return OPEN_SOURCES.map((s) => links.find((l) => l.source === s)).filter(
     (l): l is SongstatsLink => Boolean(l),
   );
+}
+
+/* ------------------------------- artists --------------------------------- */
+
+/** Primary artists Songstats returned for this track (empty if none). */
+export function primaryArtists(data: SongstatsTrackData | null): SongstatsArtist[] {
+  return data?.artists ?? [];
+}
+
+/** An artist's external links sorted into the canonical platform order. */
+export function artistLinks(artist: SongstatsArtist): SongstatsLink[] {
+  return sortLinksByPlatform(artist.links ?? []);
 }
 
 /* ---------------------- distribution ecosystem --------------------------- */
