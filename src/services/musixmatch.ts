@@ -1,5 +1,6 @@
 import Fuse from "fuse.js";
 import {
+  AnalysisResponse,
   LyricsResponse,
   Track,
   TrackDetails,
@@ -287,5 +288,35 @@ export async function getLyricsTranslation(
   return (
     data?.message?.body?.lyrics?.lyrics_translated
       ?.lyrics_body ?? null
+  );
+}
+
+export async function getAnalysis(
+  commontrackId: string
+): Promise<AnalysisResponse | null> {
+  const response = await fetch(
+    `${BASE_URL}/track.lyrics.analysis.get?commontrack_id=${commontrackId}&apikey=${API_KEY}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to fetch analysis"
+    );
+  }
+
+  const data = await response.json();
+  if (
+    data?.message?.header?.status_code !==
+    200
+  ) {
+    return null;
+  }
+
+  return (
+    data?.message?.body?.analysis ??
+    null
   );
 }

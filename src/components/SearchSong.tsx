@@ -174,26 +174,26 @@ export default function SearchSong() {
           Try:
           <button
             disabled={loading}
-            onClick={() => searchExample("Enigma Arjan Dhillon")}
+            onClick={() => searchExample("295 SMW")}
             className="mx-2 text-violet-400 hover:text-violet-300 cursor-pointer"
           >
-            Enigma Arjan Dhillon
+            295 SMW
           </button>
           ·
           <button
             disabled={loading}
-            onClick={() => searchExample("Softly Karan Aujla")}
+            onClick={() => searchExample("Twice")}
             className="mx-2 text-violet-400 hover:text-violet-300 cursor-pointer"
           >
-            Softly Karan Aujla
+            Twice
           </button>
           ·
           <button
             disabled={loading}
-            onClick={() => searchExample("East Side Flow Sidhu Moose Wala")}
+            onClick={() => searchExample("ICONIC BY MISTAKE LE SSERAFIM")}
             className="mx-2 text-violet-400 hover:text-violet-300 cursor-pointer"
           >
-            East Side Flow Sidhu Moose Wala
+            ICONIC BY MISTAKE LE SSERAFIM
           </button>
         </div>
       </div>

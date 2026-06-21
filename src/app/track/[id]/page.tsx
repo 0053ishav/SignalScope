@@ -1,15 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { getLyrics, getRichSync, getTrack } from "@/services/musixmatch";
+import {
+  getAnalysis,
+  getLyrics,
+  getRichSync,
+  getTrack,
+} from "@/services/musixmatch";
 import { classes } from "@/theme";
-import { TrackDetails, LyricsResponse } from "@/types/music";
+import { TrackDetails, LyricsResponse, AnalysisResponse } from "@/types/music";
 import InfoItem from "@/components/ui/InfoItem";
-import { Card } from "@/components/ui/Card";
 import LyricsPanel from "@/components/LyricsPanel";
 import { parseRichSync } from "@/lib/richsync/parseRichSync";
 import { normalizeRichSync } from "@/lib/richsync/normalizeRichSync";
-import RichSyncViewer from "@/components/RichSyncViewer";
+import SignalScopeIntelligence from "@/components/SignalScopeIntelligence";
 interface PageProps {
   params: Promise<{
     id: string;
@@ -22,6 +26,7 @@ export default async function TrackPage({ params }: PageProps) {
   let track: TrackDetails | null = null;
   let lyrics: LyricsResponse | null = null;
   let richsync = null;
+  let analysis: AnalysisResponse | null = null;
   try {
     track = await getTrack(id);
     lyrics = track.commontrack_id
@@ -30,6 +35,7 @@ export default async function TrackPage({ params }: PageProps) {
 
     if (track.commontrack_id) {
       richsync = await getRichSync(String(track.commontrack_id));
+      analysis = await getAnalysis(String(track.commontrack_id));
     }
   } catch (error) {
     console.error("Track page error:", error);
@@ -57,12 +63,16 @@ export default async function TrackPage({ params }: PageProps) {
     track.album_coverart_100x100;
 
   const hasArtwork = coverArt && !coverArt.includes("nocover.png");
-
-  const duration = `${Math.floor(track.track_length / 60)}:${(
-    track.track_length % 60
-  )
-    .toString()
-    .padStart(2, "0")}`;
+const duration =
+  track.track_length > 0
+    ? `${Math.floor(
+        track.track_length / 60
+      )}:${(
+        track.track_length % 60
+      )
+        .toString()
+        .padStart(2, "0")}`
+    : null;
 
   const richsyncLines = richsync?.richsync_body
     ? parseRichSync(richsync.richsync_body)
@@ -90,7 +100,7 @@ export default async function TrackPage({ params }: PageProps) {
 
           <span className={classes.badge}>Rating {track.track_rating}</span>
 
-          <span className={classes.badge}>{duration}</span>
+          {duration && <span className={classes.badge}>{duration}</span>}
 
           <span className={classes.badge}>
             {track.num_favourite.toLocaleString()} Favorites
@@ -116,44 +126,15 @@ export default async function TrackPage({ params }: PageProps) {
                 </div>
               )}
 
-              <div className="rounded-2xl border border-border bg-card p-5">
-                <h4 className="mb-4 font-semibold">SignalScope Scores</h4>
-
-                <div className="space-y-4">
-                  <div className="flex justify-between">
-                    <span>Audience</span>
-                    <span>--</span>
-                  </div>
-
-                  <div className="flex justify-between">
-                    <span>Emotion</span>
-                    <span>--</span>
-                  </div>
-
-                  <div className="flex justify-between">
-                    <span>Virality</span>
-                    <span>--</span>
-                  </div>
-
-                  <div className="flex justify-between">
-                    <span>Growth</span>
-                    <span>--</span>
-                  </div>
-                </div>
-              </div>
-
               <LyricsPanel
                 lyrics={lyrics?.lyrics_body}
                 language={lyrics?.lyrics_language}
                 translations={
-                  track.track_lyrics_translation_status?.map(
-                    (t) => t.to
-                  ) ?? []
+                  track.track_lyrics_translation_status?.map((t) => t.to) ?? []
                 }
                 segments={segments}
                 commontrackId={String(track.commontrack_id)}
-              />  
-
+              />
             </div>
           </div>
 
@@ -166,7 +147,7 @@ export default async function TrackPage({ params }: PageProps) {
 
               <InfoItem label="Track Rating" value={track.track_rating} />
 
-              <InfoItem label="Duration" value={duration} />
+          {duration && <InfoItem label="Duration" value={duration} />}
 
               <InfoItem
                 label="Favorites"
@@ -191,58 +172,17 @@ export default async function TrackPage({ params }: PageProps) {
 
             <div className="my-10 h-px bg-border" />
 
-            <div className="mt-10 rounded-3xl border border-violet-500/20 bg-violet-500/5 p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold">
-                    SignalScope Intelligence
-                  </h3>
-
-                  <p className="mt-1 text-sm text-muted">
-                    Intelligence generated from lyrics, metadata, audience
-                    signals and music context.
-                  </p>
-                </div>
-
-                <span className="rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-xs text-violet-300">
-                  Coming Soon
-                </span>
-              </div>
-
-              <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <Card
-                  title="Audience Archetypes"
-                  description="Who resonates with this song?"
+            {analysis && (
+              <>
+                <SignalScopeIntelligence
+                  track={track}
+                  lyrics={lyrics}
+                  richSync={richsync}
+                  analysis={analysis}
                 />
-
-                <Card
-                  title="Emotional Positioning"
-                  description="What emotions drive engagement?"
-                />
-
-                <Card
-                  title="Cultural Positioning"
-                  description="Identity and community signals."
-                />
-
-                <Card
-                  title="Content Opportunities"
-                  description="Potential clips, hooks and moments."
-                />
-
-                <Card
-                  title="Platform Fit"
-                  description="Reels, Shorts, TikTok and playlists."
-                />
-
-                <Card
-                  title="Growth Recommendations"
-                  description="Actionable artist strategy."
-                />
-              </div>
-            </div>
-
-            <div className="my-10 h-px bg-border" />
+                <div className="my-10 h-px bg-border" />
+              </>
+            )}
 
             <div className="my-10">
               <h3 className="text-xl font-semibold">
@@ -333,6 +273,7 @@ export default async function TrackPage({ params }: PageProps) {
           <div className="border-t border-border p-5">
             <div className={classes.grid}>
               <InfoItem label="Track ID" value={track.track_id} />
+              <InfoItem label="Common Track ID" value={track.commontrack_id} />
 
               <InfoItem label="Artist ID" value={track.artist_id} />
 
@@ -344,7 +285,6 @@ export default async function TrackPage({ params }: PageProps) {
                 label="Spotify ID"
                 value={track.track_spotify_id || "N/A"}
               />
-              <InfoItem label="Common Track ID" value={track.commontrack_id} />
               <InfoItem
                 label="RichSync"
                 value={track.has_richsync ? "Available" : "Unavailable"}

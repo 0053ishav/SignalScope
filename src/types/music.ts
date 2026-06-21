@@ -92,3 +92,70 @@ export interface LyricSegment {
   endTime: number;
   text: string;
 }
+
+export interface AnalysisResponse {
+  meaning?: {
+    explanation: string;
+    description?: string;
+  };
+
+  moods?: {
+    main_moods: string[];
+    description?: string;
+  };
+
+  themes?: {
+    main_themes: {
+      theme: string;
+      quotes: string[];
+    }[];
+    description?: string;
+  };
+
+  rating?: {
+    audience: string;
+    descriptor: string;
+    description?: string;
+  };
+
+  moderation?: {
+    needs_moderation: boolean;
+
+    categories: {
+      category: string;
+      is_present: boolean;
+      score: number;
+    }[];
+
+    description?: string;
+  };
+
+  religion?: {
+    has_references: boolean;
+    referenced_religions?: string[];
+    description?: string;
+  };
+
+  explicitness?: {
+    explicit_expressions?: {
+      text: string;
+      severity: string;
+      reason: string;
+      start_char?: number;
+      end_char?: number;
+    }[];
+
+    description?: string;
+  };
+
+  language_detection?: {
+    languages: {
+      language_name: string;
+      language_iso_code_1: string;
+      language_iso_code_3: string;
+      percentage: number;
+      is_romanized: boolean;
+    }[];
+  };
+}
+
