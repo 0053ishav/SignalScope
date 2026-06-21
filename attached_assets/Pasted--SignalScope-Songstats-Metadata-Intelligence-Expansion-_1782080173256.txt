@@ -1,0 +1,594 @@
+# SignalScope — Songstats Metadata Intelligence Expansion
+
+IMPLEMENTATION MODE
+
+Proceed directly with implementation.
+
+Do not stop for planning.
+
+Do not redesign the workspace architecture.
+
+This task expands Songstats usage beyond performance metrics.
+
+The Songstats Track Info endpoint already provides valuable metadata, ecosystem links, credits, audio analysis, release intelligence and platform presence.
+
+Use this data throughout the workspace.
+
+No mock data.
+
+No fabricated analytics.
+
+Only use fields returned by Songstats.
+
+---
+
+# OBJECTIVE
+
+Current SignalScope combines:
+
+* Musixmatch
+* Gemini
+* Intelligence Engine
+
+Songstats should become:
+
+* Metadata Intelligence Layer
+* Platform Intelligence Layer
+* Sonic Intelligence Layer
+* Creative Credits Layer
+
+before performance metrics are integrated.
+
+---
+
+# IMPORTANT
+
+Do NOT wait for stream counts.
+
+Implement everything possible using the existing Songstats Track Info response.
+
+Use real fields only.
+
+---
+
+# DATA AVAILABLE
+
+Songstats currently returns:
+
+* artwork/avatar
+* release date
+* genres
+* distributors
+* collaborators
+* producers
+* songwriters
+* engineers
+* arrangers
+* platform links
+* Spotify IDs
+* Apple Music IDs
+* TikTok IDs
+* YouTube IDs
+* SoundCloud links
+* audio analysis
+* external ecosystem references
+
+Build features around these immediately.
+
+---
+
+# TRACK HEADER ENHANCEMENT
+
+Enhance Workspace Header.
+
+Display:
+
+Track Artwork
+
+Release Date
+
+Genres
+
+Distributor
+
+Artist List
+
+Examples:
+
+Released:
+Jun 12, 2026
+
+Genres:
+Pop • K-Pop • Dance
+
+Distributed By:
+InGrooves
+
+Use Songstats artwork as preferred artwork source.
+
+Fallback to Musixmatch.
+
+Never show broken images.
+
+---
+
+# PLATFORM FOOTPRINT PANEL
+
+Create:
+
+PlatformFootprintCard
+
+Purpose:
+
+Show where the track exists.
+
+Supported platforms:
+
+Spotify
+
+Apple Music
+
+TikTok
+
+YouTube
+
+SoundCloud
+
+Deezer
+
+Amazon Music
+
+Tidal
+
+Shazam
+
+Songstats
+
+Display:
+
+Platform Icon
+
+Platform Name
+
+Open Link
+
+Use real links only.
+
+No placeholders.
+
+---
+
+# OPEN TRACK PANEL
+
+Create:
+
+OpenTrackPanel
+
+Purpose:
+
+Quick access to track ecosystem.
+
+Display:
+
+Open In Spotify
+
+Open In Apple Music
+
+Open In TikTok
+
+Open In YouTube
+
+Open In Songstats
+
+Use real URLs from Songstats.
+
+Open in new tab.
+
+---
+
+# RELEASE INTELLIGENCE
+
+Create:
+
+ReleaseIntelligenceCard
+
+Use:
+
+release_date
+
+Calculate:
+
+Days Since Release
+
+Release Age
+
+Release Status
+
+Examples:
+
+Fresh Release
+
+Recent Release
+
+Catalog Track
+
+Rules must be deterministic.
+
+No AI generation.
+
+---
+
+# SONIC INTELLIGENCE PAGE
+
+Create new workspace page:
+
+Sonic Intelligence
+
+Sidebar Group:
+
+INTELLIGENCE
+
+Icon:
+
+Waveform
+
+This page uses Songstats audio analysis.
+
+No Cyanite integration yet.
+
+Songstats becomes the temporary Sonic Intelligence provider.
+
+---
+
+# SONIC INTELLIGENCE METRICS
+
+Use real values:
+
+Danceability
+
+Energy
+
+Valence
+
+Tempo
+
+Acousticness
+
+Speechiness
+
+Liveness
+
+Instrumentalness
+
+Loudness
+
+Key
+
+Mode
+
+Time Signature
+
+Duration
+
+Display raw values.
+
+No fabricated scores.
+
+---
+
+# SONIC VISUALIZATION
+
+Create:
+
+Audio Profile Radar
+
+Use:
+
+Danceability
+
+Energy
+
+Valence
+
+Acousticness
+
+Speechiness
+
+Liveness
+
+Radar values must be derived directly from Songstats.
+
+No invented normalization.
+
+---
+
+# CREATOR READINESS
+
+Create:
+
+CreatorReadinessCard
+
+Derived from:
+
+Danceability
+
+Energy
+
+Tempo
+
+Speechiness
+
+Purpose:
+
+Estimate short-form content compatibility.
+
+Rules must be deterministic.
+
+Not AI generated.
+
+Display:
+
+Low
+
+Medium
+
+High
+
+With explanation.
+
+---
+
+# SHORT FORM COMPATIBILITY
+
+Create:
+
+ShortFormCompatibilityCard
+
+Derived from:
+
+Danceability
+
+Tempo
+
+Speechiness
+
+Display:
+
+Short Form Potential
+
+with explanation.
+
+No fabricated data.
+
+---
+
+# CREATIVE NETWORK PAGE
+
+Create:
+
+Creative Network
+
+Sidebar Group:
+
+ANALYSIS
+
+Icon:
+
+Users
+
+Purpose:
+
+Show creative contributors behind the track.
+
+---
+
+# CREATIVE NETWORK SECTIONS
+
+Songwriters
+
+Producers
+
+Engineers
+
+Arrangers
+
+Performers
+
+Collaborators
+
+Group by role.
+
+Display:
+
+Name
+
+Role
+
+Songstats ID if available
+
+---
+
+# CREATIVE NETWORK INSIGHTS
+
+Display:
+
+Total Contributors
+
+Primary Producers
+
+Primary Songwriters
+
+Primary Engineers
+
+Derived directly from Songstats collaborators.
+
+No AI generation.
+
+---
+
+# DISTRIBUTION INTELLIGENCE ENHANCEMENT
+
+Add:
+
+Distribution Ecosystem
+
+Display:
+
+Spotify
+
+Apple Music
+
+TikTok
+
+YouTube
+
+SoundCloud
+
+Tidal
+
+Deezer
+
+Amazon Music
+
+Shazam
+
+Show:
+
+Connected
+
+Available
+
+based on Songstats links.
+
+---
+
+# INTELLIGENCE SOURCE PANEL
+
+Update:
+
+Musixmatch
+Connected
+
+Gemini
+Connected
+
+Songstats
+Connected
+
+JamBase
+Coming Soon
+
+Cyanite
+Coming Soon
+
+ElevenLabs
+Coming Soon
+
+Display source status clearly.
+
+---
+
+# MARKETPLACE FOOTPRINT CARD
+
+Create:
+
+MarketplaceFootprint
+
+Display:
+
+Total Platforms Available
+
+Streaming Platforms
+
+Social Platforms
+
+Discovery Platforms
+
+Derived from Songstats links.
+
+No fabricated numbers.
+
+---
+
+# FUTURE COMPATIBILITY
+
+Design Songstats integration so future modules can consume:
+
+Songstats Metadata
+
+Songstats Audio Analysis
+
+Songstats Platform Presence
+
+Songstats Performance Metrics
+
+without architectural changes.
+
+Create reusable:
+
+songstatsAdapter.ts
+
+songstatsMapper.ts
+
+songstatsSignals.ts
+
+---
+
+# ERROR HANDLING
+
+If Songstats unavailable:
+
+Hide Songstats sections gracefully.
+
+Display:
+
+"Songstats data unavailable"
+
+Do not break:
+
+Workspace
+
+Intelligence Pages
+
+Source Data
+
+Track Header
+
+---
+
+# SUCCESS CRITERIA
+
+Songstats should immediately expand SignalScope into:
+
+Music Intelligence
+
+*
+
+Platform Intelligence
+
+*
+
+Sonic Intelligence
+
+*
+
+Creative Credits Intelligence
+
+before performance metrics are added.
+
+Judges should see:
+
+* What the song means
+* Who it resonates with
+* How it is distributed
+* How it sounds
+* Who created it
+* Where it exists online
+
+without leaving SignalScope.
+
+Use only real Songstats data.
+
+No fake analytics.
+
+No fabricated metrics.
