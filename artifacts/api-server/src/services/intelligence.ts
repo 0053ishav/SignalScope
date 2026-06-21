@@ -37,6 +37,11 @@ export async function generateIntelligenceReport(
             model: GEMINI_MODEL,
 
             contents: prompt,
+
+            config: {
+                responseMimeType:
+                    "application/json",
+            },
         });
 
     const text =
@@ -45,11 +50,29 @@ export async function generateIntelligenceReport(
     let parsed;
 
     try {
-        const cleaned =
+        let cleaned =
             text
                 .replace(/```json/g, "")
                 .replace(/```/g, "")
                 .trim();
+
+        const firstBrace =
+            cleaned.indexOf("{");
+
+        const lastBrace =
+            cleaned.lastIndexOf("}");
+
+        if (
+            firstBrace !== -1 &&
+            lastBrace !== -1 &&
+            lastBrace > firstBrace
+        ) {
+            cleaned =
+                cleaned.slice(
+                    firstBrace,
+                    lastBrace + 1
+                );
+        }
 
         parsed =
             JSON.parse(cleaned);
@@ -64,7 +87,43 @@ export async function generateIntelligenceReport(
         );
     }
 
+    if (
+        parsed &&
+        Array.isArray(
+            parsed.platformFit
+        )
+    ) {
+        parsed.platformFit =
+            parsed.platformFit.map(
+                (entry: any) => ({
+                    ...entry,
+                    score:
+                        normalizeScore(
+                            entry?.score
+                        ),
+                })
+            );
+    }
+
     return IntelligenceSchema.parse(
         parsed
     );
+}
+
+function normalizeScore(
+    value: unknown
+): "High" | "Medium" | "Low" {
+    const text = String(
+        value ?? ""
+    ).toLowerCase();
+
+    if (text.includes("high")) {
+        return "High";
+    }
+
+    if (text.includes("low")) {
+        return "Low";
+    }
+
+    return "Medium";
 }

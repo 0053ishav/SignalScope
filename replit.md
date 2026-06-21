@@ -42,7 +42,7 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- `POST /api/intelligence` (Gemini) must request `responseMimeType: "application/json"` and normalize `platformFit[].score` to the `High|Medium|Low` enum before Zod validation, or it returns 500. The redesigned TrackPage auto-generates this report on load (~15-25s), so a 500 leaves the center pane stuck on "Synthesizing Intelligence". See `.agents/memory/gemini-intelligence-json.md`.
 
 ## Pointers
 

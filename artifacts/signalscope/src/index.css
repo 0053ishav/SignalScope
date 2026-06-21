@@ -1,56 +1,5 @@
 @import "tailwindcss";
 
-:root {
-  /* Base */
-
-  --background: #09090b;
-  --foreground: #fafafa;
-
-  /* Cards */
-
-  --card: #111114;
-  --card-foreground: #fafafa;
-
-  /* Borders */
-
-  --border: #232326;
-
-  /* Text */
-
-  --muted: #9ca3af;
-
-  /* Brand */
-
-  --primary: #8b5cf6;
-  --primary-foreground: #ffffff;
-
-  /* Intelligence Colors */
-
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --info: #3b82f6;
-
-  /* Accent */
-
-  --accent: #14b8a6;
-
-  /* Fonts */
-
-  --font-geist-sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-geist-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
-
-  /* Gradients */
-
-  --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
-
-  --gradient-glow: radial-gradient(
-    circle,
-    rgba(139, 92, 246, 0.15),
-    transparent 70%
-  );
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -58,15 +7,68 @@
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
 
-  --color-border: var(--border);
-
-  --color-muted: var(--muted);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
 
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  /* Premium Dark SaaS Palette */
+  --background: 224 71% 4%;
+  --foreground: 210 20% 98%;
+
+  --card: 224 71% 6%;
+  --card-foreground: 210 20% 98%;
+
+  --popover: 224 71% 6%;
+  --popover-foreground: 210 20% 98%;
+
+  --primary: 250 89% 65%;
+  --primary-foreground: 210 20% 98%;
+
+  --secondary: 220 30% 12%;
+  --secondary-foreground: 210 20% 98%;
+
+  --muted: 220 30% 12%;
+  --muted-foreground: 217.9 10.6% 64.9%;
+
+  --accent: 220 30% 15%;
+  --accent-foreground: 210 20% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 20% 98%;
+
+  --border: 220 30% 14%;
+  --input: 220 30% 14%;
+  --ring: 250 89% 65%;
+
+  --radius: 0.5rem;
 }
 
 html {
@@ -74,23 +76,32 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans);
-  min-height: 100vh;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-::selection {
-  background: rgba(139, 92, 246, 0.3);
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
-
-/* Hide scrollbar but keep scrolling */
-
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+/* Custom Scrollbar for Intelligence Panels */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
 }

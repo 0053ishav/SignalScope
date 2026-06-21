@@ -1,0 +1,1 @@
+- [Gemini intelligence JSON](gemini-intelligence-json.md) — /api/intelligence needs responseMimeType=application/json + platformFit score enum normalization or it 500s.
