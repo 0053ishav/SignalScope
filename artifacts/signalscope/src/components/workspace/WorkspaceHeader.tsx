@@ -1,8 +1,8 @@
-import { RefreshCw, ShieldCheck, FileOutput, ChevronRight } from "lucide-react";
+import { RefreshCw, ShieldCheck, FileOutput, ChevronRight, Menu } from "lucide-react";
 import { useTrackWorkspace } from "@/context/TrackWorkspaceContext";
 import { getNavItem } from "./nav";
 
-export default function WorkspaceHeader({ view }: { view: string }) {
+export default function WorkspaceHeader({ view, onMenuClick }: { view: string; onMenuClick?: () => void }) {
   const { track, report, reportLoading, confidence, regenerate } = useTrackWorkspace();
   const nav = getNavItem(view);
   const cover = track.album_coverart_100x100 || track.album_coverart_350x350;
@@ -10,6 +10,13 @@ export default function WorkspaceHeader({ view }: { view: string }) {
   return (
     <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border px-4 md:px-6 py-3 flex flex-col md:flex-row gap-3 items-start md:items-center justify-between">
       <div className="flex items-center gap-3 min-w-0">
+        <button
+          onClick={onMenuClick}
+          aria-label="Open navigation"
+          className="md:hidden p-2 -ml-1 rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none shrink-0"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
         {cover ? (
           <img
             src={cover}

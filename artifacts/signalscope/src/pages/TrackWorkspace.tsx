@@ -57,6 +57,7 @@ export default function TrackWorkspace({ id, view }: Props) {
   const [report, setReport] = useState<IntelligenceReport | null>(null);
   const [reportLoading, setReportLoading] = useState(false);
   const [reportError, setReportError] = useState("");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const generatedForRef = useRef<number | null>(null);
 
@@ -187,8 +188,15 @@ export default function TrackWorkspace({ id, view }: Props) {
   return (
     <TrackWorkspaceContext.Provider value={value}>
       <WorkspaceLayout
-        sidebar={<WorkspaceSidebar id={id} view={view} />}
-        header={<WorkspaceHeader view={view} />}
+        sidebar={
+          <WorkspaceSidebar
+            id={id}
+            view={view}
+            mobileOpen={mobileNavOpen}
+            onClose={() => setMobileNavOpen(false)}
+          />
+        }
+        header={<WorkspaceHeader view={view} onMenuClick={() => setMobileNavOpen(true)} />}
         rightRail={<SourceIntelligencePanel />}
       >
         <Page />
