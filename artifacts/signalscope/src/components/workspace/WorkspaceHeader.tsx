@@ -1,0 +1,61 @@
+import { RefreshCw, ShieldCheck, FileOutput, ChevronRight } from "lucide-react";
+import { useTrackWorkspace } from "@/context/TrackWorkspaceContext";
+import { getNavItem } from "./nav";
+
+export default function WorkspaceHeader({ view }: { view: string }) {
+  const { track, report, reportLoading, confidence, regenerate } = useTrackWorkspace();
+  const nav = getNavItem(view);
+  const cover = track.album_coverart_100x100 || track.album_coverart_350x350;
+
+  return (
+    <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border px-4 md:px-6 py-3 flex flex-col md:flex-row gap-3 items-start md:items-center justify-between">
+      <div className="flex items-center gap-3 min-w-0">
+        {cover ? (
+          <img
+            src={cover}
+            alt={track.album_name}
+            className="w-10 h-10 rounded-md object-cover border border-border shrink-0"
+          />
+        ) : (
+          <div className="w-10 h-10 rounded-md bg-secondary shrink-0" />
+        )}
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+            <span className="truncate max-w-[140px]">{track.track_name}</span>
+            <ChevronRight className="w-3 h-3 shrink-0" />
+            <span className="text-foreground font-medium">{nav?.label ?? "Workspace"}</span>
+          </div>
+          <div className="flex items-center gap-2 mt-0.5">
+            <h1 className="text-sm font-bold tracking-tight truncate">{track.artist_name}</h1>
+            {report && (
+              <span className="flex items-center gap-1 text-[11px] font-medium text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded border border-emerald-400/20">
+                <ShieldCheck className="w-3 h-3" />
+                {confidence}%
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 shrink-0">
+        <button
+          onClick={() => window.print()}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none transition-colors cursor-pointer"
+          title="Export current view (print)"
+        >
+          <FileOutput className="w-4 h-4" />
+          <span className="hidden sm:inline">Export</span>
+        </button>
+        <button
+          onClick={regenerate}
+          disabled={reportLoading}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Regenerate report"
+        >
+          <RefreshCw className={`w-4 h-4 ${reportLoading ? "animate-spin" : ""}`} />
+          <span className="hidden sm:inline">Regenerate</span>
+        </button>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,29 @@
+import { createContext, useContext } from "react";
+import type { TrackDetails, LyricsResponse, AnalysisResponse, LyricSegment } from "@/types/music";
+import type { IntelligenceReport } from "@/types/intelligence";
+
+export interface TrackWorkspaceValue {
+  id: string;
+  track: TrackDetails;
+  lyrics: LyricsResponse | null;
+  richSync: unknown;
+  segments: LyricSegment[];
+  analysis: AnalysisResponse | null;
+
+  report: IntelligenceReport | null;
+  reportLoading: boolean;
+  reportError: string;
+  regenerate: () => void;
+
+  confidence: number;
+}
+
+export const TrackWorkspaceContext = createContext<TrackWorkspaceValue | null>(null);
+
+export function useTrackWorkspace(): TrackWorkspaceValue {
+  const ctx = useContext(TrackWorkspaceContext);
+  if (!ctx) {
+    throw new Error("useTrackWorkspace must be used within a TrackWorkspaceContext provider");
+  }
+  return ctx;
+}

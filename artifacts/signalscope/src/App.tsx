@@ -1,8 +1,8 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Header from "@/components/ui/Header";
 import HomePage from "@/pages/Home";
-import TrackPage from "@/pages/TrackPage";
+import TrackWorkspace from "@/pages/TrackWorkspace";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -11,9 +11,8 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={HomePage} />
-      <Route path="/track/:id">
-        {(params) => <TrackPage id={params.id} />}
-      </Route>
+      <Route path="/track/:id">{(params) => <Redirect to={`/track/${params.id}/overview`} />}</Route>
+      <Route path="/track/:id/:view">{(params) => <TrackWorkspace id={params.id} view={params.view} />}</Route>
       <Route component={NotFound} />
     </Switch>
   );

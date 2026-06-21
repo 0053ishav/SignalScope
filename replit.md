@@ -22,13 +22,14 @@ Music intelligence for artists & labels: search any song (Musixmatch), view lyri
 
 ## Where things live
 
-- `artifacts/signalscope/` — Vite + React frontend (wouter routing). Routes: `/` (Home), `/track/:id` (TrackPage). Theme tokens in `src/index.css`.
+- `artifacts/signalscope/` — Vite + React frontend (wouter routing). Routes: `/` (Home), `/track/:id` → redirects to `/track/:id/overview`, `/track/:id/:view` (TrackWorkspace shell). Theme tokens in `src/index.css`.
 - `artifacts/api-server/` — Express 5 backend. SignalScope routes in `src/routes/signalscope.ts` (mounted under `/api`). Services in `src/services/` (musixmatch, intelligence, gemini); RichSync parsing in `src/lib/richsync/`.
 - `artifacts/mockup-sandbox/` — design/preview artifact (scaffold).
 
 ## Architecture decisions
 
 - Ported from a Next.js (Vercel/v0) export: `next/link` → wouter `Link`, `next/image` → `<img>`, server components → client-side `fetch` in `useEffect`.
+- Track view is a route-based "Intelligence Workspace": persistent left nav (`WorkspaceSidebar`), routed center pages (`pages/workspace/*`), right Source Context rail. The shell `pages/TrackWorkspace.tsx` stays mounted across view changes, loads source data + generates the Gemini report ONCE per `commontrack_id`, and shares everything via `context/TrackWorkspaceContext`. Reusable building blocks (cards, charts, helpers) live in `components/workspace/`; shared helpers/constants in `lib/intelligence.ts`. Strategy pages (Performance/Live/Sonic) are honest coming-soon placeholders — no fabricated metrics.
 - Frontend calls the backend via relative `/api/...`; the shared proxy routes `/api/*` to the api-server (signalscope is served at base path `/`).
 - Original dark theme preserved with direct hex CSS vars + Tailwind v4 `@theme inline` (not the shadcn HSL token system). Font is Geist (loaded via Google Fonts in `index.html`).
 
@@ -42,7 +43,7 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-- `POST /api/intelligence` (Gemini) must request `responseMimeType: "application/json"` and normalize `platformFit[].score` to the `High|Medium|Low` enum before Zod validation, or it returns 500. The redesigned TrackPage auto-generates this report on load (~15-25s), so a 500 leaves the center pane stuck on "Synthesizing Intelligence". See `.agents/memory/gemini-intelligence-json.md`.
+- `POST /api/intelligence` (Gemini) must request `responseMimeType: "application/json"` and normalize `platformFit[].score` to the `High|Medium|Low` enum before Zod validation, or it returns 500. The `TrackWorkspace` shell auto-generates this report on load (~15-25s); report-dependent pages show a "Synthesizing Intelligence" loader and a graceful "Analysis Failed" + Retry state on error (`components/workspace/ReportGate`). See `.agents/memory/gemini-intelligence-json.md`.
 
 ## Pointers
 
