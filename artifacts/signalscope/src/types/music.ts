@@ -1,0 +1,161 @@
+export interface Track {
+  id: string;
+  name: string;
+  artist: string;
+  album?: string;
+}
+export interface TrackDetails {
+  track_id: number;
+  track_name: string;
+  track_rating: number;
+  track_length: number;
+
+  track_isrc: string;
+  track_spotify_id?: string;
+
+  commontrack_id: number;
+
+  artist_id: number;
+  artist_name: string;
+
+  album_id: number;
+  album_name: string;
+
+  instrumental: number;
+  explicit: number;
+
+  has_lyrics: number;
+  has_subtitles: number;
+  has_richsync: number;
+
+  num_favourite: number;
+
+  restricted: number;
+
+  updated_time: string;
+
+  album_coverart_100x100?: string;
+  album_coverart_350x350?: string;
+  album_coverart_500x500?: string;
+  album_coverart_800x800?: string;
+
+  track_share_url?: string;
+  track_edit_url?: string;
+
+  commontrack_isrcs?: string[][];
+
+  primary_genres?: {
+    music_genre_list: {
+      music_genre: {
+        music_genre_id: number;
+        music_genre_parent_id: number;
+        music_genre_name: string;
+        music_genre_name_extended: string;
+        music_genre_vanity: string;
+      };
+    }[];
+  };
+
+  track_lyrics_translation_status?: {
+    from: string;
+    to: string;
+    perc: number;
+  }[];
+
+  track_lyrics_translation_options?: {
+    contribution_blocked: number;
+  };
+}
+
+export interface LyricsResponse {
+  lyrics_body: string;
+  lyrics_language: string;
+  explicit: number;
+  lyrics_copyright?: string;
+  updated_time?: string;
+}
+
+export interface RichSyncChunk {
+  c: string;
+  o: number;
+}
+
+export interface RichSyncLine {
+  ts: number;
+  te: number;
+  x: string;
+  l: RichSyncChunk[];
+}
+
+export interface LyricSegment {
+  startTime: number;
+  endTime: number;
+  text: string;
+}
+
+export interface AnalysisResponse {
+  meaning?: {
+    explanation: string;
+    description?: string;
+  };
+
+  moods?: {
+    main_moods: string[];
+    description?: string;
+  };
+
+  themes?: {
+    main_themes: {
+      theme: string;
+      quotes: string[];
+    }[];
+    description?: string;
+  };
+
+  rating?: {
+    audience: string;
+    descriptor: string;
+    description?: string;
+  };
+
+  moderation?: {
+    needs_moderation: boolean;
+
+    categories: {
+      category: string;
+      is_present: boolean;
+      score: number;
+    }[];
+
+    description?: string;
+  };
+
+  religion?: {
+    has_references: boolean;
+    referenced_religions?: string[];
+    description?: string;
+  };
+
+  explicitness?: {
+    explicit_expressions?: {
+      text: string;
+      severity: string;
+      reason: string;
+      start_char?: number;
+      end_char?: number;
+    }[];
+
+    description?: string;
+  };
+
+  language_detection?: {
+    languages: {
+      language_name: string;
+      language_iso_code_1: string;
+      language_iso_code_3: string;
+      percentage: number;
+      is_romanized: boolean;
+    }[];
+  };
+}
+
