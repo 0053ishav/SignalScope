@@ -126,7 +126,15 @@ export function observedForPlatform(
   }
 
   // Fall back to any matching named platform in the per-source breakdown.
-  const platformMatch = data.platforms.find((pl) => p.includes(pl.source) || pl.label.toLowerCase().includes(p));
+  // Normalize separators and match bidirectionally so longer AI labels
+  // ("Apple Music Editorial") still resolve to "apple_music" / "Apple Music".
+  const norm = (s: string) => s.toLowerCase().replace(/[_-]+/g, " ").trim();
+  const np = norm(platform);
+  const platformMatch = data.platforms.find((pl) => {
+    const ns = norm(pl.source);
+    const nl = norm(pl.label);
+    return np.includes(ns) || ns.includes(np) || np.includes(nl) || nl.includes(np);
+  });
   if (platformMatch && platformMatch.metrics.length > 0) {
     const top = platformMatch.metrics[0];
     return make(top.value, platformMatch.source, top.label);

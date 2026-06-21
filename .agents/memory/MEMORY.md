@@ -1,1 +1,1 @@
-- [SignalScope intelligence pipeline](signalscope-intelligence-pipeline.md) — report caching/source meta, fallback honesty, RichSync ingestion quirk, and FE/BE lexicon sync.
+- [api-server dev & testing gotchas](api-server-dev-testing.md) — api-server serves a built bundle (restart to pick up route edits); test via localhost:8080/api, not $REPLIT_DEV_DOMAIN.
