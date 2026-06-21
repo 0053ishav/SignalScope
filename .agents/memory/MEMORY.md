@@ -1,3 +1,1 @@
-- [Gemini intelligence JSON](gemini-intelligence-json.md) — /api/intelligence needs responseMimeType=application/json + platformFit score enum normalization or it 500s.
-- [SignalScope report verification](signalscope-report-verification.md) — track page screenshots always show the loading spinner; the ~20s Gemini gen needs a Playwright wait to verify the report renders.
-- [SignalScope test harness](signalscope-test-harness.md) — Vitest+jsdom setup for signalscope; recharts needs a ResizeObserver polyfill, mount AppRoutes under wouter memoryLocation, labels are duplicated.
+- [SignalScope intelligence pipeline](signalscope-intelligence-pipeline.md) — report caching/source meta, fallback honesty, RichSync ingestion quirk, and FE/BE lexicon sync.

@@ -11,6 +11,8 @@ import {
   ThemeSignal,
 } from "./types";
 
+import { parseRichSync } from "@/lib/richsync/parseRichSync";
+
 export function extractThemes(
   analysis: AnalysisResponse | null
 ): ThemeSignal[] {
@@ -75,76 +77,54 @@ function formatTime(
     .padStart(2, "0")}`;
 }
 
+// Identity / emotional lexicons for RichSync salience scoring. These MUST stay
+// in sync with the frontend mirror in
+// `artifacts/signalscope/src/lib/intelligence.ts` (IDENTITY_WORDS / EMOTIONAL_WORDS)
+// so the displayed timeline matches the moments fed into report generation.
+const IDENTITY_WORDS = ["i", "me", "my", "we", "our", "us", "mine"];
+const EMOTIONAL_WORDS = [
+  "love",
+  "pain",
+  "dream",
+  "hope",
+  "alone",
+  "home",
+  "heart",
+  "life",
+];
+
+function tokenize(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z\s']/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
 export function extractRichSyncMoments(
   lines: RichSyncLine[]
 ): string[] {
-  const identityWords = [
-    "i",
-    "me",
-    "my",
-    "we",
-    "our",
-  ];
+  const scored = lines.map((line) => {
+    const tokens = tokenize(line.x);
+    const identityHits = tokens.filter((t) =>
+      IDENTITY_WORDS.includes(t)
+    ).length;
+    const emotionalHits = tokens.filter((t) =>
+      EMOTIONAL_WORDS.includes(t)
+    ).length;
+    const isNarrative = line.x.length > 40;
 
-  const emotionalWords = [
-    "love",
-    "pain",
-    "dream",
-    "hope",
-    "alone",
-    "home",
-    "heart",
-    "life",
-  ];
+    const score =
+      identityHits * 2 + emotionalHits * 2 + (isNarrative ? 1 : 0);
 
-  const scored = lines.map(
-    (line) => {
-      const text =
-        line.x.toLowerCase();
-
-      let score = 0;
-
-      if (line.x.length > 40)
-        score += 1;
-
-      identityWords.forEach(
-        (word) => {
-          if (
-            text.includes(word)
-          )
-            score += 2;
-        }
-      );
-
-      emotionalWords.forEach(
-        (word) => {
-          if (
-            text.includes(word)
-          )
-            score += 2;
-        }
-      );
-
-      return {
-        text: line.x,
-        ts: line.ts,
-        score,
-      };
-    }
-  );
+    return { text: line.x, ts: line.ts, score };
+  });
 
   return scored
-    .sort(
-      (a, b) =>
-        b.score - a.score
-    )
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score)
     .slice(0, 5)
-    .map(
-      (item) =>
-        `${formatTime(
-          item.ts
-        )} - ${item.text}`
-    );
+    .map((item) => `${formatTime(item.ts)} - ${item.text}`);
 }
 
 export function extractSongSignals({
@@ -159,12 +139,24 @@ export function extractSongSignals({
   const lyricsData =
     lyrics as LyricsResponse;
 
-let richSyncLines: RichSyncLine[] =
-  [];
+  // The frontend forwards the raw Musixmatch RichSync payload, which is an
+  // object carrying a JSON-encoded `richsync_body` string. Parse it so the
+  // timing moments actually populate (older code only handled pre-parsed
+  // arrays, silently dropping RichSync entirely).
+  let richSyncLines: RichSyncLine[] = [];
 
-if (Array.isArray(richSync)) {
-  richSyncLines = richSync;
-}
+  if (Array.isArray(richSync)) {
+    richSyncLines = richSync;
+  } else if (
+    richSync &&
+    typeof richSync === "object" &&
+    typeof (richSync as { richsync_body?: unknown }).richsync_body === "string"
+  ) {
+    richSyncLines = parseRichSync(
+      (richSync as { richsync_body: string }).richsync_body
+    );
+  }
+
   const analysisData =
     analysis as AnalysisResponse;
 

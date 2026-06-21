@@ -44,6 +44,8 @@ _Populate as you build — explicit user instructions worth remembering across s
 ## Gotchas
 
 - `POST /api/intelligence` (Gemini) must request `responseMimeType: "application/json"` and normalize `platformFit[].score` to the `High|Medium|Low` enum before Zod validation, or it returns 500. The `TrackWorkspace` shell auto-generates this report on load (~15-25s); report-dependent pages show a "Synthesizing Intelligence" loader and a graceful "Analysis Failed" + Retry state on error (`components/workspace/ReportGate`). See `.agents/memory/gemini-intelligence-json.md`.
+- Reports are persisted in the `intelligence_reports` table (keyed by `commontrack_id`) and served from cache. The response carries non-breaking meta `source: "gemini" | "fallback"` and `cached: boolean` (attached after Zod parse). On Gemini failure the route returns an honest ontology-derived report (`buildFallbackReport`, `source: "fallback"`) instead of throwing. To force a fresh synthesis (bypass cache), POST with `?refresh=true` — the frontend `regenerate()`/FallbackBanner "Retry" already do this.
+- RichSync arrives from the frontend as the raw Musixmatch object `{ richsync_body: <JSON string> }`, NOT a parsed array. `extractSongSignals` must `parseRichSync(richsync_body)` or `richSyncMoments` silently come back empty. The identity/emotional lexicons used to score RichSync salience are duplicated in `api-server/.../intelligence/signals.ts` and `signalscope/src/lib/intelligence.ts` — keep them identical or the displayed timeline diverges from what feeds the report.
 
 ## Pointers
 

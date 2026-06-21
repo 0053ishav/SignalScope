@@ -4,6 +4,7 @@ import ReportGate from "@/components/workspace/ReportGate";
 import MetricCard from "@/components/workspace/MetricCard";
 import ChartCard, { EmptyChart } from "@/components/workspace/ChartCard";
 import IntelligenceCard from "@/components/workspace/IntelligenceCard";
+import ConfidenceDrivers from "@/components/workspace/ConfidenceDrivers";
 import ScoreRadar from "@/components/workspace/charts/ScoreRadar";
 import ConfidenceGauge from "@/components/workspace/charts/ConfidenceGauge";
 import SignalDistributionDonut from "@/components/workspace/charts/SignalDistributionDonut";
@@ -45,6 +46,8 @@ export default function OverviewPage() {
                 <SignalDistributionDonut report={report} />
               </ChartCard>
             </div>
+
+            <ConfidenceDrivers />
 
             <div className="grid lg:grid-cols-2 gap-4">
               <IntelligenceCard title="Key Opportunities" icon={Lightbulb} iconClassName="text-amber-400">

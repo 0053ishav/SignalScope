@@ -4,6 +4,7 @@ import ReportGate from "@/components/workspace/ReportGate";
 import MetricCard from "@/components/workspace/MetricCard";
 import EvidenceCard from "@/components/workspace/EvidenceCard";
 import IntelligenceCard from "@/components/workspace/IntelligenceCard";
+import SourceAttribution from "@/components/workspace/SourceAttribution";
 import { EmptyChart } from "@/components/workspace/ChartCard";
 import { KPI_META } from "@/lib/intelligence";
 import { useTrackWorkspace } from "@/context/TrackWorkspaceContext";
@@ -63,6 +64,8 @@ export default function EmotionalPage() {
               accent="pink"
               emptyHint="No emotional evidence provided."
             />
+
+            <SourceAttribution section="emotion" />
           </div>
         )}
       </ReportGate>

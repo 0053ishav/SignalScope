@@ -4,6 +4,8 @@ export interface PlatformFit {
   reason: string;
 }
 
+export type ReportSource = "gemini" | "fallback";
+
 export interface IntelligenceReport {
   summary: string;
 
@@ -34,4 +36,8 @@ export interface IntelligenceReport {
   artistActions: string[];
 
   platformFit: PlatformFit[];
+
+  /** Provenance metadata attached by the API (non-LLM fields). */
+  source?: ReportSource;
+  cached?: boolean;
 }

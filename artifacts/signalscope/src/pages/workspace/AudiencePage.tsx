@@ -4,6 +4,7 @@ import ReportGate from "@/components/workspace/ReportGate";
 import MetricCard from "@/components/workspace/MetricCard";
 import EvidenceCard from "@/components/workspace/EvidenceCard";
 import IntelligenceCard from "@/components/workspace/IntelligenceCard";
+import SourceAttribution from "@/components/workspace/SourceAttribution";
 import { EmptyChart } from "@/components/workspace/ChartCard";
 import { KPI_META } from "@/lib/intelligence";
 
@@ -46,6 +47,8 @@ export default function AudiencePage() {
               accent="violet"
               emptyHint="No audience evidence provided."
             />
+
+            <SourceAttribution section="audience" />
           </div>
         )}
       </ReportGate>

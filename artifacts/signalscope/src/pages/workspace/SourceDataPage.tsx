@@ -1,6 +1,7 @@
-import { Disc3, FileText, Clock, HeartHandshake, Globe, BrainCircuit, Tag } from "lucide-react";
+import { Disc3, FileText, Clock, HeartHandshake, Globe, BrainCircuit, Tag, Plug } from "lucide-react";
 import WorkspacePage from "@/components/workspace/WorkspacePage";
 import CollapsibleCard from "@/components/workspace/CollapsibleCard";
+import IntelligenceSourcesPanel from "@/components/workspace/IntelligenceSourcesPanel";
 import { useTrackWorkspace } from "@/context/TrackWorkspaceContext";
 
 function formatDuration(seconds?: number) {
@@ -25,6 +26,13 @@ export default function SourceDataPage() {
       description="The raw signals feeding this workspace — Musixmatch metadata, lyrics, RichSync timing, and lyrical analysis. No metric here is inferred."
     >
       <div className="space-y-3">
+        <CollapsibleCard title="Intelligence Sources" icon={Plug} defaultOpen>
+          <p className="text-xs text-muted-foreground mb-4">
+            Live data providers feeding this workspace, plus partner integrations on the roadmap.
+          </p>
+          <IntelligenceSourcesPanel />
+        </CollapsibleCard>
+
         <CollapsibleCard title="Track Metadata" icon={Disc3} defaultOpen>
           <dl className="grid sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
             <MetaRow label="Title" value={track.track_name} />

@@ -8,8 +8,24 @@ import { extractSongSignals } from "@/lib/intelligence/signals";
 
 import {
     IntelligenceSchema,
+    type IntelligenceResponse,
 } from "@/lib/intelligence/schema";
 
+import { buildFallbackReport } from "@/lib/intelligence/fallback";
+
+export type ReportSource = "gemini" | "fallback";
+
+export interface GeneratedReport {
+    report: IntelligenceResponse;
+    source: ReportSource;
+}
+
+/**
+ * Generate an intelligence report. Tries Gemini first; if Gemini fails for any
+ * reason (quota, network, invalid JSON), falls back to the deterministic
+ * ontology pipeline so the workspace never appears broken. Both paths return
+ * only real, signal-derived data.
+ */
 export async function generateIntelligenceReport(
     input: {
         track: unknown;
@@ -17,7 +33,7 @@ export async function generateIntelligenceReport(
         richSync: unknown;
         analysis: unknown;
     }
-) {
+): Promise<GeneratedReport> {
     const songSignals =
         extractSongSignals(input);
 
@@ -26,30 +42,28 @@ export async function generateIntelligenceReport(
             songSignals
         );
 
-    const prompt =
-        buildIntelligencePrompt(
-            songSignals,
-            derivedSignals
-        );
-
-    const response =
-        await gemini.models.generateContent({
-            model: GEMINI_MODEL,
-
-            contents: prompt,
-
-            config: {
-                responseMimeType:
-                    "application/json",
-            },
-        });
-
-    const text =
-        response.text ?? "{}";
-
-    let parsed;
-
     try {
+        const prompt =
+            buildIntelligencePrompt(
+                songSignals,
+                derivedSignals
+            );
+
+        const response =
+            await gemini.models.generateContent({
+                model: GEMINI_MODEL,
+
+                contents: prompt,
+
+                config: {
+                    responseMimeType:
+                        "application/json",
+                },
+            });
+
+        const text =
+            response.text ?? "{}";
+
         let cleaned =
             text
                 .replace(/```json/g, "")
@@ -74,40 +88,45 @@ export async function generateIntelligenceReport(
                 );
         }
 
-        parsed =
+        const parsed =
             JSON.parse(cleaned);
+
+        if (
+            parsed &&
+            Array.isArray(
+                parsed.platformFit
+            )
+        ) {
+            parsed.platformFit =
+                parsed.platformFit.map(
+                    (entry: any) => ({
+                        ...entry,
+                        score:
+                            normalizeScore(
+                                entry?.score
+                            ),
+                    })
+                );
+        }
+
+        return {
+            report: IntelligenceSchema.parse(parsed),
+            source: "gemini",
+        };
     } catch (error) {
         console.error(
-            "Gemini invalid JSON",
-            text
+            "Gemini generation failed, using fallback analysis",
+            error instanceof Error ? error.message : error
         );
 
-        throw new Error(
-            "Failed to parse Gemini response"
-        );
+        return {
+            report: buildFallbackReport(
+                songSignals,
+                derivedSignals
+            ),
+            source: "fallback",
+        };
     }
-
-    if (
-        parsed &&
-        Array.isArray(
-            parsed.platformFit
-        )
-    ) {
-        parsed.platformFit =
-            parsed.platformFit.map(
-                (entry: any) => ({
-                    ...entry,
-                    score:
-                        normalizeScore(
-                            entry?.score
-                        ),
-                })
-            );
-    }
-
-    return IntelligenceSchema.parse(
-        parsed
-    );
 }
 
 function normalizeScore(

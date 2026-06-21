@@ -1,0 +1,437 @@
+# SignalScope Final Pre-Integration Hardening Sprint
+
+IMPLEMENTATION MODE
+
+Proceed directly with implementation.
+
+Do not stop for planning.
+
+Do not redesign architecture again.
+
+Do not add partner integrations yet.
+
+Do not add mock analytics.
+
+Do not fabricate metrics.
+
+Do not modify Musixmatch integrations.
+
+Do not modify Gemini intelligence generation.
+
+Preserve existing functionality.
+
+Goal:
+
+Finish the platform before external partner integrations.
+
+---
+
+PRIORITY
+
+Make SignalScope feel production-ready.
+
+Focus on:
+
+* Reliability
+* Explainability
+* Performance
+* Exportability
+* Demo Readiness
+
+---
+
+TASK 1
+
+Export Report
+
+Current state:
+
+Export buttons exist but are not useful.
+
+Implement:
+
+Export PDF
+
+Print Intelligence Report
+
+Download Intelligence JSON
+
+Requirements:
+
+PDF can use browser print functionality.
+
+JSON export should download the current IntelligenceReport.
+
+Do not create fake export data.
+
+Export only real report data.
+
+---
+
+TASK 2
+
+Report Persistence
+
+Current problem:
+
+Every track regeneration requires Gemini.
+
+Implement report caching.
+
+Flow:
+
+Open Track
+
+→ Check persistence layer
+
+Found
+
+→ Load report instantly
+
+Not Found
+
+→ Generate report
+
+→ Save report
+
+→ Return report
+
+Use existing database infrastructure if available.
+
+If persistence is not available yet:
+
+Create a local persistence layer architecture that can later move to Postgres.
+
+Goal:
+
+Avoid repeated report generation.
+
+---
+
+TASK 3
+
+Intelligence Fallback
+
+Current problem:
+
+Gemini failure can break the workspace.
+
+Implement graceful fallback.
+
+Flow:
+
+Try Gemini
+
+If Gemini fails
+
+→ Use fallback.ts
+
+Display:
+
+"Intelligence generated using fallback analysis"
+
+Workspace must never appear broken.
+
+---
+
+TASK 4
+
+Loading States
+
+Audit every workspace page.
+
+Implement:
+
+Loading
+
+Skeleton
+
+Error
+
+Empty
+
+Success
+
+states.
+
+Requirements:
+
+No layout shifts.
+
+No flashing content.
+
+Consistent skeleton patterns.
+
+---
+
+TASK 5
+
+Source Attribution
+
+Every intelligence section must clearly show where conclusions came from.
+
+Examples:
+
+Audience Intelligence
+
+Derived From:
+
+✓ Musixmatch Analysis
+
+✓ Theme Signals
+
+✓ Mood Signals
+
+✓ RichSync Moments
+
+✓ Ontology Expansion
+
+Do not invent sources.
+
+Only display real sources.
+
+---
+
+TASK 6
+
+Confidence Explanation
+
+Current:
+
+Confidence 41%
+
+Problem:
+
+No explanation.
+
+Add:
+
+Confidence Drivers
+
+Examples:
+
+✓ Meaning Analysis Available
+
+✓ RichSync Available
+
+✓ Theme Signals Detected
+
+✓ Mood Signals Detected
+
+✓ Strong Signal Coverage
+
+Use real intelligence inputs only.
+
+---
+
+TASK 7
+
+RichSync Intelligence Timeline
+
+Create a new visualization.
+
+Use actual RichSync moments.
+
+Examples:
+
+6s
+"Hatin' me is like all you do"
+
+→ Criticism Signal
+
+9s
+"Algorithm bulletproof"
+
+→ Creator Economy Signal
+
+16s
+"I am iconic by mistake"
+
+→ Identity Signal
+
+Goal:
+
+Show how intelligence was derived from specific moments.
+
+No fabricated mappings.
+
+Must come from existing signal extraction logic.
+
+---
+
+TASK 8
+
+Platform Positioning Audit
+
+Review naming consistency.
+
+Ensure workspace language feels like an intelligence platform.
+
+Examples:
+
+Audience Intelligence
+
+Emotional Intelligence
+
+Cultural Intelligence
+
+Content Intelligence
+
+Distribution Intelligence
+
+Growth Intelligence
+
+Performance Intelligence
+
+Use consistent enterprise terminology.
+
+---
+
+TASK 9
+
+Intelligence Sources Panel
+
+Add a dedicated panel.
+
+Show:
+
+Musixmatch
+Connected
+
+Gemini
+Connected
+
+Songstats
+Coming Soon
+
+JamBase
+Coming Soon
+
+Cyanite
+Coming Soon
+
+ElevenLabs
+Coming Soon
+
+Purpose:
+
+Show future ecosystem architecture.
+
+No integrations.
+
+No fake data.
+
+Visual only.
+
+---
+
+TASK 10
+
+Shareable Intelligence Links
+
+Implement:
+
+Copy Link
+
+Share Report
+
+Requirements:
+
+Copy current workspace URL.
+
+Support deep linking to workspace pages.
+
+Examples:
+
+/track/123/overview
+
+/track/123/audience
+
+/track/123/content
+
+---
+
+TASK 11
+
+Download Intelligence JSON
+
+Technical export.
+
+Provide:
+
+Download Intelligence JSON
+
+Must export:
+
+Full IntelligenceReport
+
+Exactly as generated.
+
+No transformations.
+
+---
+
+TASK 12
+
+Workspace Polish Audit
+
+Review entire platform.
+
+Check:
+
+cursor-pointer
+
+hover states
+
+focus states
+
+selected states
+
+keyboard accessibility
+
+responsive layouts
+
+empty states
+
+loading states
+
+spacing consistency
+
+icon consistency
+
+Remove any interaction that feels unfinished.
+
+---
+
+SUCCESS CRITERIA
+
+SignalScope should feel like:
+
+* AI Studio
+* HubSpot
+* Mixpanel
+* Vercel Dashboard
+* Stripe Dashboard
+
+The platform should feel production-ready before partner integrations begin.
+
+No fabricated metrics.
+
+No fake analytics.
+
+No placeholder intelligence.
+
+Only real data from:
+
+* Musixmatch
+* Gemini
+* Existing intelligence pipeline
+
+After this sprint is complete, the platform should be ready for:
+
+1. Songstats
+2. ElevenLabs
+3. JamBase
+4. Cyanite
+
+without requiring another architectural redesign.

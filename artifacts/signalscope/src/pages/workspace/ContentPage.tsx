@@ -3,6 +3,7 @@ import WorkspacePage from "@/components/workspace/WorkspacePage";
 import ReportGate from "@/components/workspace/ReportGate";
 import MetricCard from "@/components/workspace/MetricCard";
 import IntelligenceCard from "@/components/workspace/IntelligenceCard";
+import SourceAttribution from "@/components/workspace/SourceAttribution";
 import { EmptyChart } from "@/components/workspace/ChartCard";
 import { KPI_META } from "@/lib/intelligence";
 
@@ -51,6 +52,8 @@ export default function ContentPage() {
                 <EmptyChart />
               )}
             </IntelligenceCard>
+
+            <SourceAttribution section="content" />
           </div>
         )}
       </ReportGate>

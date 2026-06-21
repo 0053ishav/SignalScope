@@ -104,11 +104,17 @@ export default function TrackWorkspace({ id, view }: Props) {
   }, [id]);
 
   const generate = useCallback(
-    async (t: TrackDetails, l: LyricsResponse | null, r: unknown, a: AnalysisResponse | null) => {
+    async (
+      t: TrackDetails,
+      l: LyricsResponse | null,
+      r: unknown,
+      a: AnalysisResponse | null,
+      force = false,
+    ) => {
       try {
         setReportLoading(true);
         setReportError("");
-        const response = await fetch("/api/intelligence", {
+        const response = await fetch(force ? "/api/intelligence?refresh=true" : "/api/intelligence", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ track: t, lyrics: l, richSync: r, analysis: a }),
@@ -137,7 +143,7 @@ export default function TrackWorkspace({ id, view }: Props) {
 
   const regenerate = useCallback(() => {
     if (!track) return;
-    generate(track, lyrics, richSync, analysis);
+    generate(track, lyrics, richSync, analysis, true);
   }, [track, lyrics, richSync, analysis, generate]);
 
   if (loading) {
@@ -179,6 +185,7 @@ export default function TrackWorkspace({ id, view }: Props) {
     report,
     reportLoading,
     reportError,
+    reportSource: report?.source ?? null,
     regenerate,
     confidence: report ? clamp(report.confidence) : 0,
   };

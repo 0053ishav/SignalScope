@@ -1,6 +1,7 @@
-import { RefreshCw, ShieldCheck, FileOutput, ChevronRight, Menu } from "lucide-react";
+import { RefreshCw, ShieldCheck, ChevronRight, Menu } from "lucide-react";
 import { useTrackWorkspace } from "@/context/TrackWorkspaceContext";
 import { getNavItem } from "./nav";
+import WorkspaceActions from "./WorkspaceActions";
 
 export default function WorkspaceHeader({ view, onMenuClick }: { view: string; onMenuClick?: () => void }) {
   const { track, report, reportLoading, confidence, regenerate } = useTrackWorkspace();
@@ -45,14 +46,7 @@ export default function WorkspaceHeader({ view, onMenuClick }: { view: string; o
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
-        <button
-          onClick={() => window.print()}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none transition-colors cursor-pointer"
-          title="Export current view (print)"
-        >
-          <FileOutput className="w-4 h-4" />
-          <span className="hidden sm:inline">Export</span>
-        </button>
+        <WorkspaceActions />
         <button
           onClick={regenerate}
           disabled={reportLoading}

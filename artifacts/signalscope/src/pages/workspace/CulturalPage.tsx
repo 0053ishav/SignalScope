@@ -3,6 +3,7 @@ import WorkspacePage from "@/components/workspace/WorkspacePage";
 import ReportGate from "@/components/workspace/ReportGate";
 import EvidenceCard from "@/components/workspace/EvidenceCard";
 import IntelligenceCard from "@/components/workspace/IntelligenceCard";
+import SourceAttribution from "@/components/workspace/SourceAttribution";
 import { EmptyChart } from "@/components/workspace/ChartCard";
 import { useTrackWorkspace } from "@/context/TrackWorkspaceContext";
 
@@ -61,6 +62,8 @@ export default function CulturalPage() {
               accent="cyan"
               emptyHint="No cultural evidence provided."
             />
+
+            <SourceAttribution section="culture" />
           </div>
         )}
       </ReportGate>

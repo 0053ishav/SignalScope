@@ -2,6 +2,7 @@ import { ShieldCheck } from "lucide-react";
 import WorkspacePage from "@/components/workspace/WorkspacePage";
 import ReportGate from "@/components/workspace/ReportGate";
 import EvidenceCard from "@/components/workspace/EvidenceCard";
+import RichSyncTimeline from "@/components/workspace/RichSyncTimeline";
 
 export default function EvidencePage() {
   return (
@@ -40,6 +41,8 @@ export default function EvidencePage() {
                 emptyHint="No evidence provided."
               />
             </div>
+
+            <RichSyncTimeline />
           </div>
         )}
       </ReportGate>

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import FallbackBanner from "@/components/workspace/FallbackBanner";
 
 interface Props {
   id: string;
@@ -18,6 +19,7 @@ export default function WorkspacePage({ id, title, description, children }: Prop
           <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
           {description && <p className="text-sm text-muted-foreground max-w-2xl">{description}</p>}
         </div>
+        <FallbackBanner />
         {children}
         <div className="pb-6" />
       </div>

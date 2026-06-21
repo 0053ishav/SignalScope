@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Clock, ArrowRight, Database } from "lucide-react";
 import { useTrackWorkspace } from "@/context/TrackWorkspaceContext";
+import IntelligenceSourcesPanel from "@/components/workspace/IntelligenceSourcesPanel";
 
 function formatDuration(seconds?: number) {
   if (!seconds) return "—";
@@ -68,6 +69,10 @@ export default function SourceIntelligencePanel() {
             </div>
           </Section>
         )}
+
+        <Section label="Intelligence Sources">
+          <IntelligenceSourcesPanel compact />
+        </Section>
 
         <Link
           href={`/track/${id}/source`}

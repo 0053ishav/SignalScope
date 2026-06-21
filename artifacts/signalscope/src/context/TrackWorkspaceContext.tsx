@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import type { TrackDetails, LyricsResponse, AnalysisResponse, LyricSegment } from "@/types/music";
-import type { IntelligenceReport } from "@/types/intelligence";
+import type { IntelligenceReport, ReportSource } from "@/types/intelligence";
 
 export interface TrackWorkspaceValue {
   id: string;
@@ -13,6 +13,7 @@ export interface TrackWorkspaceValue {
   report: IntelligenceReport | null;
   reportLoading: boolean;
   reportError: string;
+  reportSource: ReportSource | null;
   regenerate: () => void;
 
   confidence: number;
