@@ -34,6 +34,7 @@ import SourceDataPage from "@/pages/workspace/SourceDataPage";
 import PerformancePage from "@/pages/workspace/PerformancePage";
 import LivePage from "@/pages/workspace/LivePage";
 import SonicPage from "@/pages/workspace/SonicPage";
+import CreativeNetworkPage from "@/pages/workspace/CreativeNetworkPage";
 
 interface Props {
   id: string;
@@ -52,6 +53,7 @@ const PAGES: Record<string, ComponentType> = {
   performance: PerformancePage,
   live: LivePage,
   sonic: SonicPage,
+  credits: CreativeNetworkPage,
 };
 
 export default function TrackWorkspace({ id, view }: Props) {

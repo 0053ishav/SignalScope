@@ -5,6 +5,7 @@ import MetricCard from "@/components/workspace/MetricCard";
 import ChartCard from "@/components/workspace/ChartCard";
 import IntelligenceCard from "@/components/workspace/IntelligenceCard";
 import PlatformCard from "@/components/workspace/PlatformCard";
+import DistributionEcosystem from "@/components/workspace/DistributionEcosystem";
 import ObservedPlatformPerformance from "@/components/workspace/ObservedPlatformPerformance";
 import SourceAttribution from "@/components/workspace/SourceAttribution";
 import PlatformFitBar from "@/components/workspace/charts/PlatformFitBar";
@@ -44,6 +45,8 @@ export default function DistributionPage() {
             </IntelligenceCard>
 
             <ObservedPlatformPerformance />
+
+            <DistributionEcosystem />
 
             <SourceAttribution section="distribution" />
           </div>

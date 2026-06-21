@@ -8,8 +8,8 @@ import {
   SiShazam,
   SiTidal,
   SiPandora,
-  type IconType,
 } from "react-icons/si";
+import type { IconType } from "react-icons";
 import { BarChart3 } from "lucide-react";
 
 /**

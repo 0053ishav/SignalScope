@@ -23,6 +23,18 @@ export interface SongstatsTopMarket {
   value: number;
 }
 
+export interface SongstatsCollaborator {
+  name: string;
+  roles: string[];
+  id?: string;
+}
+
+export interface SongstatsLink {
+  source: string;
+  label: string;
+  url: string;
+}
+
 export interface SongstatsGrowth {
   source: string;
   metric: string;
@@ -50,6 +62,13 @@ export interface SongstatsTrackData {
   releaseDate?: string;
   avatarUrl?: string;
   siteUrl?: string;
+
+  genres?: string[];
+  distributors?: string[];
+  labels?: string[];
+  collaborators?: SongstatsCollaborator[];
+  links?: SongstatsLink[];
+  isRemix?: boolean;
 
   spotifyStreams?: number;
   spotifyPopularity?: number;

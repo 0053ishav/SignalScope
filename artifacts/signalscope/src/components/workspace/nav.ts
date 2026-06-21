@@ -53,6 +53,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Analysis",
     items: [
+      { view: "credits", label: "Creative Network", icon: Users },
       { view: "evidence", label: "Evidence Layer", icon: BadgeCheck },
       { view: "source", label: "Source Data", icon: Database },
     ],

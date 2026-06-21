@@ -2,6 +2,8 @@ import { BrainCircuit, Lightbulb, Target } from "lucide-react";
 import WorkspacePage from "@/components/workspace/WorkspacePage";
 import ReportGate from "@/components/workspace/ReportGate";
 import MarketHighlights from "@/components/workspace/MarketHighlights";
+import TrackProfileCard from "@/components/workspace/TrackProfileCard";
+import PlatformPresence from "@/components/workspace/PlatformPresence";
 import MetricCard from "@/components/workspace/MetricCard";
 import ChartCard, { EmptyChart } from "@/components/workspace/ChartCard";
 import IntelligenceCard from "@/components/workspace/IntelligenceCard";
@@ -19,6 +21,11 @@ export default function OverviewPage() {
       description="Executive briefing and headline scores synthesized from this song's lyrics, mood, and cultural signals."
     >
       <div className="space-y-8">
+      <div className="grid lg:grid-cols-2 gap-4">
+        <TrackProfileCard />
+        <PlatformPresence />
+      </div>
+
       <ReportGate>
         {(report) => (
           <div className="space-y-8">

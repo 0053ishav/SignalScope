@@ -25,6 +25,21 @@ export interface SongstatsRawArtist {
   avatar?: string;
 }
 
+/** A real catalog contributor as returned under `track_info.collaborators`. */
+export interface SongstatsRawCollaborator {
+  name?: string;
+  roles?: string[];
+  songstats_collaborator_id?: string;
+}
+
+/** A real external platform link as returned under `track_info.links`. */
+export interface SongstatsRawLink {
+  source?: string;
+  external_id?: string;
+  url?: string;
+  isrc?: string;
+}
+
 export interface SongstatsRawTrackInfo {
   songstats_track_id?: string;
   isrc?: string;
@@ -34,6 +49,13 @@ export interface SongstatsRawTrackInfo {
   site_url?: string;
   artists?: SongstatsRawArtist[];
   genres?: string[];
+  /** Distributor objects, e.g. `[{ name: "InGrooves" }]`. */
+  distributors?: Array<{ name?: string }>;
+  /** Label objects (often empty); tolerate string or `{ name }`. */
+  labels?: Array<{ name?: string } | string>;
+  collaborators?: SongstatsRawCollaborator[];
+  links?: SongstatsRawLink[];
+  is_remix?: boolean;
 }
 
 /** A single per-source stats entry. `data` is an open bag of real numbers. */
@@ -75,6 +97,26 @@ export interface SongstatsTopMarket {
   country: string;
   /** Real value associated with the market (e.g. streams). */
   value: number;
+}
+
+/** A real creative-credit contributor, deduped and normalized. */
+export interface SongstatsCollaborator {
+  /** Contributor name as returned. */
+  name: string;
+  /** Real roles as returned, e.g. ["Producer", "Songwriter"]. */
+  roles: string[];
+  /** Songstats collaborator id, when present. */
+  id?: string;
+}
+
+/** A real external platform link, deduped to one canonical entry per source. */
+export interface SongstatsLink {
+  /** Raw source id, e.g. `spotify`, `apple_music`. */
+  source: string;
+  /** Display name, e.g. "Spotify". */
+  label: string;
+  /** Canonical URL for this track on that platform. */
+  url: string;
 }
 
 /** One real point in a historic time series — date + value as returned. */
@@ -128,6 +170,14 @@ export interface SongstatsTrackData {
   releaseDate?: string;
   avatarUrl?: string;
   siteUrl?: string;
+
+  /* Catalog metadata — populated only when Songstats returns these fields. */
+  genres?: string[];
+  distributors?: string[];
+  labels?: string[];
+  collaborators?: SongstatsCollaborator[];
+  links?: SongstatsLink[];
+  isRemix?: boolean;
 
   /* Headline KPIs — only set when the corresponding real field is returned. */
   spotifyStreams?: number;

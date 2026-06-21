@@ -1,6 +1,7 @@
 import type {
   SongstatsRawTrackResponse,
   SongstatsRawStatEntry,
+  SongstatsRawTrackInfo,
   SongstatsTrackData,
   SongstatsPlatform,
   SongstatsMetric,
@@ -8,6 +9,8 @@ import type {
   SongstatsGrowth,
   SongstatsTrend,
   SongstatsHistoryPoint,
+  SongstatsCollaborator,
+  SongstatsLink,
 } from "@/types/songstats";
 
 /**
@@ -164,6 +167,63 @@ function extractTopMarkets(payload: unknown): SongstatsTopMarket[] {
   return markets.sort((a, b) => b.value - a.value).slice(0, 8);
 }
 
+/** Normalize raw genre/distributor/label arrays into clean string lists. */
+function extractStrings(items: Array<{ name?: string } | string> | undefined): string[] {
+  if (!Array.isArray(items)) return [];
+  const out: string[] = [];
+  for (const item of items) {
+    const name = typeof item === "string" ? item : item?.name;
+    const trimmed = typeof name === "string" ? name.trim() : "";
+    if (trimmed && !out.includes(trimmed)) out.push(trimmed);
+  }
+  return out;
+}
+
+/** Normalize collaborators: keep only named entries with their real roles. */
+function extractCollaborators(info: SongstatsRawTrackInfo | undefined): SongstatsCollaborator[] {
+  const raw = info?.collaborators;
+  if (!Array.isArray(raw)) return [];
+  const out: SongstatsCollaborator[] = [];
+  for (const c of raw) {
+    const name = typeof c?.name === "string" ? c.name.trim() : "";
+    if (!name) continue;
+    const roles = Array.isArray(c?.roles)
+      ? c.roles.filter((r): r is string => typeof r === "string" && r.trim().length > 0).map((r) => r.trim())
+      : [];
+    out.push({ name, roles, id: c?.songstats_collaborator_id || undefined });
+  }
+  return out;
+}
+
+/**
+ * Dedupe the raw links[] (which carries multiple entries per source for
+ * different ISRCs/mixes) to one canonical link per source. Prefer the link
+ * whose ISRC matches this track; otherwise take the first for that source.
+ */
+function extractLinks(info: SongstatsRawTrackInfo | undefined, effectiveIsrc: string): SongstatsLink[] {
+  const raw = info?.links;
+  if (!Array.isArray(raw)) return [];
+  const bySource = new Map<string, SongstatsLink>();
+  const matchedSource = new Set<string>();
+
+  for (const l of raw) {
+    const source = typeof l?.source === "string" ? l.source.trim() : "";
+    const url = typeof l?.url === "string" ? l.url.trim() : "";
+    if (!source || !url) continue;
+
+    const isMatch = Boolean(effectiveIsrc && l?.isrc && l.isrc === effectiveIsrc);
+    // Keep the first link per source, then upgrade to an ISRC-matched one if found.
+    if (!bySource.has(source)) {
+      bySource.set(source, { source, label: sourceLabel(source), url });
+      if (isMatch) matchedSource.add(source);
+    } else if (isMatch && !matchedSource.has(source)) {
+      bySource.set(source, { source, label: sourceLabel(source), url });
+      matchedSource.add(source);
+    }
+  }
+  return Array.from(bySource.values());
+}
+
 /** Index raw stats[] by source for direct headline lookups. */
 function indexStats(stats: SongstatsRawStatEntry[]): Record<string, Record<string, unknown>> {
   const map: Record<string, Record<string, unknown>> = {};
@@ -203,6 +263,12 @@ function normalize(
   const instagram = bySource["instagram"] ?? {};
   const shazam = bySource["shazam"] ?? {};
 
+  const genres = extractStrings(trackInfo?.genres);
+  const distributors = extractStrings(trackInfo?.distributors);
+  const labels = extractStrings(trackInfo?.labels);
+  const collaborators = extractCollaborators(trackInfo);
+  const links = extractLinks(trackInfo, isrc);
+
   const data: SongstatsTrackData = {
     isrc,
     songstatsTrackId: trackInfo?.songstats_track_id,
@@ -211,6 +277,13 @@ function normalize(
     releaseDate: trackInfo?.release_date,
     avatarUrl: trackInfo?.avatar,
     siteUrl: trackInfo?.site_url,
+
+    genres: genres.length ? genres : undefined,
+    distributors: distributors.length ? distributors : undefined,
+    labels: labels.length ? labels : undefined,
+    collaborators: collaborators.length ? collaborators : undefined,
+    links: links.length ? links : undefined,
+    isRemix: typeof trackInfo?.is_remix === "boolean" ? trackInfo.is_remix : undefined,
 
     spotifyStreams: readNumber(spotify, ["streams_total", "streams", "streams_current"]),
     spotifyPopularity: readNumber(spotify, ["popularity_current", "popularity"]),
@@ -229,9 +302,18 @@ function normalize(
     lastUpdated: new Date().toISOString(),
   };
 
-  // Consider it "empty" if we got no usable platforms and no headline KPI.
+  // Consider it usable if we got platforms, a headline KPI, OR real catalog
+  // metadata (genres / links / credits). Metadata-only tracks still surface.
+  const hasMetadata =
+    genres.length > 0 ||
+    distributors.length > 0 ||
+    labels.length > 0 ||
+    collaborators.length > 0 ||
+    links.length > 0 ||
+    typeof data.isRemix === "boolean";
   const hasAnything =
     platforms.length > 0 ||
+    hasMetadata ||
     [
       data.spotifyStreams,
       data.spotifyPopularity,

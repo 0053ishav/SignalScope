@@ -2,11 +2,16 @@ import { RefreshCw, ShieldCheck, ChevronRight, Menu } from "lucide-react";
 import { useTrackWorkspace } from "@/context/TrackWorkspaceContext";
 import { getNavItem } from "./nav";
 import WorkspaceActions from "./WorkspaceActions";
+import SafeArtwork from "./SafeArtwork";
+import { artworkCandidates } from "@/lib/songstatsMetadata";
 
 export default function WorkspaceHeader({ view, onMenuClick }: { view: string; onMenuClick?: () => void }) {
-  const { track, report, reportLoading, confidence, regenerate } = useTrackWorkspace();
+  const { track, songstats, report, reportLoading, confidence, regenerate } = useTrackWorkspace();
   const nav = getNavItem(view);
-  const cover = track.album_coverart_100x100 || track.album_coverart_350x350;
+  const artwork = artworkCandidates(songstats, [
+    track.album_coverart_100x100,
+    track.album_coverart_350x350,
+  ]);
 
   return (
     <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border px-4 md:px-6 py-3 flex flex-col md:flex-row gap-3 items-start md:items-center justify-between">
@@ -18,15 +23,11 @@ export default function WorkspaceHeader({ view, onMenuClick }: { view: string; o
         >
           <Menu className="w-5 h-5" />
         </button>
-        {cover ? (
-          <img
-            src={cover}
-            alt={track.album_name}
-            className="w-10 h-10 rounded-md object-cover border border-border shrink-0"
-          />
-        ) : (
-          <div className="w-10 h-10 rounded-md bg-secondary shrink-0" />
-        )}
+        <SafeArtwork
+          sources={artwork}
+          alt={track.album_name}
+          className="w-10 h-10 rounded-md border border-border shrink-0"
+        />
         <div className="min-w-0">
           <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
             <span className="truncate max-w-[140px]">{track.track_name}</span>
