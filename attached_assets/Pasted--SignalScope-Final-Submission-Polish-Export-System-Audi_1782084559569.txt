@@ -1,0 +1,581 @@
+# SignalScope — Final Submission Polish, Export System, Audio Briefing & Intelligence Consolidation
+
+IMPLEMENTATION MODE
+
+Proceed directly with implementation.
+
+Do not redesign the workspace architecture.
+
+Do not remove any existing functionality.
+
+This is the final polish and consolidation phase before submission.
+
+Current intelligence sources:
+
+* Musixmatch
+* Gemini
+* Songstats
+* JamBase
+
+The goal is to make SignalScope feel like a complete intelligence platform.
+
+---
+
+# OBJECTIVES
+
+Implement:
+
+1. Global Intelligence Export
+2. Executive Audio Briefing (ElevenLabs)
+3. Intelligence Timeline
+4. Cross-Source Intelligence Fusion
+5. Workspace Polish
+6. Submission Readiness Improvements
+
+No fake data.
+
+No mock metrics.
+
+Only real data from connected systems.
+
+---
+
+# PART 1 — GLOBAL EXPORT SYSTEM
+
+Current:
+
+Sidebar Export button exists.
+
+Header Export button exists.
+
+These must become fully functional.
+
+---
+
+# EXPORT GOAL
+
+Export the COMPLETE intelligence workspace.
+
+Not just Gemini output.
+
+Export everything available for the current track.
+
+Sources:
+
+Musixmatch
+
+Songstats
+
+JamBase
+
+Gemini
+
+Ontology Signals
+
+RichSync
+
+---
+
+# EXPORT FORMATS
+
+Implement:
+
+Export PDF
+
+Export Markdown
+
+Export JSON
+
+---
+
+# EXPORT CONTENT
+
+Include:
+
+Track Metadata
+
+Artist
+
+Track
+
+Album
+
+Genres
+
+ISRC
+
+Duration
+
+---
+
+Executive Briefing
+
+---
+
+Audience Intelligence
+
+---
+
+Emotional Intelligence
+
+---
+
+Cultural Intelligence
+
+---
+
+Virality Intelligence
+
+---
+
+Growth Intelligence
+
+---
+
+Distribution Intelligence
+
+---
+
+Performance Intelligence (Songstats)
+
+---
+
+Live Intelligence (JamBase)
+
+---
+
+Artist Actions
+
+---
+
+Content Opportunities
+
+---
+
+Platform Fit
+
+---
+
+Evidence Layer
+
+---
+
+RichSync Highlights
+
+---
+
+Market Performance
+
+---
+
+Top Markets
+
+---
+
+Top Platforms
+
+---
+
+Upcoming Live Events
+
+---
+
+Source Attribution
+
+Musixmatch
+
+Songstats
+
+JamBase
+
+Gemini
+
+---
+
+# EXPORT UX
+
+Sidebar:
+
+Export Report
+
+Click opens:
+
+Export PDF
+
+Export Markdown
+
+Export JSON
+
+Use proper icons.
+
+Everything clickable must have:
+
+cursor-pointer
+
+hover state
+
+focus state
+
+keyboard accessibility
+
+---
+
+# PART 2 — ELEVENLABS AUDIO BRIEFING
+
+Create:
+
+Executive Audio Briefing
+
+Purpose:
+
+Convert Executive Briefing into spoken intelligence.
+
+---
+
+CREATE
+
+services/elevenlabs.ts
+
+Environment:
+
+ELEVENLABS_API_KEY=
+
+ELEVENLABS_VOICE_ID=
+
+---
+
+API
+
+/api/audio-briefing
+
+Input:
+
+Current Executive Briefing
+
+Output:
+
+Audio URL
+
+---
+
+UI
+
+Workspace Header
+
+Add:
+
+Play Briefing
+
+Pause Briefing
+
+Audio Duration
+
+Voice Badge
+
+---
+
+Behavior
+
+Generate once.
+
+Cache result.
+
+Do not regenerate unnecessarily.
+
+---
+
+Briefing should include:
+
+Executive Summary
+
+Performance Summary
+
+Live Presence Summary
+
+Growth Summary
+
+Maximum:
+
+60–90 seconds
+
+---
+
+# PART 3 — INTELLIGENCE TIMELINE
+
+Create:
+
+Intelligence Timeline
+
+New page:
+
+Timeline Intelligence
+
+Sidebar Group:
+
+ANALYSIS
+
+Icon:
+
+Clock3
+
+---
+
+Purpose
+
+Visualize intelligence across the song.
+
+Use:
+
+RichSync
+
+Themes
+
+Moods
+
+Signals
+
+---
+
+Example
+
+00:06
+
+"Hatin' me is like all you do"
+
+Identity Signal
+
+---
+
+00:09
+
+"Algorithm bulletproof"
+
+Creator Economy Signal
+
+---
+
+00:16
+
+"I am iconic by mistake"
+
+Viral Driver
+
+---
+
+Timeline should combine:
+
+RichSync
+
+Ontology Signals
+
+Musixmatch Themes
+
+Musixmatch Meaning
+
+---
+
+No AI hallucinations.
+
+Only derived signals.
+
+---
+
+# PART 4 — INTELLIGENCE FUSION LAYER
+
+Create:
+
+Fusion Intelligence Card
+
+New section:
+
+Executive Briefing page
+
+---
+
+Purpose
+
+Show how multiple sources agree.
+
+Example:
+
+Audience Confidence
+
+Musixmatch → Identity Theme
+
+Gemini → Ambitious Youth
+
+Songstats → Strong TikTok Activity
+
+Result:
+
+High Confidence Audience Match
+
+---
+
+Create:
+
+Fusion Signals
+
+Source Agreement
+
+Cross-Source Validation
+
+---
+
+This becomes a major differentiator.
+
+---
+
+# PART 5 — WORKSPACE POLISH
+
+Audit entire workspace.
+
+Fix:
+
+cursor-pointer
+
+hover states
+
+focus states
+
+active states
+
+empty states
+
+loading states
+
+error states
+
+---
+
+Every button must feel alive.
+
+Nothing should feel dead.
+
+---
+
+Sidebar:
+
+All items must:
+
+hover
+
+focus
+
+active
+
+selected
+
+keyboard accessible
+
+---
+
+Cards:
+
+consistent spacing
+
+consistent shadows
+
+consistent borders
+
+consistent typography
+
+---
+
+# PART 6 — INTELLIGENCE HEALTH BAR
+
+Add workspace-wide status component.
+
+Display:
+
+Musixmatch
+
+Songstats
+
+JamBase
+
+Gemini
+
+ElevenLabs
+
+Status:
+
+Connected
+
+Unavailable
+
+Generating
+
+Coming Soon
+
+---
+
+Place:
+
+Right rail
+
+Source Context
+
+---
+
+# PART 7 — SUBMISSION POLISH
+
+Replace all:
+
+Coming Soon
+
+Placeholder
+
+Mock
+
+Demo
+
+Example
+
+with proper production wording.
+
+Except future partner pages.
+
+---
+
+Ensure:
+
+No dead buttons
+
+No broken links
+
+No empty charts
+
+No duplicated content
+
+No fake metrics
+
+---
+
+# SUCCESS CRITERIA
+
+A judge should be able to:
+
+Search a track
+
+Open intelligence workspace
+
+Understand audience
+
+Understand emotion
+
+Understand culture
+
+Understand performance
+
+Understand live markets
+
+Listen to AI briefing
+
+Export complete report
+
+Understand recommended next actions
+
+without leaving SignalScope.
+
+SignalScope should feel like a professional intelligence platform for artists, labels, managers and marketers rather than a lyrics-analysis demo.
