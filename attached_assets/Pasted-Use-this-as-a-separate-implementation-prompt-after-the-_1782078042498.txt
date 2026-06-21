@@ -1,0 +1,697 @@
+Use this as a **separate implementation prompt** after the workspace architecture is complete.
+
+---
+
+# SignalScope — Songstats Intelligence Integration
+
+IMPLEMENTATION MODE
+
+Proceed directly with implementation.
+
+Do not stop for planning.
+
+Do not redesign workspace architecture.
+
+Integrate Songstats into the existing SignalScope Intelligence Workspace.
+
+Songstats must become a first-class intelligence source.
+
+---
+
+# OBJECTIVE
+
+Current SignalScope intelligence is powered by:
+
+* Musixmatch
+* Gemini
+* Ontology Engine
+* RichSync Signals
+
+This provides:
+
+* Audience Intelligence
+* Emotional Intelligence
+* Cultural Intelligence
+* Growth Intelligence
+
+However it lacks:
+
+* Market Validation
+* Streaming Momentum
+* Platform Performance
+* Real Consumption Signals
+
+Songstats will solve this.
+
+---
+IMPORTANT: Before implementation inspect the actual Songstats API documentation and create types from real response fields. Do not assume field names or endpoint structures.
+
+
+# IMPORTANT
+
+Do NOT create a separate disconnected Songstats page.
+
+Songstats must:
+
+1. Have its own Performance Intelligence page
+2. Enhance existing intelligence sections
+3. Influence Executive Briefing
+4. Influence Growth Intelligence
+5. Influence Distribution Intelligence
+6. Influence Platform Fit
+7. Create a new Track Performance Banner
+
+Songstats should feel integrated into the platform intelligence engine.
+
+---
+
+FIRST STEP
+
+Inspect Songstats API documentation.
+
+Document:
+
+- authentication method
+- available endpoints
+- rate limits
+- track lookup methods
+- artist lookup methods
+- available metrics
+
+Only then implement integration.
+
+Do not invent endpoints.
+Do not invent response structures.
+---
+
+
+# DATA RESOLUTION
+
+Track already contains:
+
+* track_isrc
+* artist_name
+* track_name
+
+Use resolution priority:
+
+1. ISRC
+2. Songstats Track ID
+3. Artist + Track Match
+
+Implement robust matching.
+
+Handle:
+
+* missing tracks
+* duplicate tracks
+* partial data
+
+Never crash workspace.
+
+---
+
+# CREATE SERVICE
+
+Create:
+
+services/songstats.ts
+
+Responsibilities:
+
+* authenticate
+* track lookup
+* artist lookup
+* metrics normalization
+* error handling
+
+Must return:
+
+```ts
+interface SongstatsTrackData {
+  trackId: string;
+
+  title: string;
+
+  artist: string;
+
+  spotifyStreams?: number;
+
+  spotifyPopularity?: number;
+
+  tiktokPosts?: number;
+
+  instagramPosts?: number;
+
+  youtubeViews?: number;
+
+  playlistReach?: number;
+
+  playlistCount?: number;
+
+  momentumScore?: number;
+
+  trendingScore?: number;
+
+  growthRate?: number;
+
+  topMarkets?: string[];
+
+  topPlatforms?: string[];
+
+  lastUpdated?: string;
+}
+```
+
+---
+
+# ENVIRONMENT VARIABLES
+
+Create support for:
+
+```env
+SONGSTATS_API_KEY=
+
+SONGSTATS_BASE_URL=
+```
+
+Never hardcode.
+
+---
+
+# API ROUTE
+
+Create:
+
+```text
+/api/songstats/:trackId
+```
+
+Requirements:
+
+* fetch
+* normalize
+* cache response
+* return typed data
+
+Handle failures gracefully.
+
+---
+
+# TRACK PERFORMANCE BANNER
+
+New component:
+
+```text
+TrackPerformanceBanner
+```
+
+TrackPerformanceBanner must load independently.
+
+Workspace should render immediately.
+
+Songstats loading state must not block:
+
+- Executive Briefing
+- Intelligence Pages
+- Source Data
+
+Use progressive enhancement.
+
+Place:
+
+Workspace Header
+
+Directly under:
+
+Track Name
+Artist
+
+Purpose:
+
+Immediate track health overview.
+
+---
+Create a new component:
+
+PredictionVsPerformance
+
+Compare:
+
+Predicted Platform Fit (Gemini)
+
+vs
+
+Observed Performance (Songstats)
+
+Example:
+
+TikTok
+Predicted: High
+Observed: Growing
+
+Spotify
+Predicted: Medium
+Observed: Strong
+
+This section should highlight alignment and mismatches.
+
+---
+
+New Intelligence Signals
+
+High Growth Rate
+→ Emerging Track
+
+High Playlist Reach
+→ Discovery Momentum
+
+High TikTok Activity
+→ Creator Adoption
+
+High Spotify Popularity
+→ Mainstream Potential
+
+Strong Multi-Platform Activity
+→ Cross-Platform Resonance
+
+These become reusable signals for future intelligence systems.
+
+---
+
+Future Compatibility Requirement
+
+All Songstats signals must be stored in a normalized format.
+
+Future intelligence systems must be able to consume:
+
+- Musixmatch Signals
+- RichSync Signals
+- Ontology Signals
+- Songstats Signals
+
+without additional transformation.
+
+Design for future partner fusion.
+---
+
+Market Pulse
+
+New dashboard card.
+
+Summarize:
+
+- strongest platform
+- fastest growing platform
+- strongest market
+- momentum state
+
+Example:
+
+Market Pulse
+
+Strongest Platform:
+TikTok
+
+Fastest Growth:
+Spotify
+
+Top Market:
+United States
+
+Momentum:
+Accelerating
+
+Only use real Songstats data.
+
+---
+---
+
+# BANNER CONTENT
+
+Display only real Songstats data.
+
+Examples:
+
+Spotify Streams
+
+1.2M
+
+Playlist Reach
+
+4.8M
+
+Momentum
+
+High
+
+Weekly Growth
+
++18%
+
+Top Market
+
+United States
+
+Top Platform
+
+TikTok
+
+---
+
+# VISUAL STYLE
+
+Use:
+
+* Spotify icon
+* TikTok icon
+* YouTube icon
+* Instagram icon
+
+Use official platform icons.
+
+No fake logos.
+
+No emojis.
+
+---
+
+INTELLIGENCE
+  Audience
+  Emotional
+  Cultural
+  Content
+
+MARKET
+  Performance Intelligence
+  Distribution Intelligence
+
+Create:
+
+```text
+Performance Intelligence
+```
+
+Sidebar Group:
+
+INTELLIGENCE
+
+Icon:
+
+TrendingUp
+
+---
+
+# PERFORMANCE PAGE SECTIONS
+
+## Market Overview
+
+KPIs
+
+* Streams
+* Reach
+* Momentum
+* Growth
+
+---
+
+## Platform Performance
+
+Chart
+
+Use real Songstats data.
+
+Examples:
+
+Spotify
+
+TikTok
+
+Instagram
+
+YouTube
+
+---
+
+## Geographic Intelligence
+
+Display:
+
+Top Markets
+
+Example:
+
+United States
+
+Brazil
+
+India
+
+Germany
+
+United Kingdom
+
+Only if returned.
+
+---
+
+## Momentum Analysis
+
+Interpret Songstats metrics.
+
+Examples:
+
+* accelerating
+* stable
+* declining
+
+Must be derived from real growth data.
+
+---
+
+# EXECUTIVE BRIEFING ENHANCEMENT
+
+Current:
+
+Gemini summary only.
+
+Upgrade:
+
+Add Songstats section.
+
+Example:
+
+Market Performance
+
+"Track currently shows strong momentum on TikTok and Spotify, with above-average playlist penetration."
+
+Must use real data.
+
+---
+
+# GROWTH INTELLIGENCE ENHANCEMENT
+
+Current:
+
+Only Gemini recommendations.
+
+Enhance using Songstats.
+
+Examples:
+
+IF:
+
+TikTok strong
+
+THEN:
+
+Increase creator campaigns.
+
+IF:
+
+Spotify weak
+
+THEN:
+
+Increase playlist pitching.
+
+IF:
+
+Brazil emerging
+
+THEN:
+
+Target Brazilian creators.
+
+Rules must be based on real metrics.
+
+No hallucinations.
+
+---
+
+# DISTRIBUTION INTELLIGENCE ENHANCEMENT
+
+Current:
+
+Platform Fit comes from Gemini.
+
+Add:
+
+Observed Platform Performance
+
+Separate section.
+
+Example:
+
+Predicted Fit
+
+TikTok — High
+
+Observed Performance
+
+TikTok — Growing
+
+Keep both.
+
+This becomes very powerful.
+
+---
+
+# INTELLIGENCE SOURCE PANEL
+
+Update:
+
+Current:
+
+Musixmatch
+Gemini
+Songstats (coming soon)
+
+Replace with:
+
+Musixmatch
+Connected
+
+Gemini
+Connected
+
+Songstats
+Connected
+
+JamBase
+Coming Soon
+
+Cyanite
+Coming Soon
+
+ElevenLabs
+Coming Soon
+
+---
+
+# INTELLIGENCE FUSION
+
+Create helper:
+
+```text
+songstatsSignals.ts
+```
+
+Purpose:
+
+Convert Songstats metrics into intelligence signals.
+
+Examples:
+
+High TikTok activity
+
+→ Creator Economy
+
+→ Viral Potential
+
+High playlist reach
+
+→ Mainstream Discovery
+
+High growth rate
+
+→ Momentum Signal
+
+These signals should be available to future intelligence systems.
+
+---
+
+# CACHING
+
+Songstats requests must be cached.
+
+Avoid repeated API calls.
+
+Use existing caching architecture.
+
+Respect API limits.
+
+---
+
+# ERROR HANDLING
+
+If Songstats unavailable:
+
+Show:
+
+```text
+Songstats data unavailable
+```
+
+Do not break:
+
+* Executive Briefing
+* Performance Page
+* Distribution Page
+* Workspace
+
+Platform must continue functioning.
+
+---
+
+# TYPES
+
+Create:
+
+```text
+types/songstats.ts
+```
+
+All responses must be strongly typed.
+
+No any.
+
+---
+
+# SUCCESS CRITERIA
+
+SignalScope should now combine:
+
+Musixmatch
++
+Gemini
++
+Songstats
+
+into a unified intelligence platform.
+
+A judge should immediately understand:
+
+* What the song means
+* Who it resonates with
+* How it performs in the market
+* Where it is growing
+* What the artist should do next
+
+without leaving SignalScope.
+
+No fake analytics.
+
+No mock metrics.
+
+Only real Songstats data integrated throughout the intelligence workflow.
