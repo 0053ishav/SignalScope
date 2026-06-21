@@ -1,0 +1,254 @@
+# SignalScope — JamBase Live Intelligence
+
+IMPLEMENTATION MODE
+
+Proceed directly with implementation.
+
+Do not redesign the workspace.
+
+Do not modify existing intelligence generation.
+
+Integrate JamBase as the Live Intelligence layer.
+
+---
+
+OBJECTIVE
+
+SignalScope currently understands:
+
+- Lyrics
+- Audience
+- Culture
+- Emotion
+- Platform Performance
+
+It does not understand:
+
+- Touring
+- Live Markets
+- Concert Geography
+- Event Density
+
+JamBase will provide this.
+
+---
+
+CREATE
+
+services/jambase.ts
+
+Purpose:
+
+Artist lookup
+
+Event lookup
+
+Venue lookup
+
+Market intelligence
+
+Normalization
+
+Error handling
+
+---
+
+ENV
+
+JAMBASE_API_KEY=
+
+JAMBASE_BASE_URL=
+
+---
+
+ROUTE
+
+/api/jambase/:artist
+
+Return:
+
+{
+  artistName: string;
+
+  upcomingEvents: [];
+
+  topCities: [];
+
+  topCountries: [];
+
+  venueCount: number;
+
+  upcomingEventCount: number;
+}
+
+---
+
+LIVE INTELLIGENCE PAGE
+
+Sidebar:
+
+INTELLIGENCE
+
+Icon:
+
+MapPinned
+
+Page:
+
+Live Intelligence
+
+---
+
+SECTIONS
+
+Upcoming Shows
+
+Venue Intelligence
+
+Tour Footprint
+
+Market Concentration
+
+Geographic Reach
+
+---
+
+UPCOMING SHOWS
+
+Display:
+
+Date
+
+Venue
+
+City
+
+Country
+
+Open Event
+
+Use real JamBase data only.
+
+---
+
+MARKET INTELLIGENCE
+
+Calculate:
+
+Top Performing Cities
+
+Top Countries
+
+Tour Density
+
+Market Concentration
+
+Based only on real events.
+
+---
+
+EXECUTIVE BRIEFING
+
+Enhance:
+
+Live Presence
+
+Example:
+
+"Artist currently has strong touring activity in North America and Europe."
+
+Only if supported by data.
+
+---
+
+GROWTH INTELLIGENCE
+
+Enhance recommendations.
+
+Examples:
+
+If city appears frequently:
+
+recommend local creator campaigns.
+
+If country concentration exists:
+
+recommend localized content.
+
+Must use real JamBase data.
+
+---
+
+DISTRIBUTION INTELLIGENCE
+
+Add:
+
+Live Reach
+
+alongside:
+
+Platform Reach
+
+This creates:
+
+Digital Distribution
++
+Physical Presence
+
+---
+
+TRACK HEADER
+
+Add:
+
+Upcoming Shows
+
+Countries
+
+Cities
+
+small badge row.
+
+Only if data exists.
+
+---
+
+SOURCE PANEL
+
+JamBase
+
+Connected
+
+when active.
+
+---
+
+ERROR HANDLING
+
+If no events:
+
+Show:
+
+"No upcoming live event data available."
+
+Do not break workspace.
+
+---
+
+SUCCESS CRITERIA
+
+SignalScope should now answer:
+
+What does the song mean?
+
+Who likes it?
+
+How is it performing?
+
+Where is the artist growing?
+
+Where is the artist performing?
+
+Which markets should be targeted next?
+
+using real JamBase data.
