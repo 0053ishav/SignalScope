@@ -148,7 +148,9 @@ describe("Report-independent pages", () => {
         renderAt(`/track/55/${view}`);
 
         await screen.findByRole("heading", { name: heading, level: 1 });
-        expect(screen.getByText(partner)).toBeInTheDocument();
+        // The partner name appears on the page and may also surface in the
+        // right-rail Intelligence Sources panel — assert at least one match.
+        expect(screen.getAllByText(partner).length).toBeGreaterThan(0);
         // Coming-soon pages don't depend on the report, so no gating UI.
         expect(screen.queryByText(gateText)).not.toBeInTheDocument();
       });
