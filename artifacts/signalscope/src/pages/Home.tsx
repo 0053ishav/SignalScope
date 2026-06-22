@@ -1,7 +1,8 @@
 import SearchSong from "@/components/SearchSong";
 import { Link } from "wouter";
-import { BrainCircuit, Layers, Activity, Zap, TrendingUp, Globe, ArrowRight } from "lucide-react";
+import { BrainCircuit, Layers, Activity, Zap, TrendingUp, Globe } from "lucide-react";
 import { BrandFullLogo } from "@/components/BrandLogo";
+import { BRAND } from "@/lib/branding";
 
 export default function HomePage() {
   return (
@@ -31,6 +32,25 @@ export default function HomePage() {
 
           <div className="max-w-2xl mx-auto">
             <SearchSong />
+          </div>
+
+          {/* Trust / Powered By */}
+          <div className="mt-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-5">
+              Powered By
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              {["Musixmatch", "Songstats", "JamBase", "ElevenLabs", "Gemini"].map(
+                (name) => (
+                  <span
+                    key={name}
+                    className="rounded-full border border-border bg-card/60 px-4 py-1.5 text-sm font-medium text-muted-foreground"
+                  >
+                    {name}
+                  </span>
+                ),
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -82,7 +102,18 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="py-12 px-6 lg:px-8 text-center border-t border-border mt-auto">
-        <p className="text-sm text-muted-foreground">
+        <Link href="/" className="inline-flex items-center gap-2.5">
+          <img
+            src={BRAND.logoIcon}
+            alt=""
+            aria-hidden="true"
+            className="h-7 w-7 object-contain"
+          />
+          <span className="text-base font-semibold tracking-tight text-foreground">
+            SignalScope
+          </span>
+        </Link>
+        <p className="mt-3 text-sm text-muted-foreground">
           Built for Musicathon 2026 · Powered by Musixmatch
         </p>
       </footer>

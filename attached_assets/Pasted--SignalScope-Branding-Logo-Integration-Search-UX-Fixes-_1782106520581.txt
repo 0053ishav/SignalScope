@@ -1,0 +1,341 @@
+# SignalScope — Branding, Logo Integration & Search UX Fixes
+
+IMPLEMENTATION MODE
+
+Proceed directly with implementation.
+
+Do not redesign the workspace.
+
+Do not modify intelligence generation.
+
+Do not modify backend APIs.
+
+Focus on branding integration, visual polish, readability fixes, and search experience improvements.
+
+---
+
+## PRIORITY
+
+We have limited budget remaining.
+
+Avoid large architectural changes.
+
+Only implement:
+
+1. Logo integration
+2. Branding improvements
+3. Search UI improvements
+4. Text readability fixes
+5. Cover art improvements
+6. Homepage credibility improvements
+
+---
+
+## BRAND ASSETS
+
+Two assets exist:
+
+### Asset 1
+
+Transparent SignalScope icon
+
+Use for:
+
+* favicon
+* sidebar logo
+* app icon
+* mobile navigation
+* loading states
+* empty states
+
+### Asset 2
+
+Full SignalScope logo
+
+Use for:
+
+* homepage hero
+* top navigation
+* landing page branding
+* footer branding
+
+Do not generate new logos.
+
+Use the provided assets.
+
+---
+
+## LOGO PLACEMENT
+
+### Homepage
+
+Replace text-only branding.
+
+Show:
+
+Full SignalScope Logo
+
+Above headline.
+
+### Workspace
+
+Use icon-only logo.
+
+Location:
+
+Top-left sidebar.
+
+Show:
+
+SignalScope
+
+next to icon.
+
+Similar to:
+
+Linear
+Vercel
+Stripe Dashboard
+AI Studio
+
+---
+
+## SEARCH PAGE READABILITY FIX
+
+Current issue:
+
+Text blends into dark background.
+
+Artist names are difficult to read.
+
+Album text nearly disappears.
+
+Metadata lacks hierarchy.
+
+Fix globally.
+
+---
+
+## COLOR HIERARCHY
+
+Track Title
+
+* White
+* Font weight 700+
+
+Artist
+
+* High contrast gray
+* Clearly visible
+
+Album
+
+* Secondary muted text
+* Still readable
+
+Metadata
+
+* Smaller but visible
+
+No text should disappear into the background.
+
+---
+
+## SEARCH RESULTS CARD
+
+Current cards feel empty.
+
+Redesign using existing data.
+
+Layout:
+
+LEFT
+
+Songstats Cover Art
+
+CENTER
+
+Track Name
+Artist Name
+Album Name
+
+BOTTOM
+
+Metadata Row
+
+Genre
+Rating
+Duration
+
+RIGHT
+
+Capability Badges
+
+Lyrics
+RichSync
+Analysis
+Translation
+
+Only render badges if data exists.
+
+---
+
+## COVER ART
+
+Use Songstats artwork.
+
+Priority:
+
+Songstats artwork
+then Musixmatch artwork
+then SignalScope icon placeholder
+
+Never show blank artwork.
+
+Never show broken image placeholders.
+
+---
+
+## CARD INTERACTION
+
+Entire card clickable.
+
+Always:
+
+cursor-pointer
+
+Hover:
+
+border glow
+slight lift
+subtle scale
+
+Make results feel interactive.
+
+---
+
+## HOMEPAGE TRUST SECTION
+
+Under search hero add:
+
+Powered By
+
+Musixmatch
+Songstats
+JamBase
+ElevenLabs
+Gemini
+
+Use logo badges if already available.
+
+If unavailable use branded text badges.
+
+No fake logos.
+
+---
+
+## SEARCH INPUT
+
+Improve visibility.
+
+Current input blends with background.
+
+Increase contrast.
+
+Improve placeholder visibility.
+
+Keep existing functionality.
+
+---
+
+## EMPTY STATE
+
+Use SignalScope icon.
+
+Message:
+
+No tracks found.
+
+Try searching by:
+
+* Song title
+* Artist
+* Lyrics phrase
+
+---
+
+## LOADING STATE
+
+Use skeleton cards.
+
+Show:
+
+Artwork placeholder
+Track placeholder
+Artist placeholder
+Metadata placeholder
+
+Avoid blank screens.
+
+---
+
+## WORKSPACE BRANDING
+
+Use SignalScope icon in:
+
+Sidebar
+Loading states
+Empty states
+
+Use full logo in:
+
+Landing page
+Marketing sections
+
+---
+
+## RESPONSIVE
+
+Ensure:
+
+Logo scales properly
+Search cards remain readable
+Metadata wraps correctly
+
+No overflow.
+
+---
+
+## CLEANUP
+
+Remove any text that visually merges into the background.
+
+Audit all text colors.
+
+Every label should meet readable contrast levels.
+
+Focus especially on:
+
+Artist names
+Album names
+Metadata labels
+Search result subtitles
+
+---
+
+## SUCCESS CRITERIA
+
+A first-time visitor should instantly understand:
+
+* SignalScope is a Music Intelligence Platform
+* It uses real music intelligence sources
+* Search results are professional
+* Branding feels like a production SaaS product
+* Text is readable everywhere
+* Cover art loads consistently
+
+No new features.
+
+No architecture changes.
+
+Only branding, polish, readability, and UX improvements.
