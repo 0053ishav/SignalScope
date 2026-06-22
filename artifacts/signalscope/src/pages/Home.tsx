@@ -1,6 +1,7 @@
 import SearchSong from "@/components/SearchSong";
 import { Link } from "wouter";
 import { BrainCircuit, Layers, Activity, Zap, TrendingUp, Globe, ArrowRight } from "lucide-react";
+import { BrandFullLogo } from "@/components/BrandLogo";
 
 export default function HomePage() {
   return (
@@ -11,6 +12,7 @@ export default function HomePage() {
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(139,92,246,0.15),rgba(255,255,255,0))]" />
         
         <div className="mx-auto max-w-5xl text-center">
+          <BrandFullLogo className="mb-10" imgClassName="h-14 md:h-16" />
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-sm font-medium text-primary mb-8">
             <BrainCircuit className="w-4 h-4" />
             AI-Powered Music Intelligence

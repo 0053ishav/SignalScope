@@ -19,6 +19,7 @@ import type {
 import { parseRichSync } from "@/lib/richsync/parseRichSync";
 import { normalizeRichSync } from "@/lib/richsync/normalizeRichSync";
 import { clamp } from "@/lib/intelligence";
+import { BrandFullLogo } from "@/components/BrandLogo";
 
 import {
   TrackWorkspaceContext,
@@ -332,7 +333,8 @@ export default function TrackWorkspace({ id, view }: Props) {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-65px)]">
+      <div className="flex-1 flex flex-col items-center justify-center gap-6 min-h-[calc(100vh-65px)]">
+        <BrandFullLogo imgClassName="h-10" />
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
@@ -341,6 +343,7 @@ export default function TrackWorkspace({ id, view }: Props) {
   if (!track) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-12 text-center min-h-[calc(100vh-65px)]">
+        <BrandFullLogo className="mb-8" imgClassName="h-10" />
         <h1 className="text-2xl font-bold mb-4">Track Not Found</h1>
         <Link href="/" className="px-4 py-2 bg-primary text-primary-foreground rounded-md font-medium">
           Return to Search

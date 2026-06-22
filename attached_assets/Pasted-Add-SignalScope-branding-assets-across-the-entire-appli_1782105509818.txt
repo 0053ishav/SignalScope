@@ -1,0 +1,154 @@
+Add SignalScope branding assets across the entire application.
+
+Use the uploaded branding files already available in the Replit workspace:
+
+* SignalScope App Icon (dark square icon)
+* SignalScope Logo Icon Only
+* SignalScope Full Logo
+* favicon.ico
+
+Do NOT create new logos.
+
+Use the provided assets.
+
+---
+
+BRANDING STRUCTURE
+
+Create:
+
+public/branding/
+
+Place assets inside:
+
+public/branding/favicon.ico
+
+public/branding/logo-icon.png
+
+public/branding/logo-full.png
+
+public/branding/app-icon.png
+
+If filenames differ, normalize them.
+
+---
+
+FAVICON
+
+Configure favicon for the Vite application.
+
+Update index.html.
+
+Use:
+
+/branding/favicon.ico
+
+Verify favicon appears in browser tab.
+
+---
+
+SIDEBAR
+
+Replace the current placeholder icon.
+
+Use:
+
+logo-icon.png
+
+Display:
+
+[logo icon] SignalScope
+
+Requirements:
+
+* vertically centered
+* crisp rendering
+* dark theme compatible
+* maintain aspect ratio
+
+---
+
+WORKSPACE HEADER
+
+Use logo-full.png where appropriate.
+
+Examples:
+
+* landing page hero
+* workspace empty states
+* loading states
+* onboarding screens
+
+Do not duplicate logos unnecessarily.
+
+---
+
+OPEN GRAPH
+
+Configure social sharing metadata.
+
+Use:
+
+app-icon.png
+
+Add:
+
+og:title
+
+og:description
+
+og:image
+
+twitter:image
+
+twitter:card
+
+Title:
+
+SignalScope
+
+Description:
+
+Music Intelligence Workspace powered by Musixmatch, Songstats, JamBase and AI.
+
+---
+
+PWA FRIENDLY
+
+Use app-icon.png for:
+
+* Apple touch icon
+* PWA icon
+* Manifest icon (if manifest exists)
+
+---
+
+VISUAL POLISH
+
+Ensure all branding assets:
+
+* render correctly in dark mode
+* are responsive
+* are not stretched
+* preserve transparency
+* use object-contain
+
+---
+
+QUALITY CHECK
+
+Verify:
+
+✓ favicon loads
+
+✓ sidebar logo loads
+
+✓ header logo loads
+
+✓ social preview metadata exists
+
+✓ branding works in development and production
+
+Do not redesign any UI.
+
+Only integrate the provided SignalScope branding assets consistently across the application.

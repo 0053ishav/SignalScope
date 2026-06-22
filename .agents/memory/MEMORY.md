@@ -1,2 +1,3 @@
 - [SignalScope intelligence platform](signalscope-intelligence-platform.md) — deterministic FE composition (timeline/fusion/export/audio script); fusion = ≥2 real sources contribute (NOT semantic agreement); audio-briefing route always 200 + status, valid commontrack_id + bounded script required.
 - [Intelligence Health Bar](signalscope-health-bar.md) — right-rail source statuses come ONLY from deriveSourceHealth (single source of truth); ElevenLabs idle status uses the cheap /api/audio-briefing/status probe, not a TTS call; never emit "Connected" without a real signal.
+- [SignalScope branding assets](signalscope-branding-assets.md) — full logo has opaque white bg + dark wordmark; render via BrandFullLogo plate, ref via %BASE_URL%.
