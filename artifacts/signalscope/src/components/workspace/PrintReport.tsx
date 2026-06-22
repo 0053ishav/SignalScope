@@ -178,6 +178,12 @@ function PrintReportDoc() {
               />
             </>
           )}
+          {data.songstats.platforms.length > 0 && (
+            <>
+              <div style={{ fontWeight: 600, marginTop: 4 }}>Top Platforms</div>
+              <List items={data.songstats.platforms} />
+            </>
+          )}
         </Section>
       )}
 

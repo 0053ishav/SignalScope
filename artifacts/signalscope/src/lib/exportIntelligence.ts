@@ -327,6 +327,11 @@ export function toMarkdown(data: IntelligenceExport): string {
       lines.push(bullets(s.topMarkets.map((m) => `${m.country} — ${m.value.toLocaleString()}`)));
       lines.push("");
     }
+    if (s.platforms.length) {
+      lines.push(`### Top Platforms`);
+      lines.push(bullets(s.platforms));
+      lines.push("");
+    }
   }
 
   if (data.jambase) {
