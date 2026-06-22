@@ -1,0 +1,351 @@
+# SignalScope — Search Experience Upgrade
+
+IMPLEMENTATION MODE
+
+Proceed directly with implementation.
+
+Do not ask for planning.
+
+Do not modify backend APIs.
+
+Do not change search logic.
+
+Focus only on improving the search experience, branding, visual hierarchy, credibility, and conversion into the Intelligence Workspace.
+
+---
+
+# OBJECTIVE
+
+Current search results work technically but feel like a developer tool.
+
+We need the search experience to immediately communicate:
+
+"SignalScope is a Music Intelligence Platform."
+
+A user should understand within 3 seconds:
+
+- Search music
+- Open intelligence workspace
+- Discover audience, performance, culture, live and growth insights
+
+---
+
+# KEEP
+
+Existing:
+
+- search API
+- Musixmatch integration
+- search functionality
+- routing
+- workspace architecture
+
+Do not break working functionality.
+
+---
+
+# BRANDING HEADER
+
+Improve homepage hero.
+
+Add:
+
+SignalScope Logo
+
+Headline:
+
+Music Intelligence Platform
+
+Subheadline:
+
+Transform songs into audience, cultural, performance and growth intelligence.
+
+Short description:
+
+Powered by Musixmatch, Songstats, JamBase, ElevenLabs and Gemini.
+
+Maintain premium dark aesthetic.
+
+---
+
+# PARTNER STRIP
+
+Add partner strip directly below hero.
+
+Use real logos where available.
+
+Display:
+
+Musixmatch
+Songstats
+JamBase
+ElevenLabs
+Google Gemini
+
+Style:
+
+small premium badges
+hover state
+subtle glow
+
+Purpose:
+
+increase trust and hackathon credibility.
+
+---
+
+# SEARCH SECTION
+
+Improve hierarchy.
+
+Current search box dominates entire page.
+
+Refine spacing.
+
+Improve readability.
+
+Add helper text:
+
+Search any song, artist or lyric.
+
+Examples:
+
+ICONIC BY MISTAKE
+295 SMW
+Arjan Dhillon
+Twice
+
+---
+
+# SEARCH RESULT REDESIGN
+
+Current cards are too dark.
+
+Increase contrast.
+
+Improve typography hierarchy.
+
+Use:
+
+larger title
+clear artist
+secondary album metadata
+
+Cards should feel clickable.
+
+Entire card clickable.
+
+Always use cursor-pointer.
+
+Add hover:
+
+border glow
+elevation
+subtle scale
+
+---
+
+# COVER ART
+
+Display album artwork in every result.
+
+Priority:
+
+album_coverart_800x800
+album_coverart_500x500
+album_coverart_350x350
+album_coverart_100x100
+
+Fallback:
+
+SignalScope logo placeholder.
+
+Never leave blank space.
+
+---
+
+# RESULT CARD LAYOUT
+
+LEFT
+
+Artwork
+
+CENTER
+
+Track Name
+Artist Name
+Album Name
+
+RIGHT
+
+Intelligence Badges
+
+Example:
+
+Lyrics
+RichSync
+Analysis
+Translation
+Intelligence Ready
+
+Only show badges that exist.
+
+Use real Musixmatch fields:
+
+has_lyrics
+has_richsync
+has_subtitles
+has_lyrics_analysis
+track_lyrics_translation_status
+
+---
+
+# INTELLIGENCE READINESS
+
+Create derived badge:
+
+Intelligence Ready
+
+Show only when:
+
+Lyrics available
+AND Analysis available
+
+This reinforces product value.
+
+---
+
+# TRACK METADATA ROW
+
+Under title:
+
+Genre
+Track Rating
+Duration
+
+Use available metadata.
+
+Hide missing values.
+
+Never show placeholders.
+
+---
+
+# RESULT PREVIEW
+
+Add capability preview section.
+
+Not data.
+
+Capabilities.
+
+Example:
+
+Audience Intelligence
+Performance Intelligence
+Cultural Intelligence
+Growth Intelligence
+Live Intelligence
+
+Use subtle icons.
+
+This tells users what happens after click.
+
+---
+
+# EMPTY STATE
+
+Improve no-results screen.
+
+Current generic message is weak.
+
+Show:
+
+No tracks found.
+
+Try:
+- Track title
+- Artist name
+- Lyrics phrase
+
+Include search icon illustration.
+
+---
+
+# LOADING STATE
+
+Improve loading skeleton.
+
+Show:
+
+Artwork placeholder
+Title placeholder
+Metadata placeholder
+Badges placeholder
+
+Avoid blank page feeling.
+
+---
+
+# VISUAL DESIGN
+
+Increase readability.
+
+Current issue:
+
+Artist text nearly invisible.
+
+Album text difficult to read.
+
+Fix:
+
+Higher contrast
+Improved spacing
+Clear hierarchy
+
+Cards should feel premium.
+
+Reference quality:
+
+Spotify
+Linear
+Vercel
+AI Studio
+
+---
+
+# MOBILE
+
+Ensure:
+
+Artwork scales correctly
+Badges wrap
+Cards remain readable
+
+No overflow.
+
+---
+
+# TRACK ENTRY MOMENT
+
+When clicking result:
+
+Show subtle transition.
+
+Open Intelligence Workspace.
+
+Workspace should feel like entering an analysis environment.
+
+---
+
+# SUCCESS CRITERIA
+
+A judge landing on the homepage should instantly understand:
+
+1. This is SignalScope
+2. It is a Music Intelligence Platform
+3. It uses multiple intelligence sources
+4. Search is powered by real music data
+5. Clicking a song opens a professional intelligence workspace
+
+The search experience should feel comparable to modern SaaS platforms rather than a basic search page.
