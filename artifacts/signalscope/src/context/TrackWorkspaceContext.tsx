@@ -29,6 +29,25 @@ export interface TrackWorkspaceValue {
   jambase: JamBaseLiveData | null;
   jambaseSignals: JamBaseSignals | null;
   jambaseStatus: JamBaseUiStatus;
+
+  /** Executive Audio Briefing (ElevenLabs TTS) — generated once on demand. */
+  audioBriefing: AudioBriefing | null;
+  audioStatus: AudioBriefingStatus;
+  requestAudioBriefing: () => void;
+}
+
+export type AudioBriefingStatus =
+  | "idle"
+  | "loading"
+  | "ready"
+  | "unavailable"
+  | "error";
+
+export interface AudioBriefing {
+  /** Object URL for the generated audio blob. */
+  url: string;
+  mimeType: string;
+  voiceName?: string;
 }
 
 export const TrackWorkspaceContext = createContext<TrackWorkspaceValue | null>(null);

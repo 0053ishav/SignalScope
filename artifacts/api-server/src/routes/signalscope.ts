@@ -18,7 +18,19 @@ import {
   isJamBaseConfigured,
 } from "@/services/jambase";
 import { deriveJamBaseSignals } from "@/lib/intelligence/jambaseSignals";
-import { db, intelligenceReportsTable, songstatsCacheTable, jambaseCacheTable } from "@workspace/db";
+import {
+  isElevenLabsConfigured,
+  generateSpeech,
+  getVoiceName,
+  getConfiguredVoiceId,
+} from "@/services/elevenlabs";
+import {
+  db,
+  intelligenceReportsTable,
+  songstatsCacheTable,
+  jambaseCacheTable,
+  audioBriefingCacheTable,
+} from "@workspace/db";
 import { eq } from "drizzle-orm";
 import type { SongstatsTrackData } from "@/types/songstats";
 import type { JamBaseLiveData } from "@/types/jambase";
@@ -319,6 +331,124 @@ router.get("/jambase/:artist", async (req, res) => {
     });
   } catch (error) {
     console.error("JamBase route error", error);
+    return res.json({
+      status: "error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+});
+
+/**
+ * Executive Audio Briefing — text-to-speech via ElevenLabs. Always responds 200
+ * with a status discriminator so the frontend can progressively enhance and
+ * never throws:
+ *   - "unavailable": ElevenLabs not configured (honest "not connected" state)
+ *   - "ok":          audio (base64) + mime type + voice metadata
+ *   - "error":       generation failed (still non-fatal for the workspace)
+ *
+ * The briefing script is composed deterministically on the frontend from real
+ * data and POSTed here; this route only performs TTS + caches the result keyed
+ * by commontrack_id so a briefing is generated exactly once.
+ */
+router.post("/audio-briefing", async (req, res) => {
+  const { commontrackId, script } = (req.body ?? {}) as {
+    commontrackId?: unknown;
+    script?: unknown;
+  };
+
+  if (!isElevenLabsConfigured()) {
+    return res.json({ status: "unavailable" });
+  }
+
+  const id = Number(commontrackId);
+  const hasValidId = Number.isFinite(id) && id > 0;
+  const text = typeof script === "string" ? script.trim() : "";
+
+  // A valid commontrack_id is required so every paid generation is cache-keyed
+  // (generate-once) and the route can't be used as an open TTS relay.
+  if (!hasValidId) {
+    return res.json({ status: "error", message: "Invalid track id" });
+  }
+  if (!text) {
+    return res.json({ status: "error", message: "Empty briefing script" });
+  }
+  // Bound the input so an oversized payload can't drive runaway TTS cost.
+  if (text.length > 6000) {
+    return res.json({ status: "error", message: "Briefing script too long" });
+  }
+
+  try {
+    // 1. Serve a cache hit (keyed by commontrack_id) — briefings are stable.
+    {
+      try {
+        const [cached] = await db
+          .select()
+          .from(audioBriefingCacheTable)
+          .where(eq(audioBriefingCacheTable.commontrackId, id))
+          .limit(1);
+
+        if (cached) {
+          return res.json({
+            status: "ok",
+            audio: cached.audio,
+            mimeType: cached.mimeType,
+            voiceId: cached.voiceId,
+            voiceName: cached.voiceName ?? undefined,
+            cached: true,
+          });
+        }
+      } catch (cacheError) {
+        console.error("Audio briefing cache read failed", cacheError);
+      }
+    }
+
+    // 2. Generate.
+    const speech = await generateSpeech(text);
+    if (!speech) {
+      return res.json({ status: "error", message: "Audio generation failed" });
+    }
+
+    const voiceName = await getVoiceName();
+
+    // 3. Persist (best-effort).
+    {
+      try {
+        await db
+          .insert(audioBriefingCacheTable)
+          .values({
+            commontrackId: id,
+            audio: speech.audio,
+            mimeType: speech.mimeType,
+            voiceId: speech.voiceId,
+            voiceName: voiceName ?? undefined,
+            script: text,
+          })
+          .onConflictDoUpdate({
+            target: audioBriefingCacheTable.commontrackId,
+            set: {
+              audio: speech.audio,
+              mimeType: speech.mimeType,
+              voiceId: speech.voiceId,
+              voiceName: voiceName ?? undefined,
+              script: text,
+              fetchedAt: new Date(),
+            },
+          });
+      } catch (saveError) {
+        console.error("Audio briefing cache write failed", saveError);
+      }
+    }
+
+    return res.json({
+      status: "ok",
+      audio: speech.audio,
+      mimeType: speech.mimeType,
+      voiceId: speech.voiceId || getConfiguredVoiceId(),
+      voiceName: voiceName ?? undefined,
+      cached: false,
+    });
+  } catch (error) {
+    console.error("Audio briefing route error", error);
     return res.json({
       status: "error",
       message: error instanceof Error ? error.message : "Unknown error",

@@ -2,6 +2,7 @@ import { RefreshCw, ShieldCheck, ChevronRight, Menu } from "lucide-react";
 import { useTrackWorkspace } from "@/context/TrackWorkspaceContext";
 import { getNavItem } from "./nav";
 import WorkspaceActions from "./WorkspaceActions";
+import AudioBriefingButton from "./AudioBriefingButton";
 import SafeArtwork from "./SafeArtwork";
 import { artworkCandidates } from "@/lib/songstatsMetadata";
 import { liveBadges } from "@/lib/jambase";
@@ -59,6 +60,7 @@ export default function WorkspaceHeader({ view, onMenuClick }: { view: string; o
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
+        <AudioBriefingButton />
         <WorkspaceActions />
         <button
           onClick={regenerate}

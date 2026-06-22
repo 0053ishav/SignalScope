@@ -20,8 +20,15 @@ import { parseRichSync } from "@/lib/richsync/parseRichSync";
 import { normalizeRichSync } from "@/lib/richsync/normalizeRichSync";
 import { clamp } from "@/lib/intelligence";
 
-import { TrackWorkspaceContext, type TrackWorkspaceValue } from "@/context/TrackWorkspaceContext";
+import {
+  TrackWorkspaceContext,
+  type TrackWorkspaceValue,
+  type AudioBriefing,
+  type AudioBriefingStatus,
+} from "@/context/TrackWorkspaceContext";
 import { KNOWN_VIEWS, DEFAULT_VIEW } from "@/components/workspace/nav";
+import { composeBriefingScript } from "@/lib/audioBriefing";
+import { PrintReport } from "@/components/workspace/PrintReport";
 
 import WorkspaceLayout from "@/components/workspace/WorkspaceLayout";
 import WorkspaceHeader from "@/components/workspace/WorkspaceHeader";
@@ -41,6 +48,7 @@ import PerformancePage from "@/pages/workspace/PerformancePage";
 import LivePage from "@/pages/workspace/LivePage";
 import SonicPage from "@/pages/workspace/SonicPage";
 import CreativeNetworkPage from "@/pages/workspace/CreativeNetworkPage";
+import TimelinePage from "@/pages/workspace/TimelinePage";
 
 interface Props {
   id: string;
@@ -60,6 +68,7 @@ const PAGES: Record<string, ComponentType> = {
   live: LivePage,
   sonic: SonicPage,
   credits: CreativeNetworkPage,
+  timeline: TimelinePage,
 };
 
 export default function TrackWorkspace({ id, view }: Props) {
@@ -81,6 +90,10 @@ export default function TrackWorkspace({ id, view }: Props) {
   const [jambase, setJambase] = useState<JamBaseLiveData | null>(null);
   const [jambaseSignals, setJambaseSignals] = useState<JamBaseSignals | null>(null);
   const [jambaseStatus, setJambaseStatus] = useState<JamBaseUiStatus>("loading");
+
+  const [audioBriefing, setAudioBriefing] = useState<AudioBriefing | null>(null);
+  const [audioStatus, setAudioStatus] = useState<AudioBriefingStatus>("idle");
+  const audioUrlRef = useRef<string | null>(null);
 
   const generatedForRef = useRef<number | null>(null);
 
@@ -168,6 +181,62 @@ export default function TrackWorkspace({ id, view }: Props) {
     if (!track) return;
     generate(track, lyrics, richSync, analysis, true);
   }, [track, lyrics, richSync, analysis, generate]);
+
+  // Reset the audio briefing whenever the track changes; revoke any blob URL.
+  useEffect(() => {
+    if (audioUrlRef.current) {
+      URL.revokeObjectURL(audioUrlRef.current);
+      audioUrlRef.current = null;
+    }
+    setAudioBriefing(null);
+    setAudioStatus("idle");
+  }, [track?.commontrack_id]);
+
+  // Revoke the last blob URL on unmount.
+  useEffect(() => {
+    return () => {
+      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+    };
+  }, []);
+
+  const requestAudioBriefing = useCallback(async () => {
+    if (!track) return;
+    setAudioStatus("loading");
+    try {
+      const script = composeBriefingScript({
+        track,
+        report,
+        analysis,
+        songstats,
+        songstatsStatus,
+        jambase,
+        jambaseStatus,
+      });
+      const res = await fetch("/api/audio-briefing", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ commontrackId: track.commontrack_id, script }),
+      });
+      const data = await res.json();
+      if (data.status === "ok" && data.audio) {
+        const byteChars = atob(data.audio);
+        const bytes = new Uint8Array(byteChars.length);
+        for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
+        const blob = new Blob([bytes], { type: data.mimeType || "audio/mpeg" });
+        const url = URL.createObjectURL(blob);
+        if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+        audioUrlRef.current = url;
+        setAudioBriefing({ url, mimeType: data.mimeType || "audio/mpeg", voiceName: data.voiceName });
+        setAudioStatus("ready");
+      } else if (data.status === "unavailable") {
+        setAudioStatus("unavailable");
+      } else {
+        setAudioStatus("error");
+      }
+    } catch {
+      setAudioStatus("error");
+    }
+  }, [track, report, analysis, songstats, songstatsStatus, jambase, jambaseStatus]);
 
   // Load Songstats market data independently of the AI report, keyed off the
   // track's ISRC. Any failure degrades to an honest status — it never blocks
@@ -291,12 +360,16 @@ export default function TrackWorkspace({ id, view }: Props) {
     jambase,
     jambaseSignals,
     jambaseStatus,
+    audioBriefing,
+    audioStatus,
+    requestAudioBriefing,
   };
 
   const Page = PAGES[view] ?? OverviewPage;
 
   return (
     <TrackWorkspaceContext.Provider value={value}>
+      <PrintReport />
       <WorkspaceLayout
         sidebar={
           <WorkspaceSidebar

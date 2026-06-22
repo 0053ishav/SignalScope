@@ -105,3 +105,33 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground));
 }
+
+/* ----------------------------------------------------------------------- */
+/* Print / PDF export                                                       */
+/* The #print-report subtree is hidden on screen; on print we hide the live */
+/* app (#root) and reveal ONLY the report so "Export PDF" yields a clean    */
+/* document rather than the on-screen chrome.                               */
+/* ----------------------------------------------------------------------- */
+#print-report {
+  display: none;
+}
+
+@media print {
+  #root {
+    visibility: hidden;
+  }
+  #print-report {
+    display: block;
+    visibility: visible;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background: #fff;
+  }
+  #print-report * {
+    visibility: visible;
+  }
+  @page {
+    margin: 16mm;
+  }
+}

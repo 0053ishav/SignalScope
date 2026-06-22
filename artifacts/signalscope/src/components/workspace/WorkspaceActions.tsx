@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { FileOutput, Printer, Download, Link2, Check, ChevronDown } from "lucide-react";
+import { FileOutput, Link2, Check, ChevronDown } from "lucide-react";
 import { useTrackWorkspace } from "@/context/TrackWorkspaceContext";
+import { ExportMenuItems } from "./ExportMenuItems";
 
 export default function WorkspaceActions() {
-  const { track, report, reportSource } = useTrackWorkspace();
+  const { track } = useTrackWorkspace();
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -23,37 +24,6 @@ export default function WorkspaceActions() {
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
-
-  const slug = `${track.artist_name}-${track.track_name}`
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
-  function downloadJson() {
-    if (!report) return;
-    const payload = {
-      track: {
-        commontrack_id: track.commontrack_id,
-        track_name: track.track_name,
-        artist_name: track.artist_name,
-        album_name: track.album_name,
-        isrc: track.track_isrc ?? null,
-      },
-      source: reportSource ?? report.source ?? "unknown",
-      generatedAt: new Date().toISOString(),
-      report,
-    };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `signalscope-${slug || track.commontrack_id}.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-    setOpen(false);
-  }
 
   async function copyLink() {
     const url = window.location.href;
@@ -106,14 +76,7 @@ export default function WorkspaceActions() {
           role="menu"
           className="absolute right-0 mt-2 w-60 rounded-lg border border-border bg-popover shadow-xl z-30 p-1.5 animate-in fade-in slide-in-from-top-1"
         >
-          <MenuItem icon={Printer} label="Print / Save as PDF" onClick={() => { window.print(); setOpen(false); }} />
-          <MenuItem
-            icon={Download}
-            label="Download Intelligence (JSON)"
-            onClick={downloadJson}
-            disabled={!report}
-            hint={!report ? "Report still generating" : undefined}
-          />
+          <ExportMenuItems onAfter={() => setOpen(false)} />
           <div className="my-1 h-px bg-border" />
           <MenuItem
             icon={copied ? Check : Link2}

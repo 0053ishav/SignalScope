@@ -10,6 +10,7 @@ import {
   AudioWaveform,
   BadgeCheck,
   Database,
+  Clock3,
   type LucideIcon,
 } from "lucide-react";
 
@@ -53,6 +54,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Analysis",
     items: [
+      { view: "timeline", label: "Timeline Intelligence", icon: Clock3 },
       { view: "credits", label: "Creative Network", icon: Users },
       { view: "evidence", label: "Evidence Layer", icon: BadgeCheck },
       { view: "source", label: "Source Data", icon: Database },

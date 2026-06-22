@@ -9,6 +9,7 @@ import MetricCard from "@/components/workspace/MetricCard";
 import ChartCard, { EmptyChart } from "@/components/workspace/ChartCard";
 import IntelligenceCard from "@/components/workspace/IntelligenceCard";
 import ConfidenceDrivers from "@/components/workspace/ConfidenceDrivers";
+import FusionCard from "@/components/workspace/FusionCard";
 import ScoreRadar from "@/components/workspace/charts/ScoreRadar";
 import ConfidenceGauge from "@/components/workspace/charts/ConfidenceGauge";
 import SignalDistributionDonut from "@/components/workspace/charts/SignalDistributionDonut";
@@ -75,6 +76,8 @@ export default function OverviewPage() {
             </div>
 
             <ConfidenceDrivers />
+
+            <FusionCard />
 
             <div className="grid lg:grid-cols-2 gap-4">
               <IntelligenceCard title="Key Opportunities" icon={Lightbulb} iconClassName="text-amber-400">

@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-import { FileOutput, Settings, Lock, X } from "lucide-react";
+import { FileOutput, Settings, Lock, X, ChevronRight } from "lucide-react";
 import { NAV_GROUPS } from "./workspace/nav";
+import { ExportMenuItems } from "./workspace/ExportMenuItems";
 
 interface SidebarProps {
   id: string;
@@ -11,6 +12,9 @@ interface SidebarProps {
 }
 
 export default function WorkspaceSidebar({ id, view, mobileOpen, onClose }: SidebarProps) {
+  const [exportOpen, setExportOpen] = useState(false);
+  const exportRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!mobileOpen) return;
     function onKey(e: KeyboardEvent) {
@@ -19,6 +23,22 @@ export default function WorkspaceSidebar({ id, view, mobileOpen, onClose }: Side
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen, onClose]);
+
+  useEffect(() => {
+    if (!exportOpen) return;
+    function onClick(e: MouseEvent) {
+      if (exportRef.current && !exportRef.current.contains(e.target as Node)) setExportOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setExportOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [exportOpen]);
 
   const nav = (
     <div className="p-4 space-y-6 flex-1">
@@ -62,16 +82,28 @@ export default function WorkspaceSidebar({ id, view, mobileOpen, onClose }: Side
       <div>
         <p className="px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">System</p>
         <nav className="space-y-1">
-          <button
-            onClick={() => {
-              onClose();
-              window.print();
-            }}
-            className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-          >
-            <FileOutput className="w-4 h-4 shrink-0" />
-            <span className="truncate">Export Report</span>
-          </button>
+          <div ref={exportRef}>
+            <button
+              onClick={() => setExportOpen((v) => !v)}
+              aria-haspopup="menu"
+              aria-expanded={exportOpen}
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            >
+              <FileOutput className="w-4 h-4 shrink-0" />
+              <span className="truncate">Export Report</span>
+              <ChevronRight className={`w-3.5 h-3.5 ml-auto transition-transform ${exportOpen ? "rotate-90" : ""}`} />
+            </button>
+            {exportOpen && (
+              <div role="menu" className="mt-1 ml-2 pl-2 border-l border-border space-y-0.5">
+                <ExportMenuItems
+                  onAfter={() => {
+                    setExportOpen(false);
+                    onClose();
+                  }}
+                />
+              </div>
+            )}
+          </div>
           <button
             disabled
             className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md text-muted-foreground/50 cursor-not-allowed"
