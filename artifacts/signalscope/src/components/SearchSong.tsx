@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { useEffect, useRef, useState } from "react";
 import { Search, ArrowRight, X } from "lucide-react";
 import { Track } from "@/types/music";
-import { CoverArt } from "@/components/CoverArt";
+import { SearchResultCover } from "@/components/SearchResultCover";
 import { BRAND } from "@/lib/branding";
 
 function SearchSkeleton() {
@@ -246,7 +246,10 @@ export default function SearchSong() {
                   href={`/track/${track.id}`}
                   className="group flex cursor-pointer items-center gap-4 rounded-2xl border border-border bg-card/80 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.01] hover:border-violet-500/50 hover:bg-card hover:shadow-lg hover:shadow-violet-500/10 animate-in fade-in slide-in-from-bottom-2"
                 >
-                  <CoverArt
+                  <SearchResultCover
+                    trackId={track.id}
+                    artist={track.artist}
+                    title={track.name}
                     alt={track.album ?? track.name}
                     className="h-16 w-16"
                   />

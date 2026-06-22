@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BRAND } from "@/lib/branding";
 
 /**
@@ -17,6 +17,11 @@ export function CoverArt({
   className?: string;
 }) {
   const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setFailed(false);
+  }, [src]);
+
   const showPlaceholder = !src || failed;
 
   return (
