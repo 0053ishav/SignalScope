@@ -31,7 +31,7 @@ Music intelligence for artists & labels: search any song (Musixmatch), view lyri
 - Ported from a Next.js (Vercel/v0) export: `next/link` → wouter `Link`, `next/image` → `<img>`, server components → client-side `fetch` in `useEffect`.
 - Track view is a route-based "Intelligence Workspace": persistent left nav (`WorkspaceSidebar`), routed center pages (`pages/workspace/*`), right Source Context rail. The shell `pages/TrackWorkspace.tsx` stays mounted across view changes, loads source data + generates the Gemini report ONCE per `commontrack_id`, and shares everything via `context/TrackWorkspaceContext`. Reusable building blocks (cards, charts, helpers) live in `components/workspace/`; shared helpers/constants in `lib/intelligence.ts`. Strategy pages (Performance/Live/Sonic) are honest coming-soon placeholders — no fabricated metrics.
 - Frontend calls the backend via relative `/api/...`; the shared proxy routes `/api/*` to the api-server (signalscope is served at base path `/`).
-- Original dark theme preserved with direct hex CSS vars + Tailwind v4 `@theme inline` (not the shadcn HSL token system). Font is Geist (loaded via Google Fonts in `index.html`).
+- Original dark theme preserved as HSL-triple CSS vars in `:root` (e.g. `--popover: 224 71% 6%`) consumed via Tailwind v4 `@theme inline`. Each `--color-*` mapping MUST wrap the token in `hsl(...)` (e.g. `--color-popover: hsl(var(--popover))`) — a bare `var(--token)` compiles to an invalid color and renders transparent. Font is Geist (loaded via Google Fonts in `index.html`). See `.agents/memory/signalscope-theme-tokens.md`.
 
 ## Product
 

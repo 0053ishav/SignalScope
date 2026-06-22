@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { FileOutput, Lock, X, ChevronRight } from "lucide-react";
 import { NAV_GROUPS } from "./workspace/nav";
@@ -13,7 +13,6 @@ interface SidebarProps {
 
 export default function WorkspaceSidebar({ id, view, mobileOpen, onClose }: SidebarProps) {
   const [exportOpen, setExportOpen] = useState(false);
-  const exportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -27,7 +26,10 @@ export default function WorkspaceSidebar({ id, view, mobileOpen, onClose }: Side
   useEffect(() => {
     if (!exportOpen) return;
     function onClick(e: MouseEvent) {
-      if (exportRef.current && !exportRef.current.contains(e.target as Node)) setExportOpen(false);
+      const target = e.target;
+      if (!(target instanceof Element) || !target.closest("[data-export-root]")) {
+        setExportOpen(false);
+      }
     }
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") setExportOpen(false);
@@ -82,7 +84,7 @@ export default function WorkspaceSidebar({ id, view, mobileOpen, onClose }: Side
       <div>
         <p className="px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">System</p>
         <nav className="space-y-1">
-          <div ref={exportRef}>
+          <div data-export-root>
             <button
               onClick={() => setExportOpen((v) => !v)}
               aria-haspopup="menu"
