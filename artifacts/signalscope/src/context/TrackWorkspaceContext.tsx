@@ -34,6 +34,8 @@ export interface TrackWorkspaceValue {
   audioBriefing: AudioBriefing | null;
   audioStatus: AudioBriefingStatus;
   requestAudioBriefing: () => void;
+  /** Whether ElevenLabs is configured on the server (null = probe pending). */
+  audioAvailable: boolean | null;
 }
 
 export type AudioBriefingStatus =

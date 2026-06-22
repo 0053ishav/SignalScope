@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-import { FileOutput, Settings, Lock, X, ChevronRight } from "lucide-react";
+import { FileOutput, Lock, X, ChevronRight } from "lucide-react";
 import { NAV_GROUPS } from "./workspace/nav";
 import { ExportMenuItems } from "./workspace/ExportMenuItems";
 
@@ -104,18 +104,6 @@ export default function WorkspaceSidebar({ id, view, mobileOpen, onClose }: Side
               </div>
             )}
           </div>
-          <button
-            disabled
-            className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md text-muted-foreground/50 cursor-not-allowed"
-            title="Settings — coming soon"
-          >
-            <Settings className="w-4 h-4 shrink-0" />
-            <span className="truncate">Settings</span>
-            <span className="ml-auto inline-flex items-center gap-1 text-[9px] font-semibold uppercase tracking-wider">
-              <Lock className="w-2.5 h-2.5" />
-              Soon
-            </span>
-          </button>
         </nav>
       </div>
     </div>

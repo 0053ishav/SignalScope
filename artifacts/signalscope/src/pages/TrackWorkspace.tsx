@@ -93,6 +93,7 @@ export default function TrackWorkspace({ id, view }: Props) {
 
   const [audioBriefing, setAudioBriefing] = useState<AudioBriefing | null>(null);
   const [audioStatus, setAudioStatus] = useState<AudioBriefingStatus>("idle");
+  const [audioAvailable, setAudioAvailable] = useState<boolean | null>(null);
   const audioUrlRef = useRef<string | null>(null);
 
   const generatedForRef = useRef<number | null>(null);
@@ -196,6 +197,23 @@ export default function TrackWorkspace({ id, view }: Props) {
   useEffect(() => {
     return () => {
       if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+    };
+  }, []);
+
+  // Probe ElevenLabs configuration once so the health bar shows an honest
+  // status (no TTS spend). Config is server-wide, so this is track-independent.
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/audio-briefing/status")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!cancelled) setAudioAvailable(d && typeof d.configured === "boolean" ? d.configured : false);
+      })
+      .catch(() => {
+        if (!cancelled) setAudioAvailable(false);
+      });
+    return () => {
+      cancelled = true;
     };
   }, []);
 
@@ -363,6 +381,7 @@ export default function TrackWorkspace({ id, view }: Props) {
     audioBriefing,
     audioStatus,
     requestAudioBriefing,
+    audioAvailable,
   };
 
   const Page = PAGES[view] ?? OverviewPage;

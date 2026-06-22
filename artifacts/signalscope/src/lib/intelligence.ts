@@ -15,8 +15,11 @@ import {
   Mic,
   type LucideIcon,
 } from "lucide-react";
-import type { IntelligenceReport } from "@/types/intelligence";
+import type { IntelligenceReport, ReportSource } from "@/types/intelligence";
 import type { AnalysisResponse, LyricSegment } from "@/types/music";
+import type { SongstatsUiStatus } from "@/types/songstats";
+import type { JamBaseUiStatus } from "@/types/jambase";
+import type { AudioBriefingStatus } from "@/context/TrackWorkspaceContext";
 
 export const CHART_COLORS = ["#8b5cf6", "#ec4899", "#06b6d4", "#f59e0b"];
 
@@ -270,53 +273,96 @@ export function getSectionSources(
   return sources;
 }
 
-/**
- * Intelligence source registry for the connection panel. Live sources reflect
- * what this build actually queries; the rest are honest "Coming Soon" partner
- * slots — visual only, no data is fabricated from them.
- */
-export interface IntelligenceSource {
+/* -------------------------------------------------------------------------- */
+/* Intelligence Health — real, per-source connection status for the right-rail */
+/* health bar. Derived ONLY from live workspace context (single source of      */
+/* truth, no fabricated "connected" claims).                                   */
+/* -------------------------------------------------------------------------- */
+
+export type SourceStatus = "connected" | "generating" | "unavailable" | "coming-soon";
+
+export interface SourceHealth {
   name: string;
-  status: "connected" | "coming-soon";
+  status: SourceStatus;
   capability: string;
   icon: LucideIcon;
 }
 
-export const INTELLIGENCE_SOURCES: IntelligenceSource[] = [
-  {
-    name: "Musixmatch",
-    status: "connected",
-    capability: "Lyrics, metadata, moods, themes & RichSync timing",
-    icon: Music,
-  },
-  {
-    name: "Gemini",
-    status: "connected",
-    capability: "AI synthesis of audience & cultural intelligence",
-    icon: BrainCircuit,
-  },
-  {
-    name: "Songstats",
-    status: "connected",
-    capability: "Streaming, playlist, creator & market performance analytics",
-    icon: BarChart3,
-  },
-  {
-    name: "JamBase",
-    status: "coming-soon",
-    capability: "Live events & touring intelligence",
-    icon: CalendarRange,
-  },
-  {
-    name: "Cyanite",
-    status: "coming-soon",
-    capability: "Audio & sonic AI analysis",
-    icon: AudioWaveform,
-  },
-  {
-    name: "ElevenLabs",
-    status: "coming-soon",
-    capability: "Voice & generative audio",
-    icon: Mic,
-  },
-];
+export interface SourceHealthInputs {
+  reportLoading: boolean;
+  reportSource: ReportSource | null;
+  reportError: string;
+  songstatsStatus: SongstatsUiStatus;
+  jambaseStatus: JamBaseUiStatus;
+  audioStatus: AudioBriefingStatus;
+  /** ElevenLabs server-config probe result (null = still checking). */
+  audioAvailable: boolean | null;
+}
+
+function geminiHealth(loading: boolean, source: ReportSource | null, error: string): SourceStatus {
+  if (loading) return "generating";
+  if (source === "gemini") return "connected";
+  if (source === "fallback" || error) return "unavailable";
+  return "generating"; // report auto-generates on load — still in flight
+}
+
+function feedHealth(status: SongstatsUiStatus | JamBaseUiStatus): SourceStatus {
+  if (status === "loading") return "generating";
+  if (status === "ok") return "connected";
+  return "unavailable"; // empty | unavailable | error — no live data for this track
+}
+
+function audioHealth(status: AudioBriefingStatus, available: boolean | null): SourceStatus {
+  if (available === false) return "unavailable";
+  if (status === "loading") return "generating";
+  if (status === "error" || status === "unavailable") return "unavailable";
+  if (status === "ready") return "connected";
+  // idle: connected only once the server probe confirms ElevenLabs is configured.
+  return available === true ? "connected" : "generating";
+}
+
+/**
+ * Map the live workspace context onto an honest status for every intelligence
+ * source. Live sources reflect what this build actually queries right now;
+ * Cyanite remains a genuine forward-looking partner slot (no data fabricated).
+ */
+export function deriveSourceHealth(inputs: SourceHealthInputs): SourceHealth[] {
+  return [
+    {
+      name: "Musixmatch",
+      status: "connected",
+      capability: "Lyrics, metadata, moods, themes & RichSync timing",
+      icon: Music,
+    },
+    {
+      name: "Gemini",
+      status: geminiHealth(inputs.reportLoading, inputs.reportSource, inputs.reportError),
+      capability: "AI synthesis of audience & cultural intelligence",
+      icon: BrainCircuit,
+    },
+    {
+      name: "Songstats",
+      status: feedHealth(inputs.songstatsStatus),
+      capability: "Streaming, playlist, creator & market performance analytics",
+      icon: BarChart3,
+    },
+    {
+      name: "JamBase",
+      status: feedHealth(inputs.jambaseStatus),
+      capability: "Live events & touring intelligence",
+      icon: CalendarRange,
+    },
+    {
+      name: "ElevenLabs",
+      status: audioHealth(inputs.audioStatus, inputs.audioAvailable),
+      capability: "Executive audio briefing narration",
+      icon: Mic,
+    },
+    {
+      name: "Cyanite",
+      status: "coming-soon",
+      capability: "Audio & sonic AI analysis",
+      icon: AudioWaveform,
+    },
+  ];
+}

@@ -456,4 +456,10 @@ router.post("/audio-briefing", async (req, res) => {
   }
 });
 
+// Lightweight readiness probe so the UI can show an honest ElevenLabs status
+// without spending a TTS generation. Not a data source — just config presence.
+router.get("/audio-briefing/status", (_req, res) => {
+  res.json({ configured: isElevenLabsConfigured() });
+});
+
 export default router;

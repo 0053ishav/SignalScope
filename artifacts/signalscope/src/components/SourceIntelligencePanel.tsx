@@ -70,7 +70,7 @@ export default function SourceIntelligencePanel() {
           </Section>
         )}
 
-        <Section label="Intelligence Sources">
+        <Section label="Intelligence Health">
           <IntelligenceSourcesPanel compact />
         </Section>
 
